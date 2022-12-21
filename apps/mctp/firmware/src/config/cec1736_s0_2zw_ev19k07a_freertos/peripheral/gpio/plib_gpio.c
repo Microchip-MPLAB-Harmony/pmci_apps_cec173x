@@ -68,6 +68,7 @@ void GPIO_Initialize(void)
     GPIO_REGS->GPIO_CTRL0[4] = 0x1140;
     GPIO_REGS->GPIO_CTRL0[3] = 0x1140;
     GPIO_REGS->GPIO_CTRL13[2] = 0x1140;
+    GPIO_REGS->GPIO_CTRL14[6] = 0x1040;
 
 }
 

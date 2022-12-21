@@ -27,9 +27,9 @@ extern "C" {
 
 #include "mctp.h"
 
-#define HOST_SLAVE_ADDR                        0x64
-#define MCTP_EC_EID                            0x94
-#define MCTP_HOST_EID                          0x95
+#define HOST_SLAVE_ADDR                        0x64U
+#define MCTP_EC_EID                            0x94U
+#define MCTP_HOST_EID                          0x95U
 #define MCTP_TASK_PRIORITY                     3U
 #define MCTP_I2C_PORT                          6U
 #define MCTP_I2C_CHANNEL                       2U

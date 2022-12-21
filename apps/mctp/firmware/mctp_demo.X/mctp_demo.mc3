@@ -424,8 +424,7 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="!@#harmonyUserData"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;UserData&gt;
   &lt;UserData dnOrder=&quot;0&quot;&gt;
-    &lt;GraphSettings canvasHeight=&quot;188&quot; canvasWidth=&quot;803&quot; dnOrder=&quot;0&quot;/&gt;
-    &lt;ComponentGraph dnOrder=&quot;1&quot; id=&quot;__ROOTVIEW&quot;&gt;
+    &lt;ComponentGraph dnOrder=&quot;0&quot; id=&quot;__ROOTVIEW&quot;&gt;
       &lt;ElementPositions dnOrder=&quot;0&quot;&gt;
         &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;FreeRTOS&quot; x=&quot;480&quot; y=&quot;20&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;1&quot; id=&quot;HarmonyCore&quot; x=&quot;640&quot; y=&quot;20&quot;/&gt;
@@ -440,6 +439,7 @@
         &lt;ElementPosition dnOrder=&quot;10&quot; id=&quot;smb4&quot; x=&quot;310&quot; y=&quot;120&quot;/&gt;
       &lt;/ElementPositions&gt;
     &lt;/ComponentGraph&gt;
+    &lt;GraphSettings canvasHeight=&quot;188&quot; canvasWidth=&quot;803&quot; dnOrder=&quot;1&quot;/&gt;
   &lt;/UserData&gt;
 &lt;/UserData&gt;
 </value>
@@ -5949,11 +5949,11 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_smbus.c</file>
-         <hash>3678f4b2c002976920c316486121cd0b7aa907eb932a789eb9388b861943583e</hash>
+         <hash>e11a2ca6d0b6ddb0786ead447cde7c43d75cf5e0959c46476d9e1b1b3649ff6e</hash>
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\gpio\plib_gpio.c</file>
-         <hash>3b745f108075ee30ffab3b14aa5aad71bd1985a818681fe7b675787e91731d20</hash>
+         <hash>c83bf6b91cfb75a2bcefe812d19785e2a0b099c9f130715cb0776501be23ac13</hash>
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\startup_xc32.c</file>
@@ -5973,7 +5973,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp.h</file>
-         <hash>a13475d504e8aefff54387faa4f62e048782b3893d4b92cbf23f935d8bffc8aa</hash>
+         <hash>7d2421fdba2d1d4996dcc74101f77cee3e722300533d20b65de51f50fdb379e8</hash>
       </entry>
       <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\gcr.h</file>
@@ -6037,7 +6037,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_smbus.h</file>
-         <hash>78c5db0e7ee1d49f3ddf18f0c6989da47e897cd537069cd70f776ebcbd253f4b</hash>
+         <hash>8274ec88b509b3bee31d624a8945c6e7ca31907d789eab55faab140141b16331</hash>
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\interrupts.c</file>
@@ -6065,7 +6065,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_task.c</file>
-         <hash>141854b097500d4051fe690813d7493d78b20cd4372219790f64d2b3277fd8d6</hash>
+         <hash>d5c600f4c725ec621dd34556896c0ae9d19d8c1cf7b700641f93d8bc5cf07c14</hash>
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\i2c\slave\plib_smb0_slave.c</file>
@@ -6089,7 +6089,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_task.h</file>
-         <hash>9a60b0c7fba2d6ce3a71301ef6bbeedff7641173ccb68e7c8f607a9b24d3975e</hash>
+         <hash>e9508758f9fa5aed507c1487de3735355b4aff5d205cded10727a116da59972d</hash>
       </entry>
       <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\instance\wdt.h</file>
@@ -6297,11 +6297,11 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_control.c</file>
-         <hash>561d38e333cad409b30ac92678c5d99ba51177c6e2da7000d7fd797610250d60</hash>
+         <hash>034524db3040e411b58e8b62b36d3837bf19c3565c11b583f4fc5e49db07b81b</hash>
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_control.h</file>
-         <hash>671b3d7bbb0494ceb79602872d6c2e8e724829bb6d0283a30faaec7d346d0c71</hash>
+         <hash>db639395d2b9457185b732302dce0902ccabaaf02ccc8277e9a0258011fe81af</hash>
       </entry>
       <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\timer32.h</file>
@@ -6425,7 +6425,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\ecia\plib_ecia.c</file>
-         <hash>1a7a6f624082711974c1f48acf9c67bc4bd70777e4b5254c30727246eda82f2e</hash>
+         <hash>f424d607385bb07c9b06a06e363d606b48b8506fd03a6c309dfc5a8138b21868</hash>
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\ecia\plib_ecia.h</file>
@@ -6469,7 +6469,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_base.h</file>
-         <hash>83817a612dbea148e1ade9c4e888c0cf45bd8ecbae2ae74526779ca8a94f4dd2</hash>
+         <hash>4daae3a84789cb21c518a2af2f165bd32c5aa4bd11b74ad365651065a8cb5bec</hash>
       </entry>
       <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\instance\dma_chan07.h</file>
@@ -6488,12 +6488,12 @@
          <hash>a73c0b319370116d5981d5dacbabad3a775f85ae540ef70b4ced1c99c9ac6cd5</hash>
       </entry>
       <entry>
-         <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\i2c\slave\plib_smb2_slave.h</file>
-         <hash>17f8584abd3b98ed08a0e3e581da083bb2c97c640ec93403e3773a306d2d6db9</hash>
-      </entry>
-      <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\dma_chan01.h</file>
          <hash>ab9d89fa99c3d4d86f3076618d67206c5137b0370318a1fdbe3e519e0833430c</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\i2c\slave\plib_smb2_slave.h</file>
+         <hash>17f8584abd3b98ed08a0e3e581da083bb2c97c640ec93403e3773a306d2d6db9</hash>
       </entry>
       <entry>
          <file>..\src\third_party\rtos\FreeRTOS\Source\queue.c</file>
@@ -6501,7 +6501,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_base.c</file>
-         <hash>afb9ddacc181551d937db7f47234cfe8aba0ecc981b5e1c2c0ead426c1e2f692</hash>
+         <hash>856b9cdd36637eafdac8284858eaacf5453862be8472656fe55a844d762b6061</hash>
       </entry>
       <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\wdt.h</file>
@@ -6509,7 +6509,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_common.h</file>
-         <hash>a177d77d89fc0296e86ac27c21dee2ed3cc93ae1f57527d3953fe3a74632484b</hash>
+         <hash>317e5a68deabac59a952771e747b8e166ddc7a1b122263d82a73d5d30d3bce6d</hash>
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\i2c\plib_smb3_master_slave_common.h</file>
@@ -6557,7 +6557,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_config.h</file>
-         <hash>ff2c20e72b8b37621df451948a096602aa56c1655441594517429c76beec4ecb</hash>
+         <hash>869254ddf4bb351f45c0cd71ca1a73c1603191b02adf18ec262c9edff1a42e0f</hash>
       </entry>
       <entry>
          <file>..\src\third_party\rtos\FreeRTOS\Source\stream_buffer.c</file>

@@ -322,7 +322,8 @@ typedef struct I2C_BUFFER_INFO
  * ############################################################################
  * ############################################################################
 *******************************************************************************/
-typedef uint8_t (*I2C_SLAVE_FUNC_PTR)(I2C_BUFFER_INFO *, uint8_t);
+typedef uint8_t (*I2C_SLAVE_FUNC_PTR)(I2C_BUFFER_INFO *buffer_info, 
+                                      uint8_t slaveTransmitFlag);
 
 /******************************************************************************/
 /** I2C_MASTER_FUNC_PTR - Master transmit status function pointer
@@ -356,7 +357,10 @@ typedef uint8_t (*I2C_SLAVE_FUNC_PTR)(I2C_BUFFER_INFO *, uint8_t);
  * Refer mctp_i2c_tx interface function
  * ############################################################################
 *******************************************************************************/
-typedef uint8_t (*I2C_MASTER_FUNC_PTR)(uint8_t, uint8_t, uint8_t *, I2C_MAPP_CBK_NEW_TX *);
+typedef uint8_t (*I2C_MASTER_FUNC_PTR)(uint8_t channel, 
+                                       uint8_t status, 
+                                       uint8_t *buffer_ptr, 
+                                       I2C_MAPP_CBK_NEW_TX *newTxParams);
 
 /******************************************************************************/
 /** mctp_i2c_tx
@@ -623,42 +627,6 @@ extern uint8_t mctp_i2c_get_chan_busy_status(uint8_t channel);
  * ############################################################################
  ******************************************************************************/
 extern uint16_t mctp_i2c_get_current_timestamp(void);
-
-/******************************************************************************/
-/** mctp_wait_for_done_spdm(void)
- * MCTP wait for SPDM application to be done
- * @param None
- * @return None
- * ############################################################################
- * -----------------------
- * Usage notes:
- * -----------------------
- * This function is called by the MCTP module after filling mctp_pktbuf[MCTP_BUF3]
- * with the SPDM request packet. The SPDM module is expected to inform the MCTP
- * module after it has done processing the SPDM request packet.
- * ############################################################################
-*******************************************************************************/
-extern void mctp_wait_for_done_spdm(void);
-
-/******************************************************************************/
-/** mctp_app_done_inform_i2c(void)
- * Inform I2C driver that MCTP has received SPDM response packet
- * @param None
- * @return None
- * ############################################################################
- * -----------------------
- * Usage notes:
- * -----------------------
- * This function is called by the MCTP module after it has received the SPDM
- * (or) PLDM reponse packet and is ready to be sent on the I2C bus. This 
- * interface function is used in conjunction with mctp_wait_for_done_spdm()
- * interface function. These interface functions are available to the user
- * for cases where the user's I2C driver double / triple buffer capability,
- * and wants to NACK the host if applications are busy processing the 
- * previous request packets.
- * ############################################################################
-*******************************************************************************/
-extern void mctp_app_done_inform_i2c(void);
 
 /******************************************************************************/
 /** mctp_app_task_create(void)

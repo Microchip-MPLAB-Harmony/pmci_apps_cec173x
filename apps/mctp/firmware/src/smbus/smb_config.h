@@ -307,8 +307,6 @@ const SMB_GPIO_LOCATION smb_gpio[MAX_SMB][SMB_MAX_PORT_PER_CHANNEL] =
 /* Macro for smbus timer tick count in msec*/
 #define SMBUS_TIMER_TICK_MSEC 10
 
-#define TICK_PERIOD 10
-
 /* Macros useful scheduling & calculating timing loops */
 //#define ms_to_ticks(x)  (x/TICK_PERIOD)
 //#define second_to_ticks(x)  (x*1000/TICK_PERIOD)

@@ -91,28 +91,28 @@ enum MEC_GIRQ_IDS
 #define MEC_GIRQ25_BITMASK          (1UL << (MEC_GIRQ25_ID + 8)) 
 #define MEC_GIRQ26_BITMASK          (1UL << (MEC_GIRQ26_ID + 8)) 
 
-#define INTERRUPT_MODE_ALL_AGGREGATED        (0u)
-#define INTERRUPT_MODE_DIRECT                (1u)
+#define INTERRUPT_MODE_ALL_AGGREGATED        (0U)
+#define INTERRUPT_MODE_DIRECT                (1U)
 
 // Bit map of GIRQs whose sources can be directly connected to the NVIC
 // GIRQs 13 - 19, 21, 23, 24-26
-#define ECIA_GIRQ_DIRECT_BITMAP     (0x07AFE000ul)
+#define ECIA_GIRQ_DIRECT_BITMAP     (0x07AFE000UL)
 
 /* Added based on CEC173x */
-#define MCHP_ECIA_ALL_MASK 0x05F7FF00ul
+#define MCHP_ECIA_ALL_MASK 0x05F7FF00UL
 
 #define MCHP_ECIA_AGGR_BITMAP                                                  \
-    ((1ul << 8) | (1ul << 9) | (1ul << 10) | (1ul << 11) | (1ul << 12) |       \
-     (1ul << 22) | (1ul << 26))
+    ((1UL << 8) | (1UL << 9) | (1UL << 10) | (1UL << 11) | (1UL << 12) |       \
+     (1UL << 22) | (1UL << 26))
 
 #define MCHP_ECIA_DIRECT_BITMAP                                                \
-    ((1ul << 13) | (1ul << 14) | (1ul << 15) | (1ul << 16) | (1ul << 17) |     \
-     (1ul << 18) | (1ul << 20) | (1ul << 21) | (1ul << 23) | (1ul << 24))
+    ((1UL << 13) | (1UL << 14) | (1UL << 15) | (1UL << 16) | (1UL << 17) |     \
+     (1UL << 18) | (1UL << 20) | (1UL << 21) | (1UL << 23) | (1UL << 24))
 
-#define ECIA_NVIC_ID_BITPOS             (0u)
-#define ECIA_IA_NVIC_ID_BITPOS          (8u)
-#define ECIA_GIRQ_ID_BITPOS             (16u)
-#define ECIA_GIRQ_BIT_BITPOS            (24u)
+#define ECIA_NVIC_ID_BITPOS             (0U)
+#define ECIA_IA_NVIC_ID_BITPOS          (8U)
+#define ECIA_GIRQ_ID_BITPOS             (16U)
+#define ECIA_GIRQ_BIT_BITPOS            (24U)
 
 /*
  * EC Interrupt Aggregator and NVIC configuration.
@@ -205,8 +205,8 @@ static const struct girq_route girq_routing_tbl[MEC_GIRQ_ID_MAX] = {
 };
 
 
-#define MCHP_FIRST_GIRQ 8u
-#define MCHP_LAST_GIRQ 26u
+#define MCHP_FIRST_GIRQ 8U
+#define MCHP_LAST_GIRQ 26U
 
 /* ------------------------------------------------------------------------------- */
 /*                  NVIC,ECIA Routing Policy for Direct Mode                       */
