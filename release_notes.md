@@ -3,3 +3,27 @@
 
 # Microchip MPLAB® Harmony 3 Release Notes
 
+## Harmony 3 PMCI library (MCTP and SPDM) application examples for CEC173x family  v3.0.0
+
+### Development kit and demo application support
+
+Following table provides number of peripheral library examples available for different development kits.
+
+| Development Kits  | MPLAB X applications |
+|:-----------------:|:-------------------:|
+| [CEC1736 Development Board](https://www.microchip.com/en-us/development-tool/EV19K07A) | 1 |
+
+### New Features
+
+- None
+
+### Known Issues
+
+- None
+
+### Development Tools
+
+- [MPLAB® X IDE v6.05](https://www.microchip.com/mplab/mplab-x-ide)
+- MPLAB® X IDE plug-ins:
+  - MPLAB® Code Configurator (MCC) v5.2.2
+- [MPLAB® XC32 C/C++ Compiler v4.20](https://www.microchip.com/mplab/compilers)

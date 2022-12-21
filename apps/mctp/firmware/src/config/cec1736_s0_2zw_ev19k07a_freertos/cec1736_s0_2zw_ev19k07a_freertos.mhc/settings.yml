@@ -1,0 +1,14 @@
+format_version: v1.0
+configName: cec1736_s0_2zw_ev19k07a_freertos
+folderName: mctp_demo
+frameworkPath: E:\Shreyas\GitHubRepo\Harmony\Internal
+processor: CEC1736_S0_2ZW
+projectName: mctp_demo
+settings:
+  PackageFilter: ''
+  FORCE_OPTIMIZATION: 'false'
+  GENERATE_BACKUP: 'true'
+  TRUSTZONE: 'false'
+  CMSISPath: dev_packs\arm\CMSIS\5.8.0
+  MERGE_STRATEGY: USER_ALL
+  DFPPath: dev_packs\Microchip\CEC_DFP\1.7.151\cec1736\atdf\CEC1736_S0_2ZW.atdf

@@ -1,6 +1,6 @@
 package:
   format-version: "1.0.0"
-  name: "replaceme"
+  name: "pmci_apps_cec173x"
   type: "application"
   status: "beta"
   required: false
@@ -10,3 +10,6 @@ package:
     - name: "csp"
       type: "package"
       version: "3.14.0"
+    - name: "CMSIS-FreeRTOS"
+      type: "package"
+      version: "10.4.6"
