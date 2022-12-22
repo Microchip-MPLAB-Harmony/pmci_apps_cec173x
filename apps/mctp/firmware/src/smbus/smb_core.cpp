@@ -233,7 +233,7 @@ void smbus_interrupt_task(void)
             base[channel].handle_bus_error_postprocessing_ports();
             /* schedule timer task for executing port state machine */
 #if SMB_FREERTOS
-			smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
+            smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
 
 #elif SMB_SKERN
             kSET_EVENT_WAKETIMER(ms_to_ticks(SMBUS_TIMER_TICK_MSEC), smbus);
@@ -289,7 +289,7 @@ void smbus_timer_task(void)
     if (timerEventRequired)
     {
 #if SMB_FREERTOS
-		smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
+        smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
         
 #elif SMB_SKERN
         kSET_EVENT_WAKETIMER(ms_to_ticks(SMBUS_TIMER_TICK_MSEC), smbus);
@@ -388,7 +388,7 @@ void smb_enable(const UINT8 channel)
     base[channel].enable_port();
     /* schedule timer task for executing port state machine */
 #if SMB_FREERTOS
-	smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
+    smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
 #elif SMB_SKERN
     kSET_EVENT_WAKETIMER(ms_to_ticks(SMBUS_TIMER_TICK_MSEC), smbus);
     smbTimerTick = ms_to_ticks(SMBUS_TIMER_TICK_MSEC);
@@ -449,7 +449,7 @@ void smb_core_isr_dma(const UINT8 channel, const bool slave_dma_flag)
     }
 
 #if SMB_FREERTOS
-	smb_raise_interrupt_event();
+    smb_raise_interrupt_event();
 #elif SMB_SKERN
     kSET_EVENT_INTERRUPT(smbus);    
 #else
@@ -503,7 +503,7 @@ void smb_core_isr(const UINT8 channel)
     if (raiseInterruptTaskRequestFlag)
     {
 #if SMB_FREERTOS
-		smb_raise_interrupt_event();
+        smb_raise_interrupt_event();
 #elif SMB_SKERN
         kSET_EVENT_INTERRUPT(smbus);
 #else
@@ -550,7 +550,7 @@ void smb_core_master_wdt(const UINT8 channel)
         base[channel].handle_bus_error_postprocessing_ports();
         /* schedule timer task for executing port state machine */
 #if SMB_FREERTOS
-		smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
+        smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
 #elif SMB_SKERN
         kSET_EVENT_WAKETIMER(ms_to_ticks(SMBUS_TIMER_TICK_MSEC), smbus);
         smbTimerTick = ms_to_ticks(SMBUS_TIMER_TICK_MSEC);
@@ -745,31 +745,31 @@ bool is_bus_error_flag_set(const UINT8 channel)
 void enable_smb_irq(const UINT8 channel)
 {
     /* Enable smbus interrupt */
-	switch(channel)
-	{
-		case SMB_CHANNEL_0:
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB0);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB0);
-			break;
-		case SMB_CHANNEL_1:
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB1);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB1);
-			break;
-		case SMB_CHANNEL_2:
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB2);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB2);
-			break;
-		case SMB_CHANNEL_3:
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB3);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB3);
-			break;
-		case SMB_CHANNEL_4:
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB4);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB4);
-			break;
-		default:
-			break;
-	}
+    switch(channel)
+    {
+        case SMB_CHANNEL_0:
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB0);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB0);
+            break;
+        case SMB_CHANNEL_1:
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB1);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB1);
+            break;
+        case SMB_CHANNEL_2:
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB2);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB2);
+            break;
+        case SMB_CHANNEL_3:
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB3);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB3);
+            break;
+        case SMB_CHANNEL_4:
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB4);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_I2CSMB4);
+            break;
+        default:
+            break;
+    }
 
 }/* enable_smb_irq */
 
@@ -781,56 +781,56 @@ void enable_smb_irq(const UINT8 channel)
 *******************************************************************************/
 void enable_smb_dma_irq(const UINT8 channel)
 {
-	switch(channel)
-	{
-		case SMB_CHANNEL_0:
-			/* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH01);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH01);
+    switch(channel)
+    {
+        case SMB_CHANNEL_0:
+            /* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH01);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH01);
 
-			/* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH00);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH00);
-			break;
-		case SMB_CHANNEL_1:
-			/* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH03);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH03);
+            /* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH00);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH00);
+            break;
+        case SMB_CHANNEL_1:
+            /* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH03);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH03);
 
-			/* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH02);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH02);
-			break;
-		case SMB_CHANNEL_2:
-			/* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH05);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH05);
+            /* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH02);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH02);
+            break;
+        case SMB_CHANNEL_2:
+            /* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH05);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH05);
 
-			/* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH04);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH04);
-			break;
-		case SMB_CHANNEL_3:
-			/* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH07);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH07);
+            /* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH04);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH04);
+            break;
+        case SMB_CHANNEL_3:
+            /* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH07);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH07);
 
-			/* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH06);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH06);
-			break;
-		case SMB_CHANNEL_4:
-			/* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH09);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH09);
+            /* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH06);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH06);
+            break;
+        case SMB_CHANNEL_4:
+            /* slave dma's start from odd channel numbers 1, 3, 5, 7, 9 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH09);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH09);
 
-			/* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
-			interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH08);
-			interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH08);
-			break;
-		default:
-			break;
-	}
+            /* master dma's start from even channel numbers 0, 2, 4, 6, 8 */
+            interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH08);
+            interrupt_device_ecia_enable_set(ECIA_AGG_INT_SRC_DMA_CH08);
+            break;
+        default:
+            break;
+    }
 
 
 
@@ -844,26 +844,26 @@ void enable_smb_dma_irq(const UINT8 channel)
 *******************************************************************************/
 void disable_smb_irq(const UINT8 channel)
 {
-	switch(channel)
-	{
-		case SMB_CHANNEL_0:
-			interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB0);
-			break;
-		case SMB_CHANNEL_1:
-			interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB1);
-			break;
-		case SMB_CHANNEL_2:
-			interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB2);
-			break;
-		case SMB_CHANNEL_3:
-			interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB3);
-			break;
-		case SMB_CHANNEL_4:
-			interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB4);
-			break;
-		default:
-			break;
-	}
+    switch(channel)
+    {
+        case SMB_CHANNEL_0:
+            interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB0);
+            break;
+        case SMB_CHANNEL_1:
+            interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB1);
+            break;
+        case SMB_CHANNEL_2:
+            interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB2);
+            break;
+        case SMB_CHANNEL_3:
+            interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB3);
+            break;
+        case SMB_CHANNEL_4:
+            interrupt_device_ecia_enable_clear(ECIA_AGG_INT_SRC_I2CSMB4);
+            break;
+        default:
+            break;
+    }
 }/* disable_smb_irq */
 
 
@@ -1018,7 +1018,7 @@ void handle_power_low_to_high_event(const UINT8 channel)
              
              /* schedule timer task for executing port state machine */
 #if SMB_FREERTOS           
-		   	 smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
+                smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
 #elif SMB_SKERN
              kSET_EVENT_WAKETIMER(ms_to_ticks(SMBUS_TIMER_TICK_MSEC), smbus);
              smbTimerTick = ms_to_ticks(SMBUS_TIMER_TICK_MSEC);
@@ -1031,7 +1031,7 @@ void handle_power_low_to_high_event(const UINT8 channel)
         {
             /* schedule timer task for executing port state machine */
 #if SMB_FREERTOS
-			smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
+            smb_raise_timer_event(SMBUS_TIMER_TICK_MSEC);
 
 #elif SMB_SKERN
             kSET_EVENT_WAKETIMER(ms_to_ticks(SMBUS_TIMER_TICK_MSEC), smbus);

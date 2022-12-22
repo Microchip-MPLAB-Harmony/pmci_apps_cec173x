@@ -137,7 +137,7 @@ class SMB_BASE{
         *******************************************************************************/
         void change_port( const UINT8 port) const
         {
-			I2CSMBx_PortSet((SMB_INSTANCE)instance_, port);
+            I2CSMBx_PortSet((SMB_INSTANCE)instance_, port);
 
         }/* change_port */
 

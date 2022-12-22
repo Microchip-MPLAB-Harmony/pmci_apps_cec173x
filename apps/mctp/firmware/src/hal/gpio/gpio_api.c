@@ -128,22 +128,22 @@ uint8_t gpio_init( GPIO_PIN pin, GPIO_INP_READ new_val, GPIO_FUNCTION new_mux, G
     uint8_t ret_init_sts = 0u;
     if ( 1u == gpio_is_valid(pin) )
     {
-		(void)gpio_property_set(pin, GPIO_PROP_INP_EN_DIS, (uint32_t)new_val);
-		(void)gpio_property_set(pin, GPIO_PROP_MUX_SEL, (uint32_t)new_mux);
-		(void)gpio_property_set(pin, GPIO_PROP_POLARITY, (uint32_t)new_pol);
-		(void)gpio_property_set(pin, GPIO_PROP_DIR, (uint32_t)new_dir);
-		(void)gpio_property_set(pin, GPIO_PROP_OBUFF_TYPE, (uint32_t)new_obuf);
-		(void)gpio_property_set(pin, GPIO_PROP_INT_DET, (uint32_t)new_idet);
-		(void)gpio_property_set(pin, GPIO_PROP_PWR_GATE, (uint32_t)new_pwrg);
-		(void)gpio_property_set(pin, GPIO_PROP_PU_PD, (uint32_t)new_pud);
-		
+        (void)gpio_property_set(pin, GPIO_PROP_INP_EN_DIS, (uint32_t)new_val);
+        (void)gpio_property_set(pin, GPIO_PROP_MUX_SEL, (uint32_t)new_mux);
+        (void)gpio_property_set(pin, GPIO_PROP_POLARITY, (uint32_t)new_pol);
+        (void)gpio_property_set(pin, GPIO_PROP_DIR, (uint32_t)new_dir);
+        (void)gpio_property_set(pin, GPIO_PROP_OBUFF_TYPE, (uint32_t)new_obuf);
+        (void)gpio_property_set(pin, GPIO_PROP_INT_DET, (uint32_t)new_idet);
+        (void)gpio_property_set(pin, GPIO_PROP_PWR_GATE, (uint32_t)new_pwrg);
+        (void)gpio_property_set(pin, GPIO_PROP_PU_PD, (uint32_t)new_pud);
+        
         ret_init_sts = 0u;
     }
     else
     {
         ret_init_sts = 1u;
     }
-	
+    
     return ret_init_sts;
 }
 
@@ -166,25 +166,25 @@ uint8_t gpio_output_set( GPIO_PIN pin, GPIO_ALT_OUT out_src, const uint32_t gpio
 
     if ( 1u == gpio_is_valid(pin) )
     {
-		GPIO_PinGroupOutputConfig( pin, out_src );
-
+        GPIO_PinGroupOutputConfig( pin, out_src );
+        
         if ( GPIO_ALT_OUT_DIS == out_src )
         {
-			if(gpio_state > 0u) {
-				GPIO_GroupPinSet(pin);
-			} else {
-				GPIO_GroupPinClear(pin);
-			}
+            if(gpio_state > 0u) {
+                GPIO_GroupPinSet(pin);
+            } else {
+                GPIO_GroupPinClear(pin);
+            }
         }
         else
         {
-			if(gpio_state > 0u) {
-				GPIO_PinSet(pin);
-			} else {
-				GPIO_PinClear(pin);
-			}
+            if(gpio_state > 0u) {
+                GPIO_PinSet(pin);
+            } else {
+                GPIO_PinClear(pin);
+            }
         }
-
+        
         ret_op_set_sts = 0u;
     }
     else
@@ -233,15 +233,15 @@ uint8_t gpio_slewRate_set( GPIO_PIN pin, GPIO_SLEW_RATE new_slew )
     uint8_t ret_slw_set_sts = 0u;
     if ( 1u == gpio_is_valid(pin) )
     {
-		GPIO_PinSlewRateConfig(pin, new_slew);
-
+        GPIO_PinSlewRateConfig(pin, new_slew);
+        
         ret_slw_set_sts = 0u;
     }
     else
     {
         ret_slw_set_sts = 1u;
     }
-
+    
     return ret_slw_set_sts;
 }
 
@@ -261,8 +261,8 @@ uint8_t gpio_drvStr_set( GPIO_PIN pin, GPIO_DRV drv_str )
     uint8_t ret_drvstr_set_sts = 0u;
     if ( 1u == gpio_is_valid(pin) )
     {
-		GPIO_DrvStrConfig(pin, drv_str);
-		
+        GPIO_DrvStrConfig(pin, drv_str);
+        
         ret_drvstr_set_sts = 0u;
     }
     else

@@ -109,14 +109,14 @@ void SMB_BASE::enable(void)
     busErrorFlag_ = false;
 //  powerLowToHighDetectFlag_ = FALSE;
 
-	I2CSMBx_Reset((SMB_INSTANCE)instance_);
+    I2CSMBx_Reset((SMB_INSTANCE)instance_);
 
     const UINT16 ownAddress = get_own_address();
     const UINT8 defaultPort = get_default_port();
     const UINT8 speed = get_speed();
     const bool fairnessEnableFlag = is_fairnessEnable_set();
 
-	I2CSMBx_Enable((SMB_INSTANCE)instance_, ownAddress, defaultPort, speed, fairnessEnableFlag);
+    I2CSMBx_Enable((SMB_INSTANCE)instance_, ownAddress, defaultPort, speed, fairnessEnableFlag);
 
 }/* SMB_BASE::enable */
 
@@ -133,7 +133,7 @@ void SMB_BASE::set_speed(UINT8 speed) const
     const bool fairnessEnableFlag = is_fairnessEnable_set();
     
     /* Configure speed and other timing parameters */
-	I2CSMBx_TimingInit((SMB_INSTANCE)instance_, speed, fairnessEnableFlag);
+    I2CSMBx_TimingInit((SMB_INSTANCE)instance_, speed, fairnessEnableFlag);
 
 }/* SMB_BASE::enable */
 
@@ -147,7 +147,7 @@ void SMB_BASE::set_speed(UINT8 speed) const
 void SMB_BASE::disable(void)
 {
     UINT8 idx_port;
-	uint8_t device;
+    uint8_t device;
 
     //trace0(0, SMB_BASE, 0, "disable: enter ");
 
@@ -158,7 +158,7 @@ void SMB_BASE::disable(void)
     DMA_Stop((DMA_CHANNEL)(instance_*2));
 
     /* Reset smbus controller */
-	I2CSMBx_Reset((SMB_INSTANCE)instance_);
+    I2CSMBx_Reset((SMB_INSTANCE)instance_);
 
     for (idx_port=0; idx_port<SMB_MAX_PORT_PER_CHANNEL; idx_port++)
     {
@@ -237,7 +237,7 @@ bool SMB_BASE::timer_task(void)
                     )
                 {
                     //TRACE0(33, SMB_BASE, 0, "put port to default port");
-					I2CSMBx_PortSet((SMB_INSTANCE)instance_, idx_port);
+                    I2CSMBx_PortSet((SMB_INSTANCE)instance_, idx_port);
                 }
             }
             else
@@ -261,7 +261,7 @@ bool SMB_BASE::timer_task(void)
  ******************************************************************************/
 void SMB_BASE::ber_isr(void)
 {
-	uint8_t device;
+    uint8_t device;
     //TRACE0(34, SMB_BASE, 0, "ber_isr: enter ");
     uint8_t idx = 0;
     if (berCounter_!=0xFF)
@@ -271,11 +271,11 @@ void SMB_BASE::ber_isr(void)
     idx =  I2CSMBx_PortGet((SMB_INSTANCE)instance_);
     port_[idx].set_bus_error_flag(true);
 
-	I2CSMBx_MdoneDisable((SMB_INSTANCE)instance_);
+    I2CSMBx_MdoneDisable((SMB_INSTANCE)instance_);
 
-	I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+    I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
 
-	I2CSMBx_ClrBERStatus((SMB_INSTANCE)instance_);
+    I2CSMBx_ClrBERStatus((SMB_INSTANCE)instance_);
 
     /* Stop the DMA's */
 #ifndef DISABLE_SMB_MASTER
@@ -283,7 +283,7 @@ void SMB_BASE::ber_isr(void)
 #endif
     DMA_Stop((DMA_CHANNEL)(instance_*2));
 
-	I2CSMBx_FlushHwTxRxBuffers((SMB_INSTANCE)instance_);
+    I2CSMBx_FlushHwTxRxBuffers((SMB_INSTANCE)instance_);
 
     busErrorFlag_ = true;
 }/* SMB_BASE::ber_isr */
@@ -303,7 +303,7 @@ void SMB_BASE::handle_bus_error(void)
     enable();
     if (is_timeouts_enabled())
     {
-	   I2CSMBx_TimeoutsEnable((SMB_INSTANCE)instance_, timeoutsFlag_);
+       I2CSMBx_TimeoutsEnable((SMB_INSTANCE)instance_, timeoutsFlag_);
     }
 }/* SMB_BASE::handle_bus_error */
 
@@ -317,36 +317,36 @@ void SMB_BASE::handle_bus_error(void)
 #ifndef DISABLE_SMB_MASTER
 void SMB_BASE::handle_master_wdt(void)
 {
-	uint8_t device;
+    uint8_t device;
     //TRACE0(35, SMB_BASE, 0, "handle_master_wdt: enter ");
     uint8_t idx =  I2CSMBx_PortGet((SMB_INSTANCE)instance_);
     port_[idx].set_bus_error_flag(true);
 
-	I2CSMBx_MdoneDisable((SMB_INSTANCE)instance_);
-	I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+    I2CSMBx_MdoneDisable((SMB_INSTANCE)instance_);
+    I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
 
     /* Stop the DMA's */
     DMA_Stop((DMA_CHANNEL)((instance_*2)+1));
 
     DMA_Stop((DMA_CHANNEL)(instance_*2));
 
-	I2CSMBx_FlushHwTxRxBuffers((SMB_INSTANCE)instance_);
-	I2CSMBx_ClrAllCompletionStatus((SMB_INSTANCE)instance_);
+    I2CSMBx_FlushHwTxRxBuffers((SMB_INSTANCE)instance_);
+    I2CSMBx_ClrAllCompletionStatus((SMB_INSTANCE)instance_);
 
     DMA_ChannelDeactivate((DMA_CHANNEL)((instance_*2)+1));
-	
+    
     DMA_ChannelDeactivate((DMA_CHANNEL)(instance_*2));
 
     /* Reset smbus controller */
-	I2CSMBx_Reset((SMB_INSTANCE)instance_);
+    I2CSMBx_Reset((SMB_INSTANCE)instance_);
 
     //trace0(0, SMB_BASE, 0, "handle_master_wdt: Set and ClR MRUN, SRUN ");
 
-	I2CSMBx_MRUNSet((SMB_INSTANCE)instance_);
-	I2CSMBx_SRUNSet((SMB_INSTANCE)instance_);
+    I2CSMBx_MRUNSet((SMB_INSTANCE)instance_);
+    I2CSMBx_SRUNSet((SMB_INSTANCE)instance_);
 
-	I2CSMBx_MRUNClr((SMB_INSTANCE)instance_);
-	I2CSMBx_SRUNClr((SMB_INSTANCE)instance_);
+    I2CSMBx_MRUNClr((SMB_INSTANCE)instance_);
+    I2CSMBx_SRUNClr((SMB_INSTANCE)instance_);
 
 }/* SMB_BASE::handle_master_wdt */
 #endif
@@ -364,7 +364,7 @@ void SMB_BASE::handle_bus_error_postprocessing_ports(void)
 
     //TRACE0(36, SMB_BASE, 0, "handle_bus_error_postprocessing_ports: enter ");
 
-	I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+    I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
     for (idx_port = SMB_PORT_0; idx_port < SMB_MAX_PORT_PER_CHANNEL; idx_port++)
     {
         if ( port_[idx_port].get_bus_error_flag())
@@ -377,7 +377,7 @@ void SMB_BASE::handle_bus_error_postprocessing_ports(void)
         }
         port_[idx_port].set_bus_error_flag(false);
     }
-	I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
+    I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
 
     /* schedule timer task for executing port state machine */
     //kSET_EVENT_WAKETIMER(ms_to_ticks(SMBUS_TIMER_TICK_COUNT), smbus);

@@ -48,30 +48,30 @@ Last Change:    None
 *******************************************************************************/
 uint8_t get_device_id(const uint8_t device_name, const uint8_t device_instance)
 {
-	uint8_t device_id = 0;
+    uint8_t device_id = 0;
 
-	trace0(0, DMA, 0, "get_device_id: Enter ");
+    trace0(0, DMA, 0, "get_device_id: Enter ");
 
-	switch (device_name)
-	{
-	case (uint8_t)SMBUS_SLAVE:
-		device_id = (uint8_t)DEVICE_ID_SLAVE_1 + (uint8_t)(2U*device_instance);
-		break;
-
-	case (uint8_t)SMBUS_MASTER:
-		device_id = (uint8_t)DEVICE_ID_MASTER_1 + (uint8_t)(2U*device_instance);
-		break;
-
-	case (uint8_t)SPI_FLASH:
-		device_id = (uint8_t)DEVICE_ID_SPI_FLASH;
-		break;
-
-	default:
-		trace0(0, DMA, 0, "get_device_id: invalid device name ");
-		break;
-	}
-
-	return device_id;
+    switch (device_name)
+    {
+    case (uint8_t)SMBUS_SLAVE:
+        device_id = (uint8_t)DEVICE_ID_SLAVE_1 + (uint8_t)(2U*device_instance);
+        break;
+        
+    case (uint8_t)SMBUS_MASTER:
+        device_id = (uint8_t)DEVICE_ID_MASTER_1 + (uint8_t)(2U*device_instance);
+        break;
+        
+    case (uint8_t)SPI_FLASH:
+        device_id = (uint8_t)DEVICE_ID_SPI_FLASH;
+        break;
+        
+    default:
+        trace0(0, DMA, 0, "get_device_id: invalid device name ");
+        break;
+    }
+    
+    return device_id;
 
 }/* get_device_id */
 

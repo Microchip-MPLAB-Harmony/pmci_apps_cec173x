@@ -39,11 +39,11 @@ int main ( void )
     /* Initialize all modules */
     SYS_Initialize ( NULL );
 
-	if(mctp_app_task_create((void*)NULL) < 0)
-	{
-		/* !!MCTP task creation failed, don't proceed!! */
-		while(1);
-	}
+    if(mctp_app_task_create((void*)NULL) < 0)
+    {
+        /* !!MCTP task creation failed, don't proceed!! */
+        while(1);
+    }
 
     while ( true )
     {

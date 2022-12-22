@@ -107,7 +107,7 @@ static void mctp_main(void* pvParameters)
         return;
     }
 
-	mctp_init_task();
+    mctp_init_task();
     mctp_update_eid(MCTP_EC_EID);
 	mctp_i2c_update(HOST_SLAVE_ADDR, (uint8_t)MCTP_I2C_CLK_FREQ);
 	mctp_smbaddress_update(mctpContext->i2c_slave_addr, MCTP_I2C_PORT);
