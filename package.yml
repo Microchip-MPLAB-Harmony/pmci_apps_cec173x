@@ -7,9 +7,19 @@ package:
   version: "1.0.0"
 
   dependencies:
+    - name: "pmci"
+      type: "package"
+      version: "v3.0.0"
     - name: "csp"
       type: "package"
       version: "3.14.0"
+    - name: "dev_packs"
+      type: "package"
+      version: "3.14.0"
+    - name: "core"
+      type: "package"
+      version: "3.11.0"
     - name: "CMSIS-FreeRTOS"
       type: "package"
       version: "10.4.6"
+      
