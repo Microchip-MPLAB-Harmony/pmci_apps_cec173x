@@ -4,7 +4,7 @@
 
 
 project: mctp
-creation_date: 2022-12-22T16:32:05.943+05:30[Asia/Calcutta]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
+creation_date: 2023-01-05T10:57:51.190+05:30[Asia/Calcutta]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
 operating_system: Windows 10
 mhc_mode: Standalone            # [IDE|Standalone|Headless]
 mhc_version: NA
@@ -14,8 +14,8 @@ compiler: xc32
 
 modules:
     - {name: "csp", version: "v3.14.0"}
-    - {name: "core", version: "3.11.0"}
+    - {name: "core", version: "unknown"}
     - {name: "dev_packs", version: "v3.14.0"}
-    - {name: "pmci", version: "v3.0.0"}
+    - {name: "pmci", version: "unknown"}
     - {name: "CMSIS-FreeRTOS", version: "v10.4.6"}
 

@@ -73,9 +73,9 @@ ENTRY(__XC32_RESET_HANDLER_NAME)
 #  define RAM_ORIGIN 0x118000
 #endif
 #ifndef RAM_LENGTH
-#  define RAM_LENGTH 0xE800
-#elif (RAM_LENGTH > 0xE800)
-#  error RAM_LENGTH is greater than the max size of 0xE800
+#  define RAM_LENGTH 0xA000
+#elif (RAM_LENGTH > 0xA000)
+#  error RAM_LENGTH is greater than the max size of 0xA000
 #endif
 
 

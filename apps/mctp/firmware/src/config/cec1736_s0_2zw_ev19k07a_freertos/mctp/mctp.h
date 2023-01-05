@@ -680,7 +680,7 @@ int mctp_app_task_create(void *pvParams);
  * -----------------------
  * This function should be called by SPDM module when an SPDM response packet
  * has been populated in mctp_pktbuf[MCTP_BUF2] and ready to be processed
- * by MCTP module
+ * by MCTP module, after calling SET_MCTP_TX_STATE interface function
  * -----------------------
  * Example:
  * -----------------------
@@ -691,6 +691,7 @@ int mctp_app_task_create(void *pvParams);
  *      spdm_buf_rx = mctp_pktbuf[MCTP_BUF3];
  *      spdm_buf_tx = mctp_pktbuf[MCTP_BUF2];
  *      spdm_populate_reponse(spdm_buf_rx, spdm_buf_tx);
+ *      SET_MCTP_TX_STATE();
  *      SET_MCTP_EVENT_FLAG();
  * }
  * ############################################################################
