@@ -29,6 +29,7 @@ The following applications are provided to demonstrate the typical or interestin
 | Name | Description |
 | ---- | ----------- |
 | [MCTP control message exchange](apps/mctp/readme.md) | This example application demonstrates exchange of MCTP control messages between a MCTP device and host
+| [SPDM message exchange](apps/spdm/readme.md) | This example application demonstrates exchange of SPDM messages between a SPDM device and host (attester)
 ____
 
 [![License](https://img.shields.io/badge/license-Harmony%20license-orange.svg)](https://github.com/Microchip-MPLAB-Harmony/pmci_apps_cec173x/blob/master/mplab_harmony_license.md)
