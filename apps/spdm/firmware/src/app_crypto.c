@@ -730,7 +730,7 @@ uint8_t spdm_read_certificate(uint32_t address,
 /** Wrapper function of SPDM module to call the ndrng block operations function in sb dgst
 * @param buff - 8 bit pointer to rng output buffer
 * @param bytes - length of buff
-* @return SUCCESS(0)/FAILURE
+* @return SUCCESS(0)/FAILURE(1)
 *******************************************************************************/
 uint8_t spdm_crypto_ops_gen_random_no(uint8_t *buff, uint8_t bytes)
 {
@@ -746,6 +746,12 @@ uint8_t spdm_crypto_ops_gen_random_no(uint8_t *buff, uint8_t bytes)
     mchp_ndrng_enable(1);
 
     ret_status = mchp_ndrng_read_bytes_nh(buff, bytes);
+
+    if (ret_status > 0) { // no of bytes read greater than 0
+        return 0x00;
+    } else {
+        return 0x01;
+    }
 
     return ret_status;
 }
