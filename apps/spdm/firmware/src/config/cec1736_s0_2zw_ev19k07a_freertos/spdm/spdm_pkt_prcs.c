@@ -145,7 +145,7 @@ void read_chain_from_offset(uint16_t start_offset, uint16_t end_offset, uint32_t
 SPDM_BSS1_ATTR uint16_t read_bytes_from_chain;
 SPDM_BSS1_ATTR uint16_t START_OFFSET_IN_BUFFER;
 SPDM_BSS1_ATTR uint16_t BUFFER_END_OFFSET;
-SPDM_BSS1_ATTR uint8_t length;
+SPDM_BSS1_ATTR uint16_t length;
 
 
 /******************************************************************************/
@@ -3393,7 +3393,6 @@ uint8_t spdm_pkt_validate_and_process_spdm_msg(uint8_t get_cmd, MCTP_PKT_BUF *sp
     default:
         // invalid request command code
         error_handle = SPDM_ERROR_INVLD_RQ;
-        // // trace0(0, SPDM_TSK, 0, "spdm_evt_tsk: IVLD CMND rcvd!");
         break;
     }
     // if any reported error scenario; fill tx buffer with error response
@@ -3429,8 +3428,6 @@ uint8_t spdm_pkt_validate_and_process_spdm_msg(uint8_t get_cmd, MCTP_PKT_BUF *sp
  *******************************************************************************/
 void spdm_pkt_msg_ready_trigger_mctp(MCTP_PKT_BUF *tx_buf)
 {
-    // trace0(0, MCTP, 0, "mctp_txpktready_init: Enter");
-
     /* configure/initialize tx packet buffer parameters */
     tx_buf->smbus_nack_retry_count = 0;
     tx_buf->smbus_lab_retry_count = 0;
@@ -3519,7 +3516,6 @@ void spdm_pkt_tx_packet()
         spdm_pkt_msg_ready_trigger_mctp(mctp_buf_tx);
         break;
     default:
-        // trace0(0, MCTP, 0, "spdm_tx_pkt: default");
         break;
     }
 }
@@ -3657,12 +3653,11 @@ void spdm_pkt_rcv_packet()
             ret_sts = spdm_pkt_validate_and_process_spdm_msg(get_cmd, spdm_buf_tx, spdmContext);
             if (ret_sts)
             {
-                // trace0(0, SPDM_TSK, 0, "spdm_evt_tsk: Ivld SPDM rqst rcvd!");
-                // trace0(0, SPDM_TSK, 0, "spdm_evt_tsk: Sending SPDM err respse!");
+               /* Invalid SPDM req rcvd */
             }
             else
             {
-                // trace0(0, SPDM_TSK, 0, "spdm_evt_tsk: Vld SPDM rqst rcvd");
+               /* Valid SPDM req rcvd */
             }
             spdm_tx_state = SPDM_TX_IN_PROGRESS;
         }
@@ -3700,7 +3695,6 @@ void spdm_event_task(SPDM_CONTEXT *spdmContext)
         spdm_pkt_rcv_packet();
         spdm_pkt_tx_packet();
     }
-    // trace0(0, SPDM_TSK, 0, "spdm_evt_tsk: End");
 
 } /* End spdm_event_task() */
 
