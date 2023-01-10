@@ -465,16 +465,6 @@ uint8_t mctp_smbmaster_done(uint8_t channel, uint8_t status, uint8_t *buffer_ptr
         SET_SPDM_EVENT_FLAG();
     }
 
-    // if (is_pldm_request_firmware_update)
-    // {
-    //     trigger_pldm_res_event();
-    // }
-
-    // if (pldm_pend)
-    // {
-    //     trigger_pldm_res_event();
-    // }
-
     return ret_val;
 
 }  /* End mctp_smbmaster_done */
