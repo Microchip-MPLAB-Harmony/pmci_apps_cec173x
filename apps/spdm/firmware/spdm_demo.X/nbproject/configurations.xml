@@ -376,7 +376,7 @@
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
-      <itemPath>spdm_demo_1.mc3</itemPath>
+      <itemPath>spdm_demo.mc3</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
