@@ -158,16 +158,16 @@
 #define QSPI_PIN_CFG_MAX    0x05
 
 #define MPU_gpio_init_intdet_edge_fall_pu(pin_x)    gpio_init( pin_x, GPIO_INP_ENABLE, GPIO_FUNCTION_GPIO, GPIO_POLARITY_NON_INVERTED, GPIO_DIR_INPUT, \
-																	GPIO_OUTPUT_BUFFER_TYPE_OPEN_DRAIN, GPIO_INTDET_TYPE_FALLING_EDGE, GPIO_PWR_VTR, GPIO_PULL_TYPE_UP );
+                                                   GPIO_OUTPUT_BUFFER_TYPE_OPEN_DRAIN, GPIO_INTDET_TYPE_FALLING_EDGE, GPIO_PWR_VTR, GPIO_PULL_TYPE_UP );
     
 #define MPU_gpio_init_intdet_edge_fall_pd(pin_x)    gpio_init( pin_x, GPIO_INP_ENABLE, GPIO_FUNCTION_GPIO, GPIO_POLARITY_NON_INVERTED, GPIO_DIR_INPUT, \
-																	GPIO_OUTPUT_BUFFER_TYPE_OPEN_DRAIN, GPIO_INTDET_TYPE_FALLING_EDGE, GPIO_PWR_VTR, GPIO_PULL_TYPE_DOWN );
+                                                   GPIO_OUTPUT_BUFFER_TYPE_OPEN_DRAIN, GPIO_INTDET_TYPE_FALLING_EDGE, GPIO_PWR_VTR, GPIO_PULL_TYPE_DOWN );
     
 #define MPU_gpio_init_intdet_edge_rise_pd(pin_x)    gpio_init( pin_x, GPIO_INP_ENABLE, GPIO_FUNCTION_GPIO, GPIO_POLARITY_NON_INVERTED, GPIO_DIR_INPUT, \
-																	GPIO_OUTPUT_BUFFER_TYPE_OPEN_DRAIN, GPIO_INTDET_TYPE_RISING_EDGE, GPIO_PWR_VTR, GPIO_PULL_TYPE_DOWN );
+                                                   GPIO_OUTPUT_BUFFER_TYPE_OPEN_DRAIN, GPIO_INTDET_TYPE_RISING_EDGE, GPIO_PWR_VTR, GPIO_PULL_TYPE_DOWN );
     
 #define MPU_gpio_init_intdet_edge_both_pd(pin_x)    gpio_init( pin_x, GPIO_INP_ENABLE, GPIO_FUNCTION_GPIO, GPIO_POLARITY_NON_INVERTED, GPIO_DIR_INPUT, \
-																	GPIO_OUTPUT_BUFFER_TYPE_OPEN_DRAIN, GPIO_INTDET_TYPE_EITHER_EDGE, GPIO_PWR_VTR, GPIO_PULL_TYPE_DOWN );
+                                                   GPIO_OUTPUT_BUFFER_TYPE_OPEN_DRAIN, GPIO_INTDET_TYPE_EITHER_EDGE, GPIO_PWR_VTR, GPIO_PULL_TYPE_DOWN );
 
 /******************************************************************************/
 /** sb_gpio_disable_unused();

@@ -1,5 +1,5 @@
 /*****************************************************************************
-* © 2018 Microchip Technology Inc. and its subsidiaries.
+* ï¿½ 2018 Microchip Technology Inc. and its subsidiaries.
 * You may use this software and any derivatives exclusively with
 * Microchip products.
 * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".
@@ -303,8 +303,8 @@ void SMB_SLAVE::configure(const UINT8 *const buffer_ptr,const UINT8 readCount,co
     {
         DMA_Start((DMA_CHANNEL)dma_chan_);
     }
-	I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
-	I2CSMBx_StartSlave((SMB_INSTANCE)instance_, readCount, 0, false);
+    I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
+    I2CSMBx_StartSlave((SMB_INSTANCE)instance_, readCount, 0, false);
 }/* SMB_SLAVE::configure */
 
 /******************************************************************************/
@@ -352,8 +352,8 @@ void SMB_SLAVE::configure_isr(const UINT8 *const buffer_ptr,const UINT8 readCoun
     {
         DMA_Start((DMA_CHANNEL)dma_chan_);
     }
-	I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
-	I2CSMBx_StartSlave((SMB_INSTANCE)instance_, readCount, 0, false);
+    I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
+    I2CSMBx_StartSlave((SMB_INSTANCE)instance_, readCount, 0, false);
 }/* SMB_SLAVE::configure */
 
 /******************************************************************************/
@@ -431,12 +431,12 @@ void SMB_SLAVE::proceed(const UINT8 *const buffer_ptr,const UINT8 writeCount,con
         DMA_EnableInterrupt((DMA_CHANNEL)dma_chan_);
          //trace0(0, SMB_SLAVE, 0, "proceed: enable_interrupt() ");
         //Program the writecount a little more, so that clock is stretched when dma completes
-		I2CSMBx_StartSlave((SMB_INSTANCE)instance_, 0, writeCount+1, pecFlag);
+        I2CSMBx_StartSlave((SMB_INSTANCE)instance_, 0, writeCount+1, pecFlag);
         slaveTxInProgressUsingDMA = true;
      }
      else
      {
-		I2CSMBx_StartSlave((SMB_INSTANCE)instance_, 0, writeCount, pecFlag);
+        I2CSMBx_StartSlave((SMB_INSTANCE)instance_, 0, writeCount, pecFlag);
         slaveTxInProgressUsingDMA = false;
      }
 
@@ -463,7 +463,7 @@ void SMB_SLAVE::handle_bus_error(void)
     slaveTxInProgressUsingDMA = false;
     slaveRxDMAInterrupt = false; 
 #else
-	I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+    I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
 #endif
 
 }/* SMB_SLAVE::handle_bus_error */
@@ -484,11 +484,11 @@ bool SMB_SLAVE::isr(void)
     UINT8 ReadCount;
     UINT8 volatile flag1=0;  /* Coverity fix */
     bool retVal;    
-	uint8_t device;
+    uint8_t device;
 
     retVal = false;
 
-	device = get_device_id(SMBUS_MASTER, instance_);
+   device = get_device_id(SMBUS_MASTER, instance_);
     /* Stop the Slave DMA */
     DMA_Stop((DMA_CHANNEL)dma_chan_);
 
@@ -496,29 +496,29 @@ bool SMB_SLAVE::isr(void)
     {
         //trace0(0, SMB_SLAVE, 0, "isr: Slave Xmit Done: ");
         flag1 = 1;
-		I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+        I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
         configure(&spare_buffer_[0], ack_read_count_, true, true, false, false);
     }
     else if (I2CSMBx_IsSNAKRSet((SMB_INSTANCE)instance_))
     {
         //trace0(0, SMB_SLAVE, 0, "isr: SNAKR Set ");
         flag1 = 2;
-		I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+       I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
         retVal = true;
     }
     else if (I2CSMBx_IsRepeatWriteSet((SMB_INSTANCE)instance_))
     {
         //trace0(0, SMB_SLAVE, 0, "isr: Repeat Write Set: ");
         flag1 = 3;
-		I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
-		I2CSMBx_StartSlave((SMB_INSTANCE)instance_, 0, 0, false);
+        I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+        I2CSMBx_StartSlave((SMB_INSTANCE)instance_, 0, 0, false);
     }
     else if (I2CSMBx_IsRepeatReadSet((SMB_INSTANCE)instance_))
     {
         //trace0(0, SMB_SLAVE, 0, "isr: RepeatRead Set ");
         flag1 = 4;
         I2CSMBx_SlaveTxBufferFlush((SMB_INSTANCE)instance_);
-		I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+        I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
         spare_buffer_[0] = 0xFF;
         proceed(spare_buffer_, 1, false);
     }
@@ -531,14 +531,14 @@ bool SMB_SLAVE::isr(void)
         if ((((ack_read_count_-1) == ReadCount) && (mGET_BIT(READ_BIT, spare_buffer_[0]))))
         {
             //trace0(0, SMB_SLAVE, 0, "isr: Receive Byte ");
-			I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+         I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
             spare_buffer_[0] = 0xFF;
             proceed(spare_buffer_, 1, false);
             flag1 = 5;
         }
         else
         {
-			I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+            I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
             configure(&spare_buffer_[0], ack_read_count_, true, true, false, false);
             flag1 = 6;
         }
@@ -564,7 +564,7 @@ bool SMB_SLAVE::isr(void)
     UINT8 ReadCount=0;
     UINT8 volatile flag1=0;
     bool isInterruptTaskRequired;
-	UINT8 device;
+    UINT8 device;
 
 //  trace1(0, SMB_SLAVE, 0, "isr: state = %02Xh", state_);
     
@@ -577,7 +577,7 @@ bool SMB_SLAVE::isr(void)
     if ((UINT8)SLAVE_CLK_STRETCH == state_)
     {
             //trace0(0, SMB_SLAVE_ERR, 0, "isr: SLAVE_CLK_STRETCH something wrong : ");
-			I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+            I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
             //smb_slave_enable(Channel);
             flag1 =1;
     }
@@ -589,14 +589,14 @@ bool SMB_SLAVE::isr(void)
             //trace0(0, SMB_SLAVE_ERR, 0, "isr: SNAKR not set:, something wrong ");
             flag1 =2;
         }
-		I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+        I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
         enable_isr();
         flag1 =3;
     }
     else if (I2CSMBx_IsSTRSet((SMB_INSTANCE)instance_))
     {
             //trace0(0, SMB_SLAVE, 0, "isr: Slave Xmit Done: ");
-			I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+            I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
             active_buffer_->XmitCount = 0;
             active_buffer_->RxCount = 0;
             active_buffer_->sdoneFlag = false;
@@ -611,7 +611,7 @@ bool SMB_SLAVE::isr(void)
     else if ( I2CSMBx_IsSNAKRSet((SMB_INSTANCE)instance_))
     {
             //trace0(0, SMB_SLAVE, 0, "isr: SNAKR Set ");
-			I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+            I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
             active_buffer_->XmitCount = 0;
             active_buffer_->RxCount = 0;
             active_buffer_->sdoneFlag = false;
@@ -629,8 +629,8 @@ bool SMB_SLAVE::isr(void)
             active_buffer_->XmitCount = 0;
             active_buffer_->RxCount = 0;
             active_buffer_->sdoneFlag = false;
-			I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
-			I2CSMBx_StartSlave((SMB_INSTANCE)instance_, 0, 0, false);
+            I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+            I2CSMBx_StartSlave((SMB_INSTANCE)instance_, 0, 0, false);
             flag1 =6;
     }
     else if (I2CSMBx_IsRepeatReadSet((SMB_INSTANCE)instance_))
@@ -641,9 +641,9 @@ bool SMB_SLAVE::isr(void)
             active_buffer_->RxCount++;
             active_buffer_->sdoneFlag = true;
             //trace1(0, SMB_SLAVE, 0, "isr: Datalen = %d", active_buffer_->DataLen);
-			I2CSMBx_SlaveTxBufferFlush((SMB_INSTANCE)instance_);
+            I2CSMBx_SlaveTxBufferFlush((SMB_INSTANCE)instance_);
             repeatReadFlag_ = true;
-			I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+            I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
             /* Schedule event task for executing smb_slave_transmit function */
             //kSET_EVENT_INTERRUPT(smbus);
             isInterruptTaskRequired = true;
@@ -666,7 +666,7 @@ bool SMB_SLAVE::isr(void)
         {
             //trace0(0, SMB_SLAVE, 0, "isr: Receive Byte ");
             repeatReadFlag_ = true;
-			I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+            I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
         /* Schedule event task for executing smb_slave_transmit function */
             //kSET_EVENT_INTERRUPT(smbus);
             isInterruptTaskRequired = true;
@@ -682,7 +682,7 @@ bool SMB_SLAVE::isr(void)
 #else
 #endif            
             bufferMgmt_.recvd_buffer_put(active_buffer_);
-			I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
+            I2CSMBx_ClrSlaveCompletionStatus((SMB_INSTANCE)instance_);
             enable_isr();
       /* Schedule interrupt task for executing smb_packet_received function */
             //kSET_EVENT_INTERRUPT( smbus );
@@ -872,7 +872,7 @@ void SMB_SLAVE::free_active_buffer(void)
 {
     if (((UINT8)SLAVE_ENABLE == state_) || ((UINT8)SLAVE_CLK_STRETCH == state_))
     {
-		I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+        I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
         bufferMgmt_.free_buffer_put(active_buffer_);
     }
 
@@ -956,15 +956,15 @@ void SMB_SLAVE::process_received_packets(void)
     bool eventTaskReqFlag;
     eventTaskReqFlag = false;
 #endif
-	uint8_t device;
+    uint8_t device;
     
     //trace0(0, SMB_SLAVE, 0, "process_received_packets: Enter ");
 
     device = get_device_id(SMBUS_MASTER, instance_);
   /* Process the received packets from Received Buffer List */
-	I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+    I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
     received_slave_buffer_info = bufferMgmt_.received_buffer_get();
-	I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
+    I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
 
     while (NULLVOIDPTR!=received_slave_buffer_info)
     {
@@ -987,7 +987,7 @@ void SMB_SLAVE::process_received_packets(void)
              * application (i.e. STATUS_BUFFER_NOT_DONE) are discarded, that is the buffer
              * is put back to the free list */
             
-			I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+            I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
             bufferMgmt_.free_buffer_put(received_slave_buffer_info);
             //trace0(0, SMB_SLAVE, 0, "smb_slave_pkt_recved: Buffer Done ");
             if (((UINT8)SLAVE_CLK_STRETCH == state_)
@@ -997,7 +997,7 @@ void SMB_SLAVE::process_received_packets(void)
                 state_ = (UINT8)SLAVE_ENABLE;
                 DMA_Start((DMA_CHANNEL)dma_chan_);
             }
-			I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
+            I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
         }
 
         numPacketsProcessed++;
@@ -1009,9 +1009,9 @@ void SMB_SLAVE::process_received_packets(void)
         }
 
         /* Get next received packet */
-		I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+        I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
         received_slave_buffer_info = bufferMgmt_.received_buffer_get();
-		I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
+        I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
     }
 
     #ifndef DISABLE_PENDING_PACKETS
@@ -1064,9 +1064,9 @@ bool SMB_SLAVE::process_pending_packets(void)
                     {
                         //trace0(0, SMB_SLAVE, 0, "process_pending_packets: Pending packet timestamp expired ");
                         /* If packet timestamp has expired, put the buffer in Free List */
-						I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+                        I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
                         bufferMgmt_.free_buffer_put(pending_slave_buffer_info);
-						I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
+                        I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
                     }
                     else
                     {
@@ -1081,9 +1081,9 @@ bool SMB_SLAVE::process_pending_packets(void)
                     //trace0(0, SMB_SLAVE, 0, "process_pending_packets: Pending packet done ");
                     /* If application has copied the packet or no application identified
                      * put the packet in Free List */
-					I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
+                    I2CSMBx_SdoneDisable((SMB_INSTANCE)instance_);
                     bufferMgmt_.free_buffer_put(pending_slave_buffer_info);
-					I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
+                    I2CSMBx_SdoneEnable((SMB_INSTANCE)instance_);
                 }       
       }
         else //if (NULLVOIDPTR != pending_slave_buffer_info)

@@ -48,7 +48,7 @@ int main ( void )
 
     if (spdm_app_task_create((void*)NULL) < 0)
     {
-        /* !!MCTP task creation failed, don't proceed!! */
+        /* !!SPDM task creation failed, don't proceed!! */
         while(1);
     }
 

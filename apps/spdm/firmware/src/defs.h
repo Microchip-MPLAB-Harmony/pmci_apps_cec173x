@@ -41,11 +41,11 @@
 #define DEFS_H
 
 /* bit operation MACRO, xvar could be byte, word or dword */
-#define mSET_BIT(x, xvar)		( xvar |= x )
-#define mCLR_BIT(x, xvar)		( xvar &= ~x )
-#define mGET_BIT(x, xvar)		( xvar & x )
-#define mCLR_SRC_BIT(x, xvar)	( xvar = x )
-#define mTOGGLE_BIT(x, xvar)	{if(mGET_BIT(x, xvar)){mCLR_BIT(x, xvar);}else{mSET_BIT(x, xvar);}}
+#define mSET_BIT(x, xvar)    ( xvar |= x )
+#define mCLR_BIT(x, xvar)    ( xvar &= ~x )
+#define mGET_BIT(x, xvar)     ( xvar & x )
+#define mCLR_SRC_BIT(x, xvar)   ( xvar = x )
+#define mTOGGLE_BIT(x, xvar)    {if(mGET_BIT(x, xvar)){mCLR_BIT(x, xvar);}else{mSET_BIT(x, xvar);}}
 
 #endif /*DEFS_H*/
 

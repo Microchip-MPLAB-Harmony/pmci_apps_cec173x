@@ -39,7 +39,7 @@ extern "C" {
     
 #define MCTP_TASK1_STACK_ALIGN __attribute__ ((aligned(MCTP_TASK1_STACK_SIZE)))
 
-#define MCTP_TASK1_BUF_SIZE		512U
+#define MCTP_TASK1_BUF_SIZE      512U
 #define MCTP_TASK1_BUF_MPU_ATTR 0U
 #define MCTP_TASK1_BUF_ALIGN __attribute__((aligned(MCTP_TASK1_BUF_SIZE)))
 

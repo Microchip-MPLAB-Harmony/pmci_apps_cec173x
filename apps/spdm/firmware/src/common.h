@@ -31,7 +31,7 @@
 #include "dma/dma_api.h"
 #include "peripheral/i2c/plib_i2c_smbus_lowlevel_intf.h"
 
-#define BIT_n_MASK(n)	(1ul << (n))
+#define BIT_n_MASK(n)   (1ul << (n))
 #define BIT_0_MASK    (1U<<0)
 #define BIT_1_MASK    (1U<<1)
 #define BIT_2_MASK    (1U<<2)

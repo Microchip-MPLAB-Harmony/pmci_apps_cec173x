@@ -19,7 +19,7 @@
  * IF ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 */
 #ifndef RTOS_DEFINITIONS_H
-#define	RTOS_DEFINITIONS_H
+#define RTOS_DEFINITIONS_H
 
 //RTOS Related Includes
 #include "FreeRTOS.h"
@@ -32,5 +32,5 @@
 
 #include "portmacro.h"
 
-#endif	/* RTOS_DEFINITIONS_H */
+#endif   /* RTOS_DEFINITIONS_H */
 

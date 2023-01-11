@@ -50,7 +50,7 @@ uint8_t sb_sram_rlog_read(uint16_t byte_index, uint8_t *buffer, uint16_t length)
     uint8_t retVal = 0;
 
     do
-    {		
+    {      
         rlog_ptr = (uint8_t *) SRAM_ROM_LOG_START_LOCATION_A1;
 
         // Read Data
@@ -109,15 +109,15 @@ SHA_RET_CODE do_sha(uint8_t hash_algo, uint8_t *input_buf, uint32_t input_len, u
     if (opn_sts == 0) {
         /* add data to DMA descriptors */
         opn_sts = mchp_hash_feed(&mchp_hash, (const char *)input_buf, (size_t)input_len);
-		if (opn_sts == 0) {
-			opn_sts = mchp_hash_digest(&mchp_hash, (char *)output);
-            
+        if (opn_sts == 0) {
+            opn_sts = mchp_hash_digest(&mchp_hash, (char *)output);
+              
             if(opn_sts == 0)
             {
                 opn_sts = mchp_hash_wait(&mchp_hash);
                 if (opn_sts != MCHP_OK) {
-		            return SHA_ERROR;
-	            }
+                   return SHA_ERROR;
+                }
                 ret = SHA_SUCCESS;
                 do
                 {
@@ -128,7 +128,7 @@ SHA_RET_CODE do_sha(uint8_t hash_algo, uint8_t *input_buf, uint32_t input_len, u
             {
                 /* Hash digest update failed */
             }            
-		}
+        }
         else
         {
             /* Hash feed failed */
@@ -352,9 +352,9 @@ uint8_t spdm_crypto_ops_hash_ctx_init(HASH_CTX_DATA *ctx_ptr)
     uint8_t rc;
     struct mchphash *cptr = &ctx_ptr->h_ctx;
     /*
-	 * initialize hash structure pointer to HW instance
-	 * allocate a descriptor to load hash configuration word
-	 */
+    * initialize hash structure pointer to HW instance
+    * allocate a descriptor to load hash configuration word
+    */
     mchp_hash_create_sha384(cptr);
     ctx_ptr->bufsz = SHA_ALGO_384_SZ;//hash block size
     
@@ -378,50 +378,50 @@ uint8_t spdm_crypto_ops_hash_ctx_init(HASH_CTX_DATA *ctx_ptr)
 *******************************************************************************/
 uint8_t spdm_crypto_ops_save_state_hash(HASH_CTX_DATA *ctx_ptr, uint8_t *data, uint16_t datasz)
 {
-	struct mchphash *cptr = &ctx_ptr->h_ctx;
-	int rc = MCHP_OK;
-	
-	if (ctx_ptr->resume) {
-		ctx_ptr->resume = false;
-		/* Get HW registers and reset descriptor count to 0 */
-		mchp_hash_create_sha384(cptr);
-	
-		/* allocate a descriptor to load hash algorithm initial state */
-		rc = mchp_hash_resume_state(cptr, &ctx_ptr->h_state);
-		if (rc != MCHP_OK) {
-			return rc;
-		}
-	}
-	
-	/* Allocate descriptor to fetch data */
-	if (datasz) {
-		rc = mchp_hash_feed(cptr, (char *)data, datasz);
-	} else {
-		rc = mchp_hash_feed(cptr, (char *)ctx_ptr->buf, ctx_ptr->buflen);
-	}
-	
-	if (rc != MCHP_OK) {
-		return rc;
-	}
-	
-	/* starts engine */
-	rc = mchp_hash_save_state(cptr);
-	if (rc != MCHP_OK) {
-		return rc;
-	}
-	
-	rc = mchp_hash_wait(cptr);
-	if (rc != MCHP_OK) {
-		return rc;
-	}
-	
-	/* NOTE: mchp_hash_wait on success clears struct mchphash DMA context.
-	 * struct mchphash must be re-initialized via mchp_hash_resume or
-	 * starting a new hash sequence via mchp_hash_create_xxx.
-	 */
-	ctx_ptr->resume = true;
-	
-	return rc;
+    struct mchphash *cptr = &ctx_ptr->h_ctx;
+    int rc = MCHP_OK;
+    
+    if (ctx_ptr->resume) {
+        ctx_ptr->resume = false;
+        /* Get HW registers and reset descriptor count to 0 */
+        mchp_hash_create_sha384(cptr);
+     
+        /* allocate a descriptor to load hash algorithm initial state */
+        rc = mchp_hash_resume_state(cptr, &ctx_ptr->h_state);
+        if (rc != MCHP_OK) {
+           return rc;
+        }
+    }
+    
+    /* Allocate descriptor to fetch data */
+    if (datasz) {
+        rc = mchp_hash_feed(cptr, (char *)data, datasz);
+    } else {
+        rc = mchp_hash_feed(cptr, (char *)ctx_ptr->buf, ctx_ptr->buflen);
+    }
+    
+    if (rc != MCHP_OK) {
+        return rc;
+    }
+    
+    /* starts engine */
+    rc = mchp_hash_save_state(cptr);
+    if (rc != MCHP_OK) {
+        return rc;
+    }
+    
+    rc = mchp_hash_wait(cptr);
+    if (rc != MCHP_OK) {
+        return rc;
+    }
+    
+    /* NOTE: mchp_hash_wait on success clears struct mchphash DMA context.
+     * struct mchphash must be re-initialized via mchp_hash_resume or
+     * starting a new hash sequence via mchp_hash_create_xxx.
+     */
+    ctx_ptr->resume = true;
+    
+    return rc;
 }
 /******************************************************************************/
 /** Function of SPDM module to calculate intermediate hash and update buffer
@@ -436,50 +436,50 @@ uint8_t spdm_crypto_ops_hash_ctx_update_buf(uint8_t *buf, HASH_CTX_DATA *ctx_ptr
     uint8_t rc = 0;
     char *bptr = (char *)ctx_ptr->buf;
 
-	/* mhp->bufsz is the hash algorithm block size */
-	while (dlen) {
-		if ((ctx_ptr->buflen == 0) && (dlen >= ctx_ptr->bufsz)) {
-			/* update dlen % blksz blocks and copy remaining to buffer */
-			clen = dlen & ~(ctx_ptr->bufsz - 1U);
-			rc = spdm_crypto_ops_save_state_hash(ctx_ptr, buf, clen);
-			if (rc != MCHP_OK) {
-				return rc;
-			}
-			dlen -= clen;
-			buf += clen;
-			if (dlen) {
-				memcpy(bptr, buf, dlen);
-				ctx_ptr->buflen = dlen;
-				buf += dlen;
-				dlen = 0;
-			}
-		} else { /* either buf not empty or dlen < blksz */
-			/* copy data to buffer and update buffer length */
-			clen = ctx_ptr->bufsz - ctx_ptr->buflen;
-			if (dlen < clen) {
-				clen = dlen;
-			}
-			memcpy((bptr + ctx_ptr->buflen), buf, clen);
-			dlen -= clen;
-			ctx_ptr->buflen += clen;
+   /* mhp->bufsz is the hash algorithm block size */
+    while (dlen) {
+        if ((ctx_ptr->buflen == 0) && (dlen >= ctx_ptr->bufsz)) {
+            /* update dlen % blksz blocks and copy remaining to buffer */
+            clen = dlen & ~(ctx_ptr->bufsz - 1U);
+            rc = spdm_crypto_ops_save_state_hash(ctx_ptr, buf, clen);
+            if (rc != MCHP_OK) {
+               return rc;
+            }
+            dlen -= clen;
+            buf += clen;
+            if (dlen) {
+               memcpy(bptr, buf, dlen);
+               ctx_ptr->buflen = dlen;
+               buf += dlen;
+               dlen = 0;
+            }
+        } else { /* either buf not empty or dlen < blksz */
+            /* copy data to buffer and update buffer length */
+            clen = ctx_ptr->bufsz - ctx_ptr->buflen;
+            if (dlen < clen) {
+               clen = dlen;
+            }
+            memcpy((bptr + ctx_ptr->buflen), buf, clen);
+            dlen -= clen;
+            ctx_ptr->buflen += clen;
             if(dlen)
-			{
+            {
                 buf += clen;
             }
-		}
-
-		/* if mhp->buf is full run the engine */
-		if (ctx_ptr->buflen == ctx_ptr->bufsz) {
-			rc = spdm_crypto_ops_save_state_hash(ctx_ptr, NULL, 0);
-			if (rc != MCHP_OK) {
-				return rc;
-			}
-			memset(bptr, 0, ctx_ptr->bufsz);
-			ctx_ptr->buflen = 0;
-		}
-	}
-
-	return MCHP_OK;
+        } 
+  
+        /* if mhp->buf is full run the engine */
+        if (ctx_ptr->buflen == ctx_ptr->bufsz) {
+            rc = spdm_crypto_ops_save_state_hash(ctx_ptr, NULL, 0);
+            if (rc != MCHP_OK) {
+               return rc;
+            }
+            memset(bptr, 0, ctx_ptr->bufsz);
+            ctx_ptr->buflen = 0;
+        }
+    } 
+ 
+    return MCHP_OK;
 }
 
 /******************************************************************************/
@@ -490,38 +490,38 @@ uint8_t spdm_crypto_ops_hash_ctx_update_buf(uint8_t *buf, HASH_CTX_DATA *ctx_ptr
 *******************************************************************************/
 uint8_t spdm_crypto_ops_hash_ctx_final(HASH_CTX_DATA *ctx_ptr, uint8_t *digest)
 {
-	uint8_t rc;
-
-	struct mchphash *cptr = &ctx_ptr->h_ctx;
-
-	if (ctx_ptr->resume) {
-		ctx_ptr->resume = false;
-		/* Get HW registers and reset descriptor count to 0 */
-		mchp_hash_create_sha384(cptr);
-        
-		/* allocate a descriptor to load hash algorithm initial state */
-		rc = mchp_hash_resume_state(cptr, &ctx_ptr->h_state);
-		if (rc != MCHP_OK) {
-			return rc;
-		}
-	}
-
-	if (ctx_ptr->buflen) {
-		rc = mchp_hash_feed(cptr, (const char *)ctx_ptr->buf, ctx_ptr->buflen);
-		if (rc != MCHP_OK) {
-			return rc;
-		}
-	}
-
-	rc = mchp_hash_digest(cptr, (char *)digest);
-	if (rc != MCHP_OK) {
-		return rc;
-	}
-
-	/* clears pointer to HW registers on completion */
-	rc = mchp_hash_wait(cptr);
-
-	return rc;
+    uint8_t rc;
+ 
+    struct mchphash *cptr = &ctx_ptr->h_ctx;
+ 
+    if (ctx_ptr->resume) {
+        ctx_ptr->resume = false;
+        /* Get HW registers and reset descriptor count to 0 */
+        mchp_hash_create_sha384(cptr);
+          
+        /* allocate a descriptor to load hash algorithm initial state */
+        rc = mchp_hash_resume_state(cptr, &ctx_ptr->h_state);
+        if (rc != MCHP_OK) {
+           return rc;
+        }
+    }
+ 
+    if (ctx_ptr->buflen) {
+        rc = mchp_hash_feed(cptr, (const char *)ctx_ptr->buf, ctx_ptr->buflen);
+        if (rc != MCHP_OK) {
+           return rc;
+        }
+    }
+ 
+    rc = mchp_hash_digest(cptr, (char *)digest);
+    if (rc != MCHP_OK) {
+       return rc;
+    }
+ 
+    /* clears pointer to HW registers on completion */
+    rc = mchp_hash_wait(cptr);
+ 
+    return rc;
 }
 
 /******************************************************************************/
@@ -542,39 +542,39 @@ uint8_t spdm_crypto_ops_run_time_hashing(uint8_t *buff, uint32_t length, SPDM_CO
     {
         case HASH_INIT_MODE:
             /*
-	          * initialize hash structure pointer to HW instance
-	          * allocate a descriptor to load hash configuration word
-	        */
+             * initialize hash structure pointer to HW instance
+             * allocate a descriptor to load hash configuration word
+           */
             rc = spdm_crypto_ops_hash_ctx_init(&ctx_ptr);
             if (rc != MCHP_OK) {
-		     return rc;
-	        }
+                return rc;
+            }
             break;
         case RUN_TIME_HASH_MODE:
             //populate internal buffer (128 bytes) upto 128 (block size) 
             //feed to hash engine and calculate intermediate hash if internal buffer reaches max 128 bytes
             rc = spdm_crypto_ops_hash_ctx_update_buf(buff, &ctx_ptr, length);
-	        if (rc != MCHP_OK) {
-		        return rc;
-	        }
+            if (rc != MCHP_OK) {
+               return rc;
+            }
             break;
         case END_OF_HASH:
             rc = spdm_crypto_ops_hash_ctx_final(&ctx_ptr, &spdmContext->sha_digest[0]);
-	        if (rc != MCHP_OK) {
-		        return rc;
-	        }
+            if (rc != MCHP_OK) {
+               return rc;
+            }
             //cleaning up the hash engine context and internal buffers in case
             //switch back to init state as we got the final digest
             spdmContext->get_requests_state = HASH_INIT_MODE;
             memset((char *)&ctx_ptr.buf, 0, ctx_ptr.bufsz);
-			ctx_ptr.buflen = 0;
+         ctx_ptr.buflen = 0;
             break;
         default:
             /* Invalid state */
             break;
             
     }
-	return rc;
+   return rc;
 }
 
 /******************************************************************************/
@@ -763,16 +763,16 @@ uint8_t spdm_crypto_ops_gen_random_no(uint8_t *buff, uint8_t bytes)
 *******************************************************************************/
 uint8_t spdm_crypto_ops_pke_engine_init(void)
 {
-	uint8_t ret_value = 0;
+    uint8_t ret_value = 0;
 
-	/* Initialize PK and library */
-	init_pke = mchp_pk_init(mchp_pk_cnx_mem_spdm_module, PK_CNX_MEM_SIZE);
+    /* Initialize PK and library */
+    init_pke = mchp_pk_init(mchp_pk_cnx_mem_spdm_module, PK_CNX_MEM_SIZE);
 
-	if (init_pke == NULL) {
-		ret_value = 0xff;
-	}
+    if (init_pke == NULL) {
+       ret_value = 0xff;
+    }
 
-	return ret_value;
+   return ret_value;
 }
 
 /******************************************************************************/
@@ -795,9 +795,9 @@ uint32_t spdm_crypto_ops_gen_signature()
     sb_sram_mbox_read(DEV_AK_CERTIFICATE_OFFSET, &pvt_key[0], PVT_KEY_CODE_LENGTH);
     
     return_status = bk_ecdsa_sign((bk_ecc_private_key_code_t *)&pvt_key[0], false, 
-		    			&hash_of_req_buffer[0], SHA384_BYTES, true, 
-					    &(ecdsa_signature.ecdsa_signature[0]),
-                        &sig_length);
+                    &hash_of_req_buffer[0], SHA384_BYTES, true, 
+                    &(ecdsa_signature.ecdsa_signature[0]),
+                    &sig_length);
     
     return return_status;
 }

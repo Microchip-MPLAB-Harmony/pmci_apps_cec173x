@@ -63,7 +63,7 @@ TimerHandle_t xSmbusTimer;
 extern void smbus_app_timer(TimerHandle_t pxTimer);
 extern void smbus_main(void *pvParameters);
 extern void smb_register_eventFlag_and_callback(EventGroupHandle_t *ptr_event_flag_handle, 
-												SMB_CALLBACK_FUNC_PTR pCallback);
+                                    SMB_CALLBACK_FUNC_PTR pCallback);
 
 extern void smb_isr(void);
 extern void smb_dma_isr(void);
@@ -145,59 +145,54 @@ void APP_SMB_DRV_Tasks ( void )
         /* Application's initial state. */
         case APP_SMB_DRV_STATE_INIT:
         {
-			bool appInitialized = true;
-
-			xSmbusEventGroupHandle = xEventGroupCreate();
-			
-			xSmbusTimer = xTimerCreate("smb_timer",		// Text name for the task.  Helps debugging only.  Not used by FreeRTOS.
-								10,						// The period of the timer in ticks.
-								pdTRUE,					// This is an auto-reload timer.
-								NULL,					// A variable incremented by the software timer's callback function
-								smbus_app_timer);		// The function to execute when the timer expires.
-			
-			xSmbSemaphore = xSemaphoreCreateBinary();
-
-			if ((xSmbusEventGroupHandle == NULL) || 
-					(xSmbusTimer == NULL) || 
-					(xSmbSemaphore == NULL))
-			{
-				appInitialized = false;
-				app_smb_drvData.state = APP_SMB_DRV_STATE_INIT_ERROR;
-				break;
-			}
-			
-			if (xTimerStart(xSmbusTimer, 0) != pdPASS) 
-			{
-				appInitialized = false;
-				app_smb_drvData.state = APP_SMB_DRV_STATE_INIT_ERROR;
-				break;
-			}
-			
+            bool appInitialized = true;   
+            xSmbusEventGroupHandle = xEventGroupCreate();
+            
+            xSmbusTimer = xTimerCreate("smb_timer",      // Text name for the task.  Helps debugging only.  Not used by FreeRTOS.
+                           10,                  // The period of the timer in ticks.
+                           pdTRUE,               // This is an auto-reload timer.
+                           NULL,               // A variable incremented by the software timer's callback function
+                           smbus_app_timer);      // The function to execute when the timer expires.
+            
+            xSmbSemaphore = xSemaphoreCreateBinary();   
+            if ((xSmbusEventGroupHandle == NULL) || 
+                  (xSmbusTimer == NULL) || 
+                  (xSmbSemaphore == NULL))
+            {
+                 appInitialized = false;
+                 app_smb_drvData.state = APP_SMB_DRV_STATE_INIT_ERROR;
+                 break;
+            }
+            
+            if (xTimerStart(xSmbusTimer, 0) != pdPASS) 
+            {
+                appInitialized = false;
+                app_smb_drvData.state = APP_SMB_DRV_STATE_INIT_ERROR;
+                break;
+            }
+            
             if (appInitialized)
             {
-				xSemaphoreGive(xSmbSemaphore);
-
-				/* This function initializes the timer tick and calls the SMBus Core Init 
-				 Task as a part of SDK Functions*/
-				smbus_init_task();
-
-				/* Register the Event Flag Group and also Register the Callback function */
-				smb_register_eventFlag_and_callback(&xSmbusEventGroupHandle, 
-									(SMB_CALLBACK_FUNC_PTR) smb_callback);
-
+            xSemaphoreGive(xSmbSemaphore);   
+            /* This function initializes the timer tick and calls the SMBus Core Init 
+             Task as a part of SDK Functions*/
+            smbus_init_task();   
+            /* Register the Event Flag Group and also Register the Callback function */
+            smb_register_eventFlag_and_callback(&xSmbusEventGroupHandle, 
+                           (SMB_CALLBACK_FUNC_PTR) smb_callback);   
                 app_smb_drvData.state = APP_SMB_DRV_STATE_SERVICE_TASKS;
             }
             break;
-        }
-
+        } 
+ 
         case APP_SMB_DRV_STATE_SERVICE_TASKS:
         {
-			smbus_main((void*)NULL);
+            smbus_main((void*)NULL);
             break;
         }
 
         case APP_SMB_DRV_STATE_INIT_ERROR:
-		/*  no break */
+        /*  no break */
         /* The default state should never be executed. */
         default:
         {
@@ -216,7 +211,7 @@ uint8_t mctp_i2c_tx(const uint8_t channel,
                     const uint8_t readChainedFlag,
                     const uint8_t writeChainedFlag)
 {
-	return smb_protocol_execute(channel,
+    return smb_protocol_execute(channel,
                                 buffer_ptr,
                                 smb_protocol,
                                 writeCount,
@@ -229,9 +224,9 @@ uint8_t mctp_i2c_tx(const uint8_t channel,
 uint8_t mctp_i2c_rx_register(const uint8_t channel, 
                             I2C_SLAVE_FUNC_PTR slaveFuncPtr)
 {
-	return smb_register_slave(channel, 
-								(SLAVE_FUNC_PTR)slaveFuncPtr);
-	
+   return smb_register_slave(channel, 
+                             (SLAVE_FUNC_PTR)slaveFuncPtr);
+   
 }
 
 void mctp_i2c_configure_and_enable(uint8_t channel, 
@@ -240,31 +235,31 @@ void mctp_i2c_configure_and_enable(uint8_t channel,
                                    uint8_t port, 
                                    uint8_t configFlag)
 {
-	smbus_configure_and_enable(channel, 
-								own_address, 
-								speed, 
-								port, 
-								configFlag);
+    smbus_configure_and_enable(channel, 
+                        own_address, 
+                        speed, 
+                        port, 
+                        configFlag);
 }
 
 uint8_t mctp_i2c_get_chan_busy_status(uint8_t channel)
 {
-	return smb_busyStatus_get(channel);
+    return smb_busyStatus_get(channel);
 }
 
 uint16_t mctp_i2c_get_current_timestamp(void)
 {
-	return smb_get_current_timestamp();
+    return smb_get_current_timestamp();
 }
 
 void I2CSMB_GRP_InterruptHandler ( void )
 {
-	smb_isr();
+    smb_isr();
 }
 
 void DMA_GRP_InterruptHandler (void)
 {
-	smb_dma_isr();
+    smb_dma_isr();
 }
 
 /*******************************************************************************

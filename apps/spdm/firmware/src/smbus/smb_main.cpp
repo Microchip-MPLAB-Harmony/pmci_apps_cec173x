@@ -561,136 +561,136 @@ extern "C" void smb_isr(void)
     register uint8_t channel = 0;
     for ( ; channel < MAX_SMB; ++channel)
     {
-		switch(channel)
-		{
-			case SMB_CHANNEL_1:
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB1))
-				{
-					/* check if DMA interrupt occurs simultaneously */
-					/* process DMA ISR firstly to fix boundary corner case */
-					/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH03))
-					{
-						smb_core_isr_dma((UINT8)channel, false);     //true for slave
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH03);
-					}
-
-					/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH02))
-					{
-						smb_core_isr_dma((UINT8)channel, false);
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH02);
-					}
-					smb_core_isr(channel);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB1);
-				}
-			break;
-			case SMB_CHANNEL_2:
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB2))
-				{
-					/* check if DMA interrupt occurs simultaneously */
-					/* process DMA ISR firstly to fix boundary corner case */
-					/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH05))
-					{
-						smb_core_isr_dma((UINT8)channel, false);     //true for slave
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH05);
-					}
-
-					/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH04))
-					{
-						smb_core_isr_dma((UINT8)channel, false);
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH04);
-					}
-					smb_core_isr(channel);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB2);
-				}
-			break;
-			case SMB_CHANNEL_3:
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB3))
-				{
-					/* check if DMA interrupt occurs simultaneously */
-					/* process DMA ISR firstly to fix boundary corner case */
-					/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH07))
-					{
-						smb_core_isr_dma((UINT8)channel, false);     //true for slave
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH07);
-					}
-
-					/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH06))
-					{
-						smb_core_isr_dma((UINT8)channel, false);
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH06);
-					}
-					smb_core_isr(channel);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB3);
-				}
-			break;
-			case SMB_CHANNEL_4:
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB4))
-				{
-					/* check if DMA interrupt occurs simultaneously */
-					/* process DMA ISR firstly to fix boundary corner case */
-					/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH09))
-					{
-						smb_core_isr_dma((UINT8)channel, false);     //true for slave
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH09);
-					}
-
-					/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH08))
-					{
-						smb_core_isr_dma((UINT8)channel, false);
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH08);
-					}
-					smb_core_isr(channel);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB4);
-				}
-			break;
-			case SMB_CHANNEL_0:
-			/* No break */
-			default :
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB0))
-				{
-					/* check if DMA interrupt occurs simultaneously */
-					/* process DMA ISR firstly to fix boundary corner case */
-					/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH01))
-					{
-						smb_core_isr_dma((UINT8)channel, false);     //true for slave
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH01);
-					}
-
-					/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-					if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH00))
-					{
-						smb_core_isr_dma((UINT8)channel, false);
-						// Clear smbus (channel) IRQ status.
-						interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH00);
-					}
-					smb_core_isr(channel);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB0);
-				}
-			break;
-		}
+        switch(channel)
+        {
+            case SMB_CHANNEL_1:
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB1))
+                {
+                   /* check if DMA interrupt occurs simultaneously */
+                   /* process DMA ISR firstly to fix boundary corner case */
+                   /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH03))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);     //true for slave
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH03);
+                   }
+    
+                   /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH02))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH02);
+                   }
+                   smb_core_isr(channel);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB1);
+                }
+            break;
+            case SMB_CHANNEL_2:
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB2))
+                {
+                   /* check if DMA interrupt occurs simultaneously */
+                   /* process DMA ISR firstly to fix boundary corner case */
+                   /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH05))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);     //true for slave
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH05);
+                   }
+    
+                   /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH04))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH04);
+                   }
+                   smb_core_isr(channel);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB2);
+                }
+            break;
+            case SMB_CHANNEL_3:
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB3))
+                {
+                   /* check if DMA interrupt occurs simultaneously */
+                   /* process DMA ISR firstly to fix boundary corner case */
+                   /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH07))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);     //true for slave
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH07);
+                   }
+    
+                   /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH06))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH06);
+                   }
+                   smb_core_isr(channel);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB3);
+                }
+            break;
+            case SMB_CHANNEL_4:
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB4))
+                {
+                   /* check if DMA interrupt occurs simultaneously */
+                   /* process DMA ISR firstly to fix boundary corner case */
+                   /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH09))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);     //true for slave
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH09);
+                   }
+    
+                   /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH08))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH08);
+                   }
+                   smb_core_isr(channel);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB4);
+                }
+            break;
+            case SMB_CHANNEL_0:
+            /* No break */
+            default :
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_I2CSMB0))
+                {
+                   /* check if DMA interrupt occurs simultaneously */
+                   /* process DMA ISR firstly to fix boundary corner case */
+                   /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH01))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);     //true for slave
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH01);
+                   }
+    
+                   /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                   if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH00))
+                   {
+                      smb_core_isr_dma((UINT8)channel, false);
+                      // Clear smbus (channel) IRQ status.
+                      interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH00);
+                   }
+                   smb_core_isr(channel);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_I2CSMB0);
+                }
+            break;
+        }
     }
 }/* smb_isr */
 
@@ -708,96 +708,96 @@ extern "C" void smb_dma_isr(void)
     
     for ( ; channel < MAX_SMB; ++channel)
     {
-		switch(channel)
-		{
-			case SMB_CHANNEL_1:
-				/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH03))
-				{
-					smb_core_isr_dma((UINT8)channel, true);     //true for slave
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH03);
-				}
-
-				/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH02))
-				{
-					smb_core_isr_dma((UINT8)channel, true);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH02);
-				}
-			break;
-			case SMB_CHANNEL_2:
-				/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH05))
-				{
-					smb_core_isr_dma((UINT8)channel, false);     //true for slave
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH05);
-				}
-
-				/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH04))
-				{
-					smb_core_isr_dma((UINT8)channel, false);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH04);
-				}
-			break;
-			case SMB_CHANNEL_3:
-				/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH07))
-				{
-					smb_core_isr_dma((UINT8)channel, true);     //true for slave
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH07);
-				}
-
-				/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH06))
-				{
-					smb_core_isr_dma((UINT8)channel, true);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH06);
-				}
-			break;
-			case SMB_CHANNEL_4:
-				/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH09))
-				{
-					smb_core_isr_dma((UINT8)channel, false);     //true for slave
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH09);
-				}
-
-				/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH08))
-				{
-					smb_core_isr_dma((UINT8)channel, false);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH08);
-				}
-			break;
-			case SMB_CHANNEL_0:
-			/* No break */
-			default:
-				/* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH01))
-				{
-					smb_core_isr_dma((UINT8)channel, false);     //true for slave
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH01);
-				}
-
-				/* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
-				if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH00))
-				{
-					smb_core_isr_dma((UINT8)channel, false);
-					// Clear smbus (channel) IRQ status.
-					interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH00);
-				}
-			break;
-		}
+        switch(channel)
+        {
+            case SMB_CHANNEL_1:
+                /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH03))
+                {
+                   smb_core_isr_dma((UINT8)channel, true);     //true for slave
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH03);
+                }
+    
+                /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH02))
+                {
+                   smb_core_isr_dma((UINT8)channel, true);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH02);
+                }
+            break;
+            case SMB_CHANNEL_2:
+                /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH05))
+                {
+                   smb_core_isr_dma((UINT8)channel, false);     //true for slave
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH05);
+                }
+    
+                /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH04))
+                {
+                   smb_core_isr_dma((UINT8)channel, false);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH04);
+                }
+            break;
+            case SMB_CHANNEL_3:
+                /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH07))
+                {
+                   smb_core_isr_dma((UINT8)channel, true);     //true for slave
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH07);
+                }
+    
+                /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH06))
+                {
+                   smb_core_isr_dma((UINT8)channel, true);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH06);
+                }
+            break;
+            case SMB_CHANNEL_4:
+                /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH09))
+                {
+                   smb_core_isr_dma((UINT8)channel, false);     //true for slave
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH09);
+                }
+    
+                /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH08))
+                {
+                   smb_core_isr_dma((UINT8)channel, false);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH08);
+                }
+            break;
+            case SMB_CHANNEL_0:
+            /* No break */
+            default:
+                /* slave dma's start from Even channel numbers 1, 3, 5, 7, 9 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH01))
+                {
+                   smb_core_isr_dma((UINT8)channel, false);     //true for slave
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH01);
+                }
+    
+                /* master dma's start from odd channel numbers 0, 2, 4, 6, 8 */
+                if (interrupt_device_ecia_result_get(ECIA_AGG_INT_SRC_DMA_CH00))
+                {
+                   smb_core_isr_dma((UINT8)channel, false);
+                   // Clear smbus (channel) IRQ status.
+                   interrupt_device_ecia_source_clear(ECIA_AGG_INT_SRC_DMA_CH00);
+                }
+            break;
+        }
     }
     
 }/* smb_dma_isr */
@@ -812,7 +812,7 @@ extern "C" void smb_dma_isr(void)
 *******************************************************************************/
 uint32_t smb_task_wait_event_bits(uint32_t event_bits, uint32_t wait_all_bits)
 {  
-	uint32_t uxBits = 0;
+    uint32_t uxBits = 0;
 
     uxBits = xEventGroupWaitBits(*pSmb_event_flag_handle,
                         event_bits , pdTRUE, wait_all_bits, portMAX_DELAY);

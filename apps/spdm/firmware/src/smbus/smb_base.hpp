@@ -1,5 +1,5 @@
 /*****************************************************************************
-* © 2018 Microchip Technology Inc. and its subsidiaries.
+* ï¿½ 2018 Microchip Technology Inc. and its subsidiaries.
 * You may use this software and any derivatives exclusively with
 * Microchip products.
 * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".
@@ -137,7 +137,7 @@ class SMB_BASE{
         *******************************************************************************/
         void change_port( const UINT8 port) const
         {
-			I2CSMBx_PortSet((SMB_INSTANCE)instance_, port);
+            I2CSMBx_PortSet((SMB_INSTANCE)instance_, port);
 
         }/* change_port */
 

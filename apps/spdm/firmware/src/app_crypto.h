@@ -82,15 +82,15 @@
 #define HW_CONFIG_MAILBOX_OFFSET                      (0x8c7U)
 #define SRAM_MBOX_HW_CONFIG_SIZE                      (0x04U)
 
-#define NDRNG_FIFO_WAKEUP_LVL	(8U)	/* number of 128-bit blocks */
+#define NDRNG_FIFO_WAKEUP_LVL   (8U)   /* number of 128-bit blocks */
 
-#define NDRNG_OFF_TIMER_VAL	(0U)
+#define NDRNG_OFF_TIMER_VAL   (0U)
 
-#define NDRNG_CLKDIV		(0U)
+#define NDRNG_CLKDIV      (0U)
 
-#define NDRNG_INIT_WAIT_VAL	(512U)
+#define NDRNG_INIT_WAIT_VAL   (512U)
 
-#define NDRNG_NB_128BIT_BLOCKS	(4U)	/* conditioning number of 128-bit blocks */
+#define NDRNG_NB_128BIT_BLOCKS   (4U)   /* conditioning number of 128-bit blocks */
 
 #define RLOG_LOAD_FROM_TAG0             (0x08000000U)
 #define RLOG_LOAD_FROM_TAG1             (0x10000000U)
@@ -99,7 +99,7 @@
 #define SRAM_ROM_LOG_START_LOCATION_A1                   (0x00126200U)
 
 #define TAG0_ADDRESS 0x20000U
-#define PK_CNX_MEM_SIZE		64U
+#define PK_CNX_MEM_SIZE      64U
 
 #define HASH_STATE_SZ (128U + 128U)
 #define HASH_BUF_SZ 128U
@@ -314,11 +314,11 @@ typedef uint32_t(*api_qmspi_flash_read_24_32_ldma_td)(uint8_t cmd_id, uint32_t s
 typedef void (*mchp_ndrng_enable_td)(bool enable);
 typedef void (*mchp_ndrng_soft_reset_td)(void);
 typedef int (*mchp_ndrng_init_td)(bool enable_conditioning,
-			uint32_t fifo_wake_thresh,
-			uint32_t ring_pwr_down_delay,
-			uint32_t nb_cond,
-			uint32_t rng_clk_div,
-			uint32_t rng_init_wait);
+         uint32_t fifo_wake_thresh,
+         uint32_t ring_pwr_down_delay,
+         uint32_t nb_cond,
+         uint32_t rng_clk_div,
+         uint32_t rng_init_wait);
 /**
  *  \name mchp_pk_get_curve_nistp384_td
  *
@@ -337,9 +337,9 @@ typedef int (*mchp_ndrng_read_bytes_nh_td)(uint8_t *dest, int nbytes);
  * Initializes struct sx_pk_cnx with memory provided by caller.
  * Memory must be aligned >= 4 bytes and have size >= PK_CNX_MEM_SIZE
  * Returns on success:
- * 	Pointer to struct sx_pk_cnx (should be cnxmem)
+ * Pointer to struct sx_pk_cnx (should be cnxmem)
  * Returns on error:
- *	NULL
+ * NULL
  */
 typedef struct mchp_pk_cnx *(*mchp_pk_init_td)(uint32_t *cnxmem, size_t cnxmsz);
 typedef struct mchp_pk_dreq (*mchp_async_ecdsa_generate_go_td)(
@@ -371,28 +371,28 @@ typedef int (*bk_ecdsa_sign_td)(
     uint16_t                  * const signature_length
 );
 
-#define	mchp_ndrng_read_bytes_nh				((mchp_ndrng_read_bytes_nh_td                       )			0x0001239)
-#define	mchp_ndrng_soft_reset				((mchp_ndrng_soft_reset_td                          )			0x0001215)
-#define	mchp_ndrng_init				((mchp_ndrng_init_td                                )			0x000121d)
-#define	mchp_ndrng_enable				((mchp_ndrng_enable_td                              )			0x0001225)
+#define   mchp_ndrng_read_bytes_nh            ((mchp_ndrng_read_bytes_nh_td                       )         0x0001239)
+#define   mchp_ndrng_soft_reset            ((mchp_ndrng_soft_reset_td                          )         0x0001215)
+#define   mchp_ndrng_init            ((mchp_ndrng_init_td                                )         0x000121d)
+#define   mchp_ndrng_enable            ((mchp_ndrng_enable_td                              )         0x0001225)
 #define api_qmspi_flash_read_24_32_ldma            ((api_qmspi_flash_read_24_32_ldma_td)0x0000f241)
 #define api_qmspi_init                        ((api_qmspi_init_td) 0x0000f225)
 #define api_qmspi_port_drv_slew                   ((api_qmspi_port_drv_slew_td) 0x0000f219)
 #define api_qmspi_port_ctrl                   ((api_qmspi_port_ctrl_td)    0x0000f215)
-#define	mchp_hash_create_sha256				((mchp_hash_create_sha256_td                        )			0x0001181)
-#define	mchp_hash_create_sha384				((mchp_hash_create_sha384_td                        )			0x0001185)
-#define	mchp_hash_feed				((mchp_hash_feed_td                                 )			0x000119d)
-#define	mchp_hash_digest				((mchp_hash_digest_td                               )			0x00011a1)
-#define	mchp_hash_wait				((mchp_hash_wait_td                                 )			0x00011a5)
+#define   mchp_hash_create_sha256            ((mchp_hash_create_sha256_td                        )         0x0001181)
+#define   mchp_hash_create_sha384            ((mchp_hash_create_sha384_td                        )         0x0001185)
+#define   mchp_hash_feed            ((mchp_hash_feed_td                                 )         0x000119d)
+#define   mchp_hash_digest            ((mchp_hash_digest_td                               )         0x00011a1)
+#define   mchp_hash_wait            ((mchp_hash_wait_td                                 )         0x00011a5)
 #define  api_efuse_byte_read              (( api_efuse_byte_read_td)0x0000f009)
-#define	mchp_hash_init_state				((mchp_hash_init_state_td                           )			0x0001191)
-#define	mchp_hash_resume_state				((mchp_hash_resume_state_td                         )			0x0001195)
-#define	mchp_hash_save_state				((mchp_hash_save_state_td                           )			0x0001199)
-#define	mchp_pk_get_curve_nistp384				((mchp_pk_get_curve_nistp384_td                     )			0x0001079)
-#define	mchp_pk_init				((mchp_pk_init_td                                   )			0x00010ad)
-#define	mchp_async_ecdsa_generate_go				((mchp_async_ecdsa_generate_go_td                   )			0x0001005)
-#define	mchp_pk_wait				((mchp_pk_wait_td                                   )			0x0001119)
-#define	mchp_async_ecdsa_generate_end				((mchp_async_ecdsa_generate_end_td                  )			0x0001009)
+#define   mchp_hash_init_state            ((mchp_hash_init_state_td                           )         0x0001191)
+#define   mchp_hash_resume_state            ((mchp_hash_resume_state_td                         )         0x0001195)
+#define   mchp_hash_save_state            ((mchp_hash_save_state_td                           )         0x0001199)
+#define   mchp_pk_get_curve_nistp384            ((mchp_pk_get_curve_nistp384_td                     )         0x0001079)
+#define   mchp_pk_init            ((mchp_pk_init_td                                   )         0x00010ad)
+#define   mchp_async_ecdsa_generate_go            ((mchp_async_ecdsa_generate_go_td                   )         0x0001005)
+#define   mchp_pk_wait            ((mchp_pk_wait_td                                   )         0x0001119)
+#define   mchp_async_ecdsa_generate_end            ((mchp_async_ecdsa_generate_end_td                  )         0x0001009)
 #define api_qmspi_start                          ((api_qmspi_start_td) 0x0000f231)
 #define api_qmspi_is_done_status                ((api_qmspi_is_done_status_td)0x0000f221)
 #define bk_ecdsa_sign                       ((bk_ecdsa_sign_td                                     )0x0001f435)

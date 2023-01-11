@@ -316,7 +316,7 @@ void SMB_MASTER::xmit(void)
     DMA_Start((DMA_CHANNEL)dma_chan_);
 
     /* Enable MDONE Interrupt */
-	I2CSMBx_MdoneEnable((SMB_INSTANCE)instance_);
+    I2CSMBx_MdoneEnable((SMB_INSTANCE)instance_);
 
     /* Start the Master */
     I2CSMBx_StartMaster((SMB_INSTANCE)instance_, masterCommand_);
@@ -656,7 +656,7 @@ bool SMB_MASTER::isr(void)
     UINT8 readCount;
         bool intrTaskReqFlag;
       bool isInterruptTaskRequired;
-	  UINT8 device;
+    UINT8 device;
 
     intrTaskReqFlag = true;
     isInterruptTaskRequired = false;  
