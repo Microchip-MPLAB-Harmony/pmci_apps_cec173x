@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------------------
  * MPLAB XC32 Compiler -  CEC1736_S0_2ZW linker script
  * 
- * Copyright (c) 2022, Microchip Technology Inc. and its subsidiaries ("Microchip")
+ * Copyright (c) 2023, Microchip Technology Inc. and its subsidiaries ("Microchip")
  * All rights reserved.
  * 
  * This software is developed by Microchip Technology Inc. and its
@@ -73,9 +73,9 @@ ENTRY(__XC32_RESET_HANDLER_NAME)
 #  define RAM_ORIGIN 0x118000
 #endif
 #ifndef RAM_LENGTH
-#  define RAM_LENGTH 0xE800
-#elif (RAM_LENGTH > 0xE800)
-#  error RAM_LENGTH is greater than the max size of 0xE800
+#  define RAM_LENGTH 0xa000
+#elif (RAM_LENGTH > 0xa000)
+#  error RAM_LENGTH is greater than the max size of 0xa000
 #endif
 
 
