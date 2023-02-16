@@ -21,6 +21,9 @@
             <logicalFolder name="dma" displayName="dma" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/dma/plib_dma.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="ec_reg_bank" displayName="ec_reg_bank" projectFiles="true">
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/ec_reg_bank/plib_ec_reg_bank.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="ecia" displayName="ecia" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/ecia/plib_ecia.h</itemPath>
             </logicalFolder>
@@ -267,6 +270,9 @@
             <logicalFolder name="dma" displayName="dma" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/dma/plib_dma.c</itemPath>
             </logicalFolder>
+            <logicalFolder name="ec_reg_bank" displayName="ec_reg_bank" projectFiles="true">
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/ec_reg_bank/plib_ec_reg_bank.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="ecia" displayName="ecia" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/ecia/plib_ecia.c</itemPath>
             </logicalFolder>
@@ -390,14 +396,14 @@
         <targetDevice>CEC1736_S0_2ZW</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>pk4hybrid</platformTool>
+        <platformTool>ICD4Tool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>4.10</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="CEC_DFP" vendor="Microchip" version="1.7.151"/>
-        <pack name="CMSIS" vendor="ARM" version="5.4.0"/>
+        <pack name="CMSIS" vendor="ARM" version="5.0.1"/>
+        <pack name="CEC_DFP" vendor="Microchip" version="1.8.258"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -645,6 +651,7 @@
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="freeze.timers" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
@@ -662,6 +669,7 @@
         <property key="poweroptions.powerenable" value="false"/>
         <property key="programmerToGoFilePath"
                   value="C:/Users/i65439/HarmonyProjects/spdm_demo_1/firmware/spdm_demo_1.X/debug/cec1736_s0_2zw_ev19k07a_freertos/spdm_demo_1_ptg"/>
+        <property key="programmerToGoImageName" value="spdm_demo_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.ledbrightness" value="5"/>
@@ -683,6 +691,8 @@
         <property key="programoptions.programcalmem" value="false"/>
         <property key="programoptions.programuserotp" value="false"/>
         <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="ptgProgramImage" value="true"/>
+        <property key="ptgSendImage" value="true"/>
         <property key="toolpack.updateoptions"
                   value="toolpack.updateoptions.uselatestoolpack"/>
         <property key="toolpack.updateoptions.packversion"

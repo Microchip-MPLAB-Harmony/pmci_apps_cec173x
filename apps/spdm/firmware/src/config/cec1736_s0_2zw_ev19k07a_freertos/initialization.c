@@ -124,6 +124,8 @@ void SYS_Initialize ( void* data )
     
     DMA_Initialize();
 
+EC_REG_BANK_Initialize();
+
     I2CSMB2_Initialize();
     
     I2CSMB1_Initialize();

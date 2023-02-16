@@ -42,10 +42,13 @@
 #define INT_SPI_PORT_ID 2U
 #define SPI_IO_FD_DUAL  0x0EU
 #define DEV_ENABLE   1U
+#define DEV_DISABLE 0U
 #define GPIO_DRV_4MA (1ul << 4)
 #define GPIO_SLEW_FAST 1U
 #define QMSPI_SPI_MODE_0 0x00U
 #define QMSPI_FREQ_48M 2U
+#define QMSPI_FREQ_12M 8U
+#define QMSPI_FREQ_24M 4U
 #define NONE     0U
 #define INT_SPI_PORT_NO 0x00U
 

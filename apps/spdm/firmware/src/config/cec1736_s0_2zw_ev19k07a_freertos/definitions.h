@@ -63,6 +63,7 @@
 #include "peripheral/ecia/plib_ecia.h"
 #include "peripheral/nvic/plib_nvic.h"
 #include "peripheral/dma/plib_dma.h"
+#include "peripheral/ec_reg_bank/plib_ec_reg_bank.h"
 #include "peripheral/i2c/plib_smb2_master_slave_common.h"
 #include "peripheral/i2c/master/plib_smb2_master.h"
 #include "peripheral/i2c/slave/plib_smb2_slave.h"

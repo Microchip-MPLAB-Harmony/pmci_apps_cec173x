@@ -68,7 +68,7 @@ extern "C" {
 }
 #endif
 
-#endif /* SPDM_Cx`ONFIG_H */
+#endif /* SPDM_CONFIG_H */
 
 /**   @}
  */

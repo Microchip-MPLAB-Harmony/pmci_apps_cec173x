@@ -64,7 +64,6 @@ uint8_t mctp_smbus_init(void)
 * @param slaveTransmitFlag Slave Transmit Flag
 * @return I2C_STATUS_BUFFER_DONE / I2C_STATUS_BUFFER_ERROR to smbus layer
 *******************************************************************************/
-#define SMB_DEBUG   1
 uint8_t mctp_receive_smbus(I2C_BUFFER_INFO *buffer_info, uint8_t slaveTransmitFlag)
 {
     uint8_t pkt_valid;
@@ -144,6 +143,14 @@ uint8_t mctp_receive_smbus(I2C_BUFFER_INFO *buffer_info, uint8_t slaveTransmitFl
 
 } /* End mctp_receive_smbus() */
 
+/******************************************************************************/
+/** This is called when packet received over smbus and the packet is 
+* meant for SPDM or PLDM modules
+* @param rx_packet_len - length of the received packet
+* @param buffer_info - pointer to store the packetized data
+* @param rx_buf - pointer to the received data
+* @return void
+*******************************************************************************/
 uint8_t packetize_data(uint8_t rx_packet_len, I2C_BUFFER_INFO *buffer_info, MCTP_PKT_BUF *rx_buf)
 {
     uint8_t i;
@@ -178,7 +185,8 @@ uint8_t packetize_data(uint8_t rx_packet_len, I2C_BUFFER_INFO *buffer_info, MCTP
 }
 
 /******************************************************************************/
-/** This is called when packet received over smbus is targeted for EC and message type is for spdm.
+/** This is called when packet received over smbus is targeted for EC and 
+* message type is for spdm.
 * @param *buffer_info Pointer to BUFFER_INFO structure of smbus layer
 * @return void
 *******************************************************************************/
@@ -459,12 +467,10 @@ uint8_t mctp_smbmaster_done(uint8_t channel, uint8_t status, uint8_t *buffer_ptr
         break;
 
     } /* end of switch */
-
     if(spdm_pend)//if eom is not 1 for the spdm messaging, trigger spdm for further transmission over mctp
     {
-        SET_SPDM_EVENT_FLAG();
+        SET_EVENT_SPDM_TASK(spdm);
     }
-
     return ret_val;
 
 }  /* End mctp_smbmaster_done */
@@ -535,7 +541,9 @@ void mctp_txpktready_init(MCTP_PKT_BUF *tx_buf)
 } /* End mctp_txpktready_init */
 
 /******************************************************************************/
-/** This is called by smbus module whenever MEC1324 SMBUS address is updated.
+/** This is called by smbus module whenever SMBUS address is updated.
+* @param smb_address - Bus address
+* @return mctp_port - I2C controller port 
 *******************************************************************************/
 void mctp_smbaddress_update(uint8_t smb_address, uint8_t mctp_port)
 {

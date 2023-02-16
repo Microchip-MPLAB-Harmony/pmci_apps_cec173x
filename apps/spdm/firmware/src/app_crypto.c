@@ -709,9 +709,11 @@ uint8_t spdm_read_certificate(uint32_t address,
     {
         sb_sram_mbox_devAK_cert_read(address, buff_ptr, certificate_num, length);
     } else {
+        api_qmspi_port_ctrl(0, SPI_IO_FD_DUAL, DEV_DISABLE);
+        api_qmspi_port_ctrl(1, SPI_IO_FD_DUAL, DEV_DISABLE);
         api_qmspi_port_ctrl(INT_SPI_PORT_ID, SPI_IO_FD_DUAL, DEV_ENABLE);
         api_qmspi_port_drv_slew(INT_SPI_PORT_ID, SPI_IO_FD_DUAL, (GPIO_DRV_4MA) | (GPIO_SLEW_FAST));
-        api_qmspi_init(QMSPI_SPI_MODE_0, QMSPI_FREQ_48M, NONE, INT_SPI_PORT_NO);
+        api_qmspi_init(QMSPI_SPI_MODE_0, QMSPI_FREQ_24M, NONE, INT_SPI_PORT_NO);
         gpio_init_pp_output_high(PIN_QSPI0_CS0);
         gpio_init_pp_output_high(PIN_QSPI0_CS1);
         gpio_init_pp_output_high(PIN_QSPI1_CS0);
