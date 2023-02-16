@@ -21,6 +21,9 @@
             <logicalFolder name="dma" displayName="dma" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/dma/plib_dma.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="ec_reg_bank" displayName="ec_reg_bank" projectFiles="true">
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/ec_reg_bank/plib_ec_reg_bank.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="ecia" displayName="ecia" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/ecia/plib_ecia.h</itemPath>
             </logicalFolder>
@@ -258,6 +261,9 @@
             <logicalFolder name="dma" displayName="dma" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/dma/plib_dma.c</itemPath>
             </logicalFolder>
+            <logicalFolder name="ec_reg_bank" displayName="ec_reg_bank" projectFiles="true">
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/ec_reg_bank/plib_ec_reg_bank.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="ecia" displayName="ecia" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/ecia/plib_ecia.c</itemPath>
             </logicalFolder>
@@ -376,12 +382,12 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>4.20</languageToolchainVersion>
+        <languageToolchainVersion>4.21</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
+        <pack name="CEC_DFP" vendor="Microchip" version="1.8.258"/>
         <pack name="CMSIS" vendor="ARM" version="5.4.0"/>
-        <pack name="CEC_DFP" vendor="Microchip" version="1.7.151"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>

@@ -4,7 +4,7 @@
 
 
 project: mctp
-creation_date: 2023-01-05T10:57:51.190+05:30[Asia/Calcutta]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
+creation_date: 2023-02-16T19:15:56.817+05:30[Asia/Calcutta]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
 operating_system: Windows 10
 mhc_mode: Standalone            # [IDE|Standalone|Headless]
 mhc_version: NA
@@ -13,9 +13,9 @@ plugin_version: NA        # if MPLAB X plugin only
 compiler: xc32
 
 modules:
-    - {name: "csp", version: "v3.14.0"}
+    - {name: "csp", version: "unknown"}
     - {name: "core", version: "unknown"}
-    - {name: "dev_packs", version: "v3.14.0"}
-    - {name: "pmci", version: "unknown"}
+    - {name: "dev_packs", version: "unknown"}
+    - {name: "pmci", version: "v3.0.0"}
     - {name: "CMSIS-FreeRTOS", version: "v10.4.6"}
 
