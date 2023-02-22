@@ -6503,12 +6503,12 @@
          <hash>a73c0b319370116d5981d5dacbabad3a775f85ae540ef70b4ced1c99c9ac6cd5</hash>
       </entry>
       <entry>
-         <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\i2c\slave\plib_smb2_slave.h</file>
-         <hash>17f8584abd3b98ed08a0e3e581da083bb2c97c640ec93403e3773a306d2d6db9</hash>
-      </entry>
-      <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\dma_chan01.h</file>
          <hash>0d822df8d8fd8b6bf2b3fbb5bdb82157f085a9e79db67f8f3e070ff407b454f4</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\i2c\slave\plib_smb2_slave.h</file>
+         <hash>17f8584abd3b98ed08a0e3e581da083bb2c97c640ec93403e3773a306d2d6db9</hash>
       </entry>
       <entry>
          <file>..\src\third_party\rtos\FreeRTOS\Source\queue.c</file>
@@ -6536,7 +6536,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\ec_reg_bank\plib_ec_reg_bank.c</file>
-         <hash>fb387399f4070a8602b5bbca0240aa8c43561d508a0da7d36e1a81d42a4aebe1</hash>
+         <hash>e8c5b1917d9950ab581d14cf47e3e4428f36c682ad8a254b8ed8332688bf01df</hash>
       </entry>
       <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\gpio.h</file>

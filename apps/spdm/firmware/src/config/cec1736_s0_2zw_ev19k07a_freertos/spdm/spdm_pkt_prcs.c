@@ -254,9 +254,10 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                         get_mem = cert_buf[current_cert_ptr].mem_addr;
                         if (root_cert)
                         {         
+                            
+                            
                             if (spdm_read_certificate(get_mem, &spi_data[offset], 1024, current_cert_ptr))
                             {
-                                    // spdmContext->spdm_state_info = SPDM_IDLE;
                                     cert_chain_valid_status = CERT_CHAIN_INVALID;
                                     break;
                             }
@@ -282,7 +283,6 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                         {
                             if (spdm_read_certificate(get_mem, &spi_data[offset], 4, current_cert_ptr))
                             {
-                                    // spdmContext->spdm_state_info = SPDM_IDLE;
                                     cert_chain_valid_status = CERT_CHAIN_INVALID;
                                     break;
                             }
@@ -296,7 +296,6 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                     if (cert_chain_valid_status == CERT_CHAIN_VALID) // Get Tail certificate Length only if all certificates are valid
                     {
                         spdm_read_certificate(0, &spi_data[offset], 4, current_cert_ptr);
-                            // spi_data[offset + 2] = 0xFF;
                         cert_chain_valid_status |= spdm_pkt_update_cert_data_len(offset, &cert_buf[current_cert_ptr].cert_size);
                     }
                 }
@@ -341,7 +340,6 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                         get_mem = cert_buf[current_cert_ptr].mem_addr;
                         if (spdm_read_certificate(get_mem, &spi_data[offset], cert_buf[current_cert_ptr].cert_size, current_cert_ptr))
                         {
-                            // spdmContext->spdm_state_info = SPDM_IDLE;
                             slot_buf[slot].is_cert_chain_valid = CERT_CHAIN_INVALID;
                             break;
                         }
@@ -368,6 +366,7 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                     spdm_get_len_for_runtime_hash(spdmContext);
                     spdm_crypto_ops_run_time_hashing(&spi_data[offset], length, spdmContext);
 
+
                     spdmContext->get_requests_state = END_OF_HASH;
                     spdm_crypto_ops_run_time_hashing(NULL, 0, spdmContext);
                     memcpy(&hash_of_chains[SPDM_SHA384_LEN * slot], &spdmContext->sha_digest[0], SPDM_SHA384_LEN);
@@ -377,6 +376,7 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                     /* Ideally, Set hash of cert chain to 0U since one of the cert is invalid
                     However, since variable is global, which is initialized to 0U by default, memset to 0U is not needed */
                 }
+
             }
         }
         spdmContext->spdm_state_info = SPDM_CMD_PROCESS_MODE;

@@ -56,8 +56,10 @@
 // Section: EC_REG_BANK Implementation
 // *****************************************************************************
 // *****************************************************************************
+   
 
-EC_REG_BANK_OBJECT ec_reg_bank[2] = {0};
+/* MISRA C-2012 Rule 5.1 deviated:4 Deviation record ID -  H3_MISRAC_2012_R_5_1_DR_1 */
+
 
 void EC_REG_BANK_Initialize( void )
 {
@@ -74,7 +76,7 @@ uint32_t EC_REG_BANK_AHBErrorAddrGet(void)
 
 void EC_REG_BANK_AHBErrorAddrClr(void)
 {
-    EC_REG_BANK_REGS->EC_REG_BANK_AHB_ERR_ADDR = 0;
+    EC_REG_BANK_REGS->EC_REG_BANK_AHB_ERR_ADDR = 0; 
 }
 
 void EC_REG_BANK_AHBErrorEnable(void)
@@ -94,7 +96,7 @@ void EC_REG_BANK_AltNVICVectorsEnable(void)
 
 void EC_REG_BANK_VTR1PadMonDebounceCtrl(VTR_PAD_MON_DEB_CTRL ctrl)
 {
-    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL = (ctrl << EC_REG_BANK_PD_MON_CTRL_CTRL_VTR1_Pos);
+    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL = ((uint32_t)ctrl << EC_REG_BANK_PD_MON_CTRL_CTRL_VTR1_Pos);
 }
 
 void EC_REG_BANK_VTR1PadMonOverrideEn(void)
@@ -149,7 +151,7 @@ void EC_REG_BANK_VTR1PadMonPDIntDis(void)
 
 void EC_REG_BANK_VTR2PadMonDebounceCtrl(VTR_PAD_MON_DEB_CTRL ctrl)
 {
-    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL = (ctrl << EC_REG_BANK_PD_MON_CTRL_CTRL_VTR2_Pos);
+    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL = ((uint32_t)ctrl << EC_REG_BANK_PD_MON_CTRL_CTRL_VTR2_Pos);
 }
 
 void EC_REG_BANK_VTR2PadMonOverrideEn(void)
@@ -204,22 +206,26 @@ void EC_REG_BANK_VTR2PadMonPDIntDis(void)
 
 VTR1_PAD_MON_STS EC_REG_BANK_VTR1PadMonStatusGet(void)
 {
-    return EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_STS & (EC_REG_BANK_PD_MON_STS_VTR1_PD_STS_Msk | EC_REG_BANK_PD_MON_STS_VTR1_PU_STS_Msk | EC_REG_BANK_PD_MON_STS_VTR1_CS_STS_Msk);
+    uint32_t temp32_t = EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_STS & (EC_REG_BANK_PD_MON_STS_VTR1_PD_STS_Msk | EC_REG_BANK_PD_MON_STS_VTR1_PU_STS_Msk | EC_REG_BANK_PD_MON_STS_VTR1_CS_STS_Msk);
+    return (VTR1_PAD_MON_STS)temp32_t;
 }
 
 void EC_REG_BANK_VTR1PadMonStatusClr(VTR1_PAD_MON_STS statusBitMask)
 {
-    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_STS = statusBitMask;
+    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_STS = (uint32_t)statusBitMask;
 }
 
 VTR2_PAD_MON_STS EC_REG_BANK_VTR2PadMonStatusGet(void)
 {
-    return EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_STS & (EC_REG_BANK_PD_MON_STS_VTR2_PD_STS_Msk | EC_REG_BANK_PD_MON_STS_VTR2_PU_STS_Msk | EC_REG_BANK_PD_MON_STS_VTR2_CS_STS_Msk);
+    uint32_t temp32_t = EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_STS & (EC_REG_BANK_PD_MON_STS_VTR2_PD_STS_Msk | EC_REG_BANK_PD_MON_STS_VTR2_PU_STS_Msk | EC_REG_BANK_PD_MON_STS_VTR2_CS_STS_Msk);
+    return (VTR2_PAD_MON_STS)temp32_t;
 }
 
 void EC_REG_BANK_VTR2PadMonStatusClr(VTR2_PAD_MON_STS statusBitMask)
 {
-    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_STS = statusBitMask;
+    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_STS = (uint32_t)statusBitMask;
 }
 
+
+/* MISRAC 2012 deviation block end */
 
