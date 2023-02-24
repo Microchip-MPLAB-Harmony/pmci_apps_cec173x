@@ -56,18 +56,19 @@
 // Section: EC_REG_BANK Implementation
 // *****************************************************************************
 // *****************************************************************************
-   
+
 
 /* MISRA C-2012 Rule 5.1 deviated:4 Deviation record ID -  H3_MISRAC_2012_R_5_1_DR_1 */
 
 
+
 void EC_REG_BANK_Initialize( void )
 {
-    
-    
+
+
     EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL = EC_REG_BANK_PD_MON_CTRL_VTR1_PROTECN_Msk | EC_REG_BANK_PD_MON_CTRL_VTR2_PROTECN_Msk;
-    
-    
+
+
 }
 uint32_t EC_REG_BANK_AHBErrorAddrGet(void)
 {
@@ -76,7 +77,7 @@ uint32_t EC_REG_BANK_AHBErrorAddrGet(void)
 
 void EC_REG_BANK_AHBErrorAddrClr(void)
 {
-    EC_REG_BANK_REGS->EC_REG_BANK_AHB_ERR_ADDR = 0; 
+    EC_REG_BANK_REGS->EC_REG_BANK_AHB_ERR_ADDR = 0;
 }
 
 void EC_REG_BANK_AHBErrorEnable(void)
@@ -86,7 +87,7 @@ void EC_REG_BANK_AHBErrorEnable(void)
 
 void EC_REG_BANK_AHBErrorDisable(void)
 {
-    EC_REG_BANK_REGS->EC_REG_BANK_AHB_ERR_CTRL = 0;
+    EC_REG_BANK_REGS->EC_REG_BANK_AHB_ERR_CTRL = 1;
 }
 
 void EC_REG_BANK_AltNVICVectorsEnable(void)
@@ -96,7 +97,7 @@ void EC_REG_BANK_AltNVICVectorsEnable(void)
 
 void EC_REG_BANK_VTR1PadMonDebounceCtrl(VTR_PAD_MON_DEB_CTRL ctrl)
 {
-    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL = ((uint32_t)ctrl << EC_REG_BANK_PD_MON_CTRL_CTRL_VTR1_Pos);
+    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL = (EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL & ~EC_REG_BANK_PD_MON_CTRL_CTRL_VTR1_Msk) | ((uint32_t)ctrl << EC_REG_BANK_PD_MON_CTRL_CTRL_VTR1_Pos);
 }
 
 void EC_REG_BANK_VTR1PadMonOverrideEn(void)
@@ -151,7 +152,7 @@ void EC_REG_BANK_VTR1PadMonPDIntDis(void)
 
 void EC_REG_BANK_VTR2PadMonDebounceCtrl(VTR_PAD_MON_DEB_CTRL ctrl)
 {
-    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL = ((uint32_t)ctrl << EC_REG_BANK_PD_MON_CTRL_CTRL_VTR2_Pos);
+    EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL = (EC_REG_BANK_REGS->EC_REG_BANK_PD_MON_CTRL & ~EC_REG_BANK_PD_MON_CTRL_CTRL_VTR2_Msk) | ((uint32_t)ctrl << EC_REG_BANK_PD_MON_CTRL_CTRL_VTR2_Pos);
 }
 
 void EC_REG_BANK_VTR2PadMonOverrideEn(void)

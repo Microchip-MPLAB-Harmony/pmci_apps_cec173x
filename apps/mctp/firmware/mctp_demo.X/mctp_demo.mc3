@@ -6440,7 +6440,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\ecia\plib_ecia.c</file>
-         <hash>1a7a6f624082711974c1f48acf9c67bc4bd70777e4b5254c30727246eda82f2e</hash>
+         <hash>f424d607385bb07c9b06a06e363d606b48b8506fd03a6c309dfc5a8138b21868</hash>
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\ecia\plib_ecia.h</file>
@@ -6503,12 +6503,12 @@
          <hash>a73c0b319370116d5981d5dacbabad3a775f85ae540ef70b4ced1c99c9ac6cd5</hash>
       </entry>
       <entry>
-         <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\dma_chan01.h</file>
-         <hash>0d822df8d8fd8b6bf2b3fbb5bdb82157f085a9e79db67f8f3e070ff407b454f4</hash>
-      </entry>
-      <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\i2c\slave\plib_smb2_slave.h</file>
          <hash>17f8584abd3b98ed08a0e3e581da083bb2c97c640ec93403e3773a306d2d6db9</hash>
+      </entry>
+      <entry>
+         <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\dma_chan01.h</file>
+         <hash>0d822df8d8fd8b6bf2b3fbb5bdb82157f085a9e79db67f8f3e070ff407b454f4</hash>
       </entry>
       <entry>
          <file>..\src\third_party\rtos\FreeRTOS\Source\queue.c</file>
@@ -6516,7 +6516,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\mctp\mctp_base.c</file>
-         <hash>ba7d5fa48c1b1882279d50603073e4bd739e74f1c8602c0796628e5a0805b875</hash>
+         <hash>91f9c015da35a45da022fdb207648405e42e4bee59a333390cd0a5c0b05c881d</hash>
       </entry>
       <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\wdt.h</file>
@@ -6536,7 +6536,7 @@
       </entry>
       <entry>
          <file>..\src\config\cec1736_s0_2zw_ev19k07a_freertos\peripheral\ec_reg_bank\plib_ec_reg_bank.c</file>
-         <hash>e8c5b1917d9950ab581d14cf47e3e4428f36c682ad8a254b8ed8332688bf01df</hash>
+         <hash>52d72bd521bc62868a7d73b37f7634fd7d91766760ce71c78ce83cb46446161b</hash>
       </entry>
       <entry>
          <file>..\src\packs\CEC1736_S0_2ZW_DFP\component\gpio.h</file>
