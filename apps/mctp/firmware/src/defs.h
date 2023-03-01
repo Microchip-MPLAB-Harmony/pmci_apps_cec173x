@@ -23,7 +23,7 @@
  **********************************************************************************
  *  #xx
  **********************************************************************************
- * $File: //depot_pcs/FWEng/solutions/Glacier_GEN3/maincodeline/Harmony/secureboot_app_source/cec173x_soteria_source/secureboot_app_src/common/include/defs.h $
+ * $File: //depot_pcs/FWEng/solutions/Glacier_GEN3/maincodeline/Harmony/pmci_stack/pmci_apps_cec173x/apps/mctp/firmware/src/defs.h $
  */
 
 

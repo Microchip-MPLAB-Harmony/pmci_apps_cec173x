@@ -29,9 +29,9 @@
 /******************************************************************************
  *  MCHP Version Control Information (Perforce):
  *
- *  FILE:     $File: //depot_pcs/FWEng/solutions/Glacier_GEN3/maincodeline/Harmony/secureboot_app_source/cec173x_soteria_source/secureboot_app_src/smbus/smb_buffers.c $
- *  REVISION: $Revision: #1 $
- *  DATETIME: $DateTime: 2022/11/28 03:10:21 $
+ *  FILE:     $File: //depot_pcs/FWEng/solutions/Glacier_GEN3/maincodeline/Harmony/pmci_stack/pmci_apps_cec173x/apps/mctp/firmware/src/smbus/smb_buffers.c $
+ *  REVISION: $Revision: #3 $
+ *  DATETIME: $DateTime: 2023/02/24 06:07:07 $
  *  AUTHOR:   $Author: i64652 $
  *
  *  Revision history (latest first):

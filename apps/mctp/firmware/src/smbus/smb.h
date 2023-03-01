@@ -36,12 +36,12 @@
 <b>Reference:</b> smsc_reusable_fw_requirement.doc */
 
 /*******************************************************************************
- $File: //depot_pcs/FWEng/solutions/Glacier_GEN3/maincodeline/Harmony/secureboot_app_source/cec173x_soteria_source/secureboot_app_src/smbus/smb.h $
+ $File: //depot_pcs/FWEng/solutions/Glacier_GEN3/maincodeline/Harmony/pmci_stack/pmci_apps_cec173x/apps/mctp/firmware/src/smbus/smb.h $
 
 Version Control Information (Perforce)
 *******************************************************************************
-$Revision: #1 $
-$DateTime: 2022/11/28 03:10:21 $
+$Revision: #3 $
+$DateTime: 2023/02/24 06:07:07 $
 $Author: i64652 $
   Change Description:
     2. Code changes to support Master Tx chaining

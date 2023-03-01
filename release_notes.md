@@ -15,16 +15,24 @@ Following table provides number of peripheral library examples available for dif
 
 ### New Features
 
-- None
+  - Added demo applications to demonstrate MCTP and SPDM message exachange using PMCI library
+
+### Bug fixes
+
+  - None
+
+### Improvements
+
+  - None
 
 ### Known Issues
 
-- MISRA-C 2012, Rule 6.1 has been suppressed for structure with bitfields
-- MISRA-C 2012, Rule 11.3 has been suppressed for casting of uint32_t* to MCTP_CONTEXT*
+  - MISRA-C 2012, Rule 6.1 has been suppressed for structure with bitfields
+  - MISRA-C 2012, Rule 11.3 has been suppressed for casting of uint32_t* to MCTP_CONTEXT*
 
 ### Development Tools
 
-- [MPLAB® X IDE v6.05](https://www.microchip.com/mplab/mplab-x-ide)
-- MPLAB® X IDE plug-ins:
+  - [MPLAB® X IDE v6.05](https://www.microchip.com/mplab/mplab-x-ide)
+  - MPLAB® X IDE plug-ins:
   - MPLAB® Code Configurator (MCC) v5.2.2
-- [MPLAB® XC32 C/C++ Compiler v4.20](https://www.microchip.com/mplab/compilers)
+  - [MPLAB® XC32 C/C++ Compiler v4.21](https://www.microchip.com/mplab/compilers)

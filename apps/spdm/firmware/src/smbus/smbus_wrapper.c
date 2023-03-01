@@ -17,12 +17,12 @@
 * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE
 * OF THESE TERMS.
 *******************************************************************************
-*$File: //depot_pcs/FWEng/solutions/Glacier_GEN3/maincodeline/Harmony/secureboot_app_source/cec173x_soteria_source/secureboot_app_src/smbus/smbus_wrapper.c $
+*$File: //depot_pcs/FWEng/solutions/Glacier_GEN3/maincodeline/Harmony/pmci_stack/pmci_apps_cec173x/apps/spdm/firmware/src/smbus/smbus_wrapper.c $
 
 Version Control Information (Perforce)
 *******************************************************************************
-$Revision: #1 $
-$DateTime: 2022/11/28 03:10:21 $
+$Revision: #2 $
+$DateTime: 2023/02/24 06:07:07 $
 $Author: i64652 $
 Change Description: 
     1. Initial Draft 
