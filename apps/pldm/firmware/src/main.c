@@ -27,6 +27,7 @@
 #include <stdlib.h>                     // Defines EXIT_FAILURE
 #include "definitions.h"                // SYS function prototypes
 #include "mctp.h"
+#include "pldm/pldm.h"
 
 
 // *****************************************************************************
@@ -41,6 +42,12 @@ int main ( void )
     SYS_Initialize ( NULL );
 
     if(mctp_app_task_create((void*)NULL) < 0)
+    {
+        /* !!MCTP task creation failed, don't proceed!! */
+        while(1);
+    }
+
+    if(pldm_app_task_create((void*)NULL) < 0)
     {
         /* !!MCTP task creation failed, don't proceed!! */
         while(1);

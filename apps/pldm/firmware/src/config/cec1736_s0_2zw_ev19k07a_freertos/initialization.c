@@ -118,18 +118,19 @@ void SYS_Initialize ( void* data )
 
     I2CSMB4_Initialize();
     
+    QMSPI0_Initialize();
+
     I2CSMB3_Initialize();
     
     I2CSMB0_Initialize();
     
     DMA_Initialize();
 
-EC_REG_BANK_Initialize();
-
     I2CSMB2_Initialize();
     
     I2CSMB1_Initialize();
     
+    EC_REG_BANK_Initialize();
 
 
 
@@ -140,6 +141,7 @@ EC_REG_BANK_Initialize();
     ECIA_Initialize();
     NVIC_Initialize();
 
+    CCT_Initialize();
     /* MISRAC 2012 deviation block end */
 }
 

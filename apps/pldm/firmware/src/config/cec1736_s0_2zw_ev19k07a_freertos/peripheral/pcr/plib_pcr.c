@@ -58,7 +58,7 @@ void PCR_Initialize (void)
     /* Select slow clock divide */
     PCR_REGS->PCR_SLOW_CLK_CTRL = PCR_SLOW_CLK_CTRL_DIV(480);
 
-    PCR_REGS->PCR_SLP_EN_0 = 0x0;
+    PCR_REGS->PCR_SLP_EN_0 = 0x80;
     PCR_REGS->PCR_SLP_EN_1 = 0x0;
     PCR_REGS->PCR_SLP_EN_3 = 0x0;
     PCR_REGS->PCR_SLP_EN_4 = 0x0;
@@ -87,16 +87,6 @@ void PCR_PrivilegeEnLock (void)
 void PCR_PrivilegeEnUnLock (void)
 {
     PCR_REGS->PCR_PRIV_EN_LOCK &= ~PCR_PRIV_EN_LOCK_LOCK_EN_Msk;
-}
-
-uint32_t PCR_PowerFailResetStatusRegGet(void)
-{
-    return VTR_REG_BANK_REGS->VTR_REG_BANK_PFRS;
-}
-
-void PCR_PowerFailResetStatusClear(uint32_t pfsr_bits)
-{
-    VTR_REG_BANK_REGS->VTR_REG_BANK_PFRS = pfsr_bits;
 }
 
 

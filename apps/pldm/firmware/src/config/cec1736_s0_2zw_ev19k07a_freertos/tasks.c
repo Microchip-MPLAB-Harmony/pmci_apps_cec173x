@@ -71,6 +71,13 @@ void _APP_SMB_DRV_Tasks(  void *pvParameters  )
 }
 
 
+void timer_enable(void)
+{
+
+    CCT_FreeRunningTimerReset();
+    CCT_TimerActivate();
+    CCT_FreeRunningTimerStart();
+}
 
 
 // *****************************************************************************
@@ -107,7 +114,7 @@ void SYS_Tasks ( void )
                 &xAPP_SMB_DRV_Tasks);
 
 
-
+    timer_enable();
 
     /* Start RTOS Scheduler. */
     

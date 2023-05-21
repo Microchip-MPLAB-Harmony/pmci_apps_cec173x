@@ -56,6 +56,9 @@ uint8_t mctp_packet_routing(I2C_BUFFER_INFO *buffer_info)
     case MCTP_IC_MSGTYPE_CONTROL:
         ret_value = mctp_copy_rxpkt_for_ec(buffer_info);
         break;
+    case MCTP_IC_MSGTYPE_PLDM:
+        ret_value = mctp_copy_rx_for_pldm_for_ec(buffer_info);
+        break;
     default:
         ret_value = MCTP_FAILURE;
         break;

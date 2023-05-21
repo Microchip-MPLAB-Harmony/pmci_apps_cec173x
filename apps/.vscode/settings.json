@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "definitions.h": "c",
+        "configuration.h": "c",
+        "platform_serial_flash.h": "c",
+        "common.h": "c",
+        "plib_smb4_master_slave_common.h": "c",
+        "plib_smb0_master.h": "c"
+    }
+}

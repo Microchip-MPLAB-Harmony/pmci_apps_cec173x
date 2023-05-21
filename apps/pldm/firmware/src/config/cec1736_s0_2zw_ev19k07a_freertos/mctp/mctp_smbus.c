@@ -70,6 +70,7 @@ uint8_t mctp_receive_smbus(I2C_BUFFER_INFO *buffer_info, uint8_t slaveTransmitFl
 
     uint8_t pkt_len;
     MCTP_PKT_BUF *pkt_buf;
+    MCTP_PKT_BUF *pldm_msg_rx_buf = NULL;
     pkt_buf = (MCTP_PKT_BUF *)((void *)&buffer_info->buffer_ptr[0]);
 
     /* if PEC not valid, drop packet */
@@ -129,6 +130,9 @@ uint8_t mctp_receive_smbus(I2C_BUFFER_INFO *buffer_info, uint8_t slaveTransmitFl
     else
     {
         mctp_base_packetizing_val_set(false);
+        pldm_msg_rx_buf = (MCTP_PKT_BUF *) &mctp_pktbuf[MCTP_BUF4];
+        memset(pldm_msg_rx_buf, 0, MCTP_PKT_BUF_DATALEN);
+        pldm_msg_rx_buf->buf_full = (uint8_t)MCTP_EMPTY;
         smb_rx_index = 0;
         mctp_clean_up_buffer_states();
         return (uint8_t)I2C_STATUS_BUFFER_ERROR;
@@ -180,6 +184,67 @@ uint8_t packetize_data(uint8_t rx_packet_len, I2C_BUFFER_INFO *buffer_info, MCTP
     return ret_val;
 }
 
+/******************************************************************************/
+/** This is called when packet received over smbus is targeted for 
+* EC and message type is PLDM.
+* @param *buffer_info Pointer to I2C_BUFFER_INFO structure of smbus layer
+* @return void
+*******************************************************************************/
+uint8_t mctp_copy_rx_for_pldm_for_ec(I2C_BUFFER_INFO *buffer_info)
+{
+    uint8_t i;
+    uint8_t msg_type;
+    uint8_t ret_val = MCTP_SUCCESS;
+    MCTP_PKT_BUF *pldm_msg_rx_buf = NULL;
+    bool is_packetizing = false;
+    is_packetizing = mctp_base_packetizing_val_get();
+
+    msg_type = mctp_self.message_type;
+
+    pldm_msg_rx_buf = (MCTP_PKT_BUF *) &mctp_pktbuf[MCTP_BUF4];
+
+    if (msg_type == MCTP_IC_MSGTYPE_PLDM)
+    {
+        if((uint8_t)MCTP_EMPTY == pldm_msg_rx_buf->buf_full)
+        {
+            if(is_packetizing)
+            {
+                ret_val = packetize_data(get_packet_len, buffer_info, pldm_msg_rx_buf);
+                if(ret_val == MCTP_SUCCESS)
+                {
+                    is_packetizing = mctp_base_packetizing_val_get();
+                    if(is_packetizing == false)
+                    {
+                        pldm_msg_rx_buf->rx_smbus_timestamp = buffer_info->TimeStamp;
+                    }
+                }
+                else
+                {
+                    ret_val = MCTP_FAILURE;
+                    return ret_val;
+                }
+            }
+            else
+            {
+                /* copy packet from smbus buffer to pldm ec rcv buffer */
+                for(i = 0; i < buffer_info->DataLen; i++)
+                {
+                    pldm_msg_rx_buf->pkt.data[i] = buffer_info->buffer_ptr[i];
+                }
+                /* store smbus layer timestamp i.e. time when packet was
+                 * received by smbus */
+                pldm_msg_rx_buf->rx_smbus_timestamp = buffer_info->TimeStamp;
+            }
+
+            /* mark ec rx buffer pending for further processing */
+            pldm_msg_rx_buf->buf_full = (uint8_t)MCTP_RX_PENDING;
+            SET_EVENT_PLDM_TASK(pldm);
+           // pldm_msg_rx_buf->buf_full = (uint8_t)MCTP_EMPTY;
+        }
+    }
+
+    return ret_val;
+} /* End mctp_copy_rx_for_pldm_for_ec */
 
 /******************************************************************************/
 /** This is called when packet received over smbus is targeted for EC.
@@ -277,9 +342,21 @@ uint8_t mctp_smbmaster_done(uint8_t channel, uint8_t status, uint8_t *buffer_ptr
 {
     MCTP_PKT_BUF *tx_buf;
     uint8_t ret_val;
+    uint8_t pldm_pend = 0x00;
 
     /* get current TX buffer pointer */
     tx_buf = (MCTP_PKT_BUF *)((void *) buffer_ptr);
+    if (store_msg_type_tx == MCTP_IC_MSGTYPE_PLDM)
+    {
+        if((buffer_ptr[MCTP_PKT_TO_MSGTAG_POS] & MCTP_EOM_REF_MSK) != MCTP_EOM_REF)
+        {
+            pldm_pend = true;
+        }
+        else
+        {
+            pldm_pend = false;
+        }
+    }
     /* based on status code, schedule re-transmission of packet or
     * drop the packet / mark buffer available */
     switch (status)
@@ -386,6 +463,15 @@ uint8_t mctp_smbmaster_done(uint8_t channel, uint8_t status, uint8_t *buffer_ptr
         break;
 
     } /* end of switch */
+    if (is_pldm_request_firmware_update)
+    {
+        SET_EVENT_PLDM_TASK_RESP(pldm);
+    }
+
+    if (pldm_pend)
+    {
+        SET_EVENT_PLDM_TASK_RESP(pldm);
+    }
     return ret_val;
 
 }  /* End mctp_smbmaster_done */

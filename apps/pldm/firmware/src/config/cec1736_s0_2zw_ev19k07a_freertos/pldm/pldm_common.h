@@ -1,4 +1,4 @@
-/*****************************************************************************
+/****************************************************************************
 * Copyright (c) 2022 Microchip Technology Inc. and its subsidiaries.
 * You may use this software and any derivatives exclusively with
 * Microchip products.
@@ -18,28 +18,36 @@
 * OF THESE TERMS.
 *****************************************************************************/
 
-#ifndef MCTP_CONFIG_H
-#define MCTP_CONFIG_H
+#ifndef PLDM_COMMON_H
+#define PLDM_COMMON_H
+
+// #include "FreeRTOS.h"
+// #include "task.h"
+// #include "event_groups.h"
+// #include "../mctp/mctp_base.h"
+// #include "../mctp/mctp.h"
+#include <stdint.h>
+#include <stddef.h>
+#include "definitions.h"
+#include "pldm_task.h"
+#include "pldm_config.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "mctp.h"
+#define PLDM_BSS0_ATTR                                     __attribute__((section("pldm_bss0")))
+#define PLDM_BSS1_ATTR                                     __attribute__((section("pldm_bss1")))
+#define PLDM_BSS2_ATTR                                     __attribute__((section("pldm_bss2")))
 
-#define HOST_SLAVE_ADDR                        0x64U
-#define MCTP_EC_EID                            0x94U
-#define MCTP_HOST_EID                          0x95U
-#define MCTP_TASK_PRIORITY                     2U
-#define MCTP_I2C_PORT                          0U
-#define MCTP_I2C_CHANNEL                       3U
-#define MCTP_I2C_CLK_FREQ                      I2C_BUS_SPEED_400KHZ
+void timer_delay(uint32_t counts_to_delay);
+
+void timer_delay_ms(uint32_t num_ms);
+
+void timer_delay_us(uint32_t num_us);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* MCTP_CONFIG_H */
-
-/**   @}
- */
+#endif

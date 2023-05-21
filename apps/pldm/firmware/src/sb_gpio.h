@@ -35,6 +35,8 @@
 #define UNUSED_GPIOS_COUNT      4
 #endif
 
+#define GPIO_DRV_4MA (1ul << 4)
+#define GPIO_SLEW_FAST 1U
 
 /* APx Reset Pins */
 #define PIN_AP0_RESET              GPIO_PIN_GPIO106

@@ -4,7 +4,7 @@
 
 
 project: pldm
-creation_date: 2023-05-07T19:20:45.475+05:30[Asia/Calcutta]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
+creation_date: 2023-05-21T13:22:32.442+05:30[Asia/Calcutta]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
 operating_system: Windows 10
 mhc_mode: Standalone            # [IDE|Standalone|Headless]
 mhc_version: NA
@@ -13,7 +13,7 @@ plugin_version: NA        # if MPLAB X plugin only
 compiler: xc32
 
 modules:
-    - {name: "csp", version: "v3.16.0"}
+    - {name: "csp", version: "unknown"}
     - {name: "core", version: "v3.12.0"}
     - {name: "dev_packs", version: "unknown"}
     - {name: "pmci", version: "unknown"}

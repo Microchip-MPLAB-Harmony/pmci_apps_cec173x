@@ -134,6 +134,18 @@ uint8_t packetize_data(uint8_t rx_packet_len, I2C_BUFFER_INFO *buffer_info, MCTP
 
 #define SET_MCTP_EVENT_TASK(mctp)   SET_MCTP_EVENT_FLAG()
 
+void SET_PLDM_RESP_EVENT_FLAG(void);
+#define SET_EVENT_PLDM_TASK_RESP(pldm)   SET_PLDM_RESP_EVENT_FLAG()
+
+void SET_PLDM_EVENT_FLAG(void);
+#define SET_EVENT_PLDM_TASK(pldm)   SET_PLDM_EVENT_FLAG()
+/******************************************************************************/
+/** This is called when packet received over smbus is targeted for 
+* EC and message type is PLDM.
+* @param *buffer_info Pointer to I2C_BUFFER_INFO structure of smbus layer
+* @return void
+*******************************************************************************/
+uint8_t mctp_copy_rx_for_pldm_for_ec(I2C_BUFFER_INFO *buffer_info);
 
 #ifdef __cplusplus
 }

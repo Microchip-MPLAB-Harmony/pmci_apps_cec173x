@@ -25,6 +25,7 @@
 #include <stddef.h>
 #include "definitions.h"
 #include "defs.h"
+#include "pldm/pldm.h"
 
 #include "interrupt/interrupt_api.h"
 #include "gpio/gpio_api.h"

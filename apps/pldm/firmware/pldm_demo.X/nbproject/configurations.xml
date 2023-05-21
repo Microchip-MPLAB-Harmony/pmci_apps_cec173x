@@ -4,6 +4,12 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="app_pldm" displayName="app_pldm" projectFiles="true">
+        <itemPath>../src/app_pldm/app_pldm.h</itemPath>
+        <itemPath>../src/app_pldm/platform_serial_flash.h</itemPath>
+        <itemPath>../src/app_pldm/rom_qmspi.h</itemPath>
+        <itemPath>../src/app_pldm/serial_flash_sst25pf.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="config" displayName="config" projectFiles="true">
         <logicalFolder name="cec1736_s0_2zw_ev19k07a_freertos"
                        displayName="cec1736_s0_2zw_ev19k07a_freertos"
@@ -18,6 +24,10 @@
             <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/mctp/mctp_config.h</itemPath>
           </logicalFolder>
           <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
+            <logicalFolder name="cct" displayName="cct" projectFiles="true">
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/cct/plib_cct.h</itemPath>
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/cct/plib_cct_common.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="dma" displayName="dma" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/dma/plib_dma.h</itemPath>
             </logicalFolder>
@@ -61,6 +71,17 @@
             <logicalFolder name="pcr" displayName="pcr" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/pcr/plib_pcr.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="qmspi" displayName="qmspi" projectFiles="true">
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/qmspi/plib_qmspi0.h</itemPath>
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/qmspi/plib_qmspi_common.h</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="pldm" displayName="pldm" projectFiles="true">
+            <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/pldm/pldm_task.h</itemPath>
+            <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/pldm/pldm_common.h</itemPath>
+            <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/pldm/pldm_config.h</itemPath>
+            <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/pldm/pldm.h</itemPath>
+            <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/pldm/pldm_pkt_prcs.h</itemPath>
           </logicalFolder>
           <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/definitions.h</itemPath>
           <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/device.h</itemPath>
@@ -247,6 +268,11 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="app_pldm" displayName="app_pldm" projectFiles="true">
+        <itemPath>../src/app_pldm/app_pldm.c</itemPath>
+        <itemPath>../src/app_pldm/platform_serial_flash.c</itemPath>
+        <itemPath>../src/app_pldm/serial_flash_sst25pf040c.c</itemPath>
+      </logicalFolder>
       <logicalFolder name="config" displayName="config" projectFiles="true">
         <logicalFolder name="cec1736_s0_2zw_ev19k07a_freertos"
                        displayName="cec1736_s0_2zw_ev19k07a_freertos"
@@ -258,6 +284,9 @@
             <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/mctp/mctp_base.c</itemPath>
           </logicalFolder>
           <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
+            <logicalFolder name="cct" displayName="cct" projectFiles="true">
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/cct/plib_cct.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="dma" displayName="dma" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/dma/plib_dma.c</itemPath>
             </logicalFolder>
@@ -299,6 +328,14 @@
             <logicalFolder name="pcr" displayName="pcr" projectFiles="true">
               <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/pcr/plib_pcr.c</itemPath>
             </logicalFolder>
+            <logicalFolder name="qmspi" displayName="qmspi" projectFiles="true">
+              <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/peripheral/qmspi/plib_qmspi0.c</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="pldm" displayName="pldm" projectFiles="true">
+            <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/pldm/pldm_task.c</itemPath>
+            <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/pldm/pldm_common.c</itemPath>
+            <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/pldm/pldm_pkt_prcs.c</itemPath>
           </logicalFolder>
           <logicalFolder name="stdio" displayName="stdio" projectFiles="true">
             <itemPath>../src/config/cec1736_s0_2zw_ev19k07a_freertos/stdio/xc32_monitor.c</itemPath>

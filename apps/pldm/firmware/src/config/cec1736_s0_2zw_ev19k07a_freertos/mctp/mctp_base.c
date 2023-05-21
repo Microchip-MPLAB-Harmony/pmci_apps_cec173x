@@ -57,6 +57,8 @@ MCTP_BSS_ATTR static uint8_t transmit_buf[sizeof(MCTP_BUFDATA)]__attribute__ ((a
 
 MCTP_BSS_ATTR static uint32_t start_time;
 
+MCTP_BSS_ATTR uint8_t is_pldm_request_firmware_update;
+
 /******************************************************************************/
 /** UPDATES packetizing variable to check if input data spans more than one mctp packet
 * @param NULL
@@ -435,6 +437,11 @@ void mctp_event_tx_handler(void)
         /* Invalid state */
         break;
     }
+    if ((mctp_pktbuf[mctp_txbuf_index].pkt.data[PLDM_HEADER_VERSION_PLDM_TYPE_POS] == PLDM_TYPE5_AND_HEADER_VERSION)
+            && (mctp_pktbuf[mctp_txbuf_index].pkt.data[PLDM_HEADER_COMMAND_CODE_POS] == PLDM_SEND_VERIFY_COMPLETE_CMD))
+    {
+        mctp_pktbuf[mctp_txbuf_index].buf_full = MCTP_EMPTY;
+    }
 } /* End mctp_event_tx_handler() */
 
 /******************************************************************************/
@@ -459,12 +466,14 @@ void mctp_handle_ec_rx_request_pkt(void)
 {
     MCTP_PKT_BUF *rx_buf;
     MCTP_PKT_BUF *tx_resp_buf;
+    MCTP_PKT_BUF *pldm_msg_rx_buf;
 
     /* get pointer of ec rx request buffer */
     rx_buf      = (MCTP_PKT_BUF *) &mctp_pktbuf[MCTP_BUF1];
     /* get pointer of ec tx response buffer */
     tx_resp_buf = (MCTP_PKT_BUF *) &mctp_pktbuf[MCTP_BUF1];
 
+    pldm_msg_rx_buf = (MCTP_PKT_BUF *) &mctp_pktbuf[MCTP_BUF4];
     /* if ec rx request buffer has valid packet */
     if(rx_buf->buf_full == (uint8_t)MCTP_RX_PENDING)
     {
@@ -481,6 +490,11 @@ void mctp_handle_ec_rx_request_pkt(void)
             mctp_ec_control_pkt_handler(rx_buf, tx_resp_buf);
             mctp_txpktready_init(tx_resp_buf);
         }
+    }
+    else if (pldm_msg_rx_buf->buf_full == (uint8_t)MCTP_RX_PENDING)
+    {
+        pldm_msg_rx_buf->buf_full = (uint8_t)MCTP_EMPTY;
+        memset(pldm_msg_rx_buf, 0, MCTP_PKT_BUF_DATALEN);
     }
 } /* mctp_handle_ec_rx_request_pkt */
 
@@ -603,6 +617,10 @@ uint8_t mctp_tx_timeout(MCTP_PKT_BUF *tx_buf)
     if (store_msg_type_tx == MCTP_MSGTYPE_CONTROL)
     {
         max_tick_count = (uint16_t)((MCTP_TIMEOUT_MS * configTICK_RATE_HZ)/1000UL); //max 100 ms timeout
+    }
+    if (store_msg_type_tx == MCTP_MSGTYPE_PLDM)
+    {
+        return (uint8_t)MCTP_FALSE;
     }
     /* check for timeout condition */
     if(processing_time <= max_tick_count)

@@ -629,6 +629,25 @@ extern uint8_t mctp_i2c_get_chan_busy_status(uint8_t channel);
 extern uint16_t mctp_i2c_get_current_timestamp(void);
 
 /******************************************************************************/
+/** mctp_app_done_inform_i2c(void)
+ * Inform I2C driver that MCTP has received SPDM response packet
+ * @param None
+ * @return None
+ * ############################################################################
+ * -----------------------
+ * Usage notes:
+ * -----------------------
+ * This function is called by the MCTP module after it has received the SPDM
+ * (or) PLDM reponse packet and is ready to be sent on the I2C bus. This 
+ * interface function is used in conjunction with mctp_wait_for_done_spdm()
+ * interface function. These interface functions are available to the user
+ * for cases where the user's I2C driver double / triple buffer capability,
+ * and wants to NACK the host if applications are busy processing the 
+ * previous request packets.
+ * ############################################################################
+*******************************************************************************/
+extern void mctp_app_done_inform_i2c(void);
+/******************************************************************************/
 /** mctp_app_task_create(void)
  * Create MCTP FreeRTOS task
  * @param pvParams  This parameter is not used
@@ -668,6 +687,27 @@ extern uint16_t mctp_i2c_get_current_timestamp(void);
 *******************************************************************************/
 int mctp_app_task_create(void *pvParams);
 
+/******************************************************************************/
+/** SET_MCTP_TX_STATE()
+ * Set MCTP module to state machine to process tx of next
+ * available packet
+ * @param  none
+ * @return none
+ * @note
+ * ############################################################################
+ * -----------------------
+ * Usage notes:
+ * -----------------------
+ * This function should be called by SPDM module when an SPDM response packet
+ * has been populated in mctp_pktbuf[MCTP_BUF2] and ready to be processed
+ * by MCTP module, before calling SET_MCTP_EVENT_FLAG interface function
+ * -----------------------
+ * Example:
+ * -----------------------
+ * Refer SET_MCTP_EVENT_FLAG interface function
+ * ############################################################################
+*******************************************************************************/
+void SET_MCTP_TX_STATE(void);
 /******************************************************************************/
 /** SET_MCTP_EVENT_FLAG()
  * Set event flag to trigger MCTP packet processing
@@ -741,6 +781,55 @@ void SET_MCTP_EVENT_FLAG(void);
 *******************************************************************************/
 void mctp_update_eid(uint8_t eid);
 
+/******************************************************************************/
+/** SET_PLDM_EVENT_FLAG()
+ * Set event flag to trigger PLDM packet processing
+ * @param  none
+ * @return none
+ * @note
+ * ############################################################################
+ * -----------------------
+ * Usage notes:
+ * -----------------------
+ * When the MCTP module identifies the received packet as being an PLDM packet,
+ * it stores the packet into mctp_pktbuf[MCTP_BUF3], and calls this function.
+ * This function should be defined by the user's PLDM module and should ideally
+ * include an IPC mechanism to trigger the user's PLDM module.
+ * -----------------------
+ * Example:
+ * -----------------------
+ * Assume that user PLDM task is using eventgroups for notifications from 
+ * other tasks and uses BIT0 to wait and trigger PLDM packet processing event
+ * 
+ * EventGroupHandle_t pldmEventGroupHandle;
+ * StaticEventGroup_t pldmCreatedEventGroup;
+ * 
+ * int pldm_task_create(void *pvParams)
+ * {
+ *      pldmEventGroupHandle = xEventGroupCreateStatic(pldmCreatedEventGroup);
+ *      // User PLDM task creation
+ *      // assume task routine = pldm_task
+ * }
+ * 
+ * static void pldm_task(void* pvParameters)
+ * {
+ *     EventBits_t uxBits;
+ *     uxBits = xEventGroupWaitBits(pldmEventGroupHandle, PLDM_EVENT_BIT, pdTRUE, pdFALSE, portMAX_DELAY);
+ *     if (PLDM_EVENT_BIT == (uxBits & PLDM_EVENT_BIT))
+ *     {
+ *          // User PLDM packet processing routine(s)
+ *     }
+ * }
+ * 
+ * void SET_PLDM_EVENT_FLAG(void)
+ * {
+ *      xEventGroupSetBits(pldmEventGroupHandle, PLDM_EVENT_BIT);
+ * }
+ * ############################################################################
+*******************************************************************************/
+extern void SET_PLDM_EVENT_FLAG(void);
+
+extern void SET_PLDM_RESP_EVENT_FLAG(void);
 
 /* Provide C++ Compatibility */
 #ifdef __cplusplus

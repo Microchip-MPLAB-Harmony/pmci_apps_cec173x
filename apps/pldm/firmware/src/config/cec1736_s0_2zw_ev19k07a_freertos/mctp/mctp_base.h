@@ -46,6 +46,7 @@ extern "C" {
 #define MCTP_PACKET_MAX            73U
 
 #define MCTP_BYTECNT_OFFSET         3U
+#define MCTP_BYTE_CNT_OFFSET        2u
 #define MCTP_PEC_BYTE               1U
 #define PAYLOAD                     8U
 #define MCTP_BYTECNT_MIN            5U
@@ -106,6 +107,7 @@ extern "C" {
 #define MCTP_IC_MSGTYPE_CONTROL     0x00U
 #define MCTP_IC_MSGTYPE_LHUP_RESP   0x01U
 #define MCTP_IC_MSGTYPE_LHUP_DGRM   0x02U
+#define MCTP_IC_MSGTYPE_PLDM        0X01U
 #define MCTP_IC_MSGTYPE_UNKNWN      0xFFU
 #define MCTP_TIMEOUT_MS             100U //100 ms
 
@@ -528,6 +530,7 @@ extern MCTP_BSS_ATTR uint8_t mctp_tx_state;
 extern MCTP_BSS_ATTR uint8_t mctp_wait_smbus_callback;
 
 extern MCTP_BSS_ATTR uint8_t store_msg_type_tx; // pldm or spdm or mctp - when transmitting multiple/single pkt through smbus
+extern MCTP_BSS_ATTR uint8_t is_pldm_request_firmware_update;
 
 MCTP_CONTEXT* mctp_ctxt_get(void);
 #ifdef __cplusplus
