@@ -36,7 +36,6 @@ void mctp_handle_get_vndr_msg_type_support_cmd(MCTP_PKT_BUF *rx_buf, MCTP_PKT_BU
 void mctp_handle_unsupported_cmd(MCTP_PKT_BUF *rx_buf, MCTP_PKT_BUF *tx_resp_buf);
 
 MCTP_BSS_ATTR MCTP_ROUTING_TABLE mctp_rt;
-
 /******************************************************************************/
 /** This mctp bridging function routes the packet to destination endpoint
 * (EC, BIOS or BRIDGE) for packet processing.

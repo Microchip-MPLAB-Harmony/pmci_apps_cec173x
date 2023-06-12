@@ -4,12 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <logicalFolder name="app_pldm" displayName="app_pldm" projectFiles="true">
-        <itemPath>../src/app_pldm/app_pldm.h</itemPath>
-        <itemPath>../src/app_pldm/platform_serial_flash.h</itemPath>
-        <itemPath>../src/app_pldm/rom_qmspi.h</itemPath>
-        <itemPath>../src/app_pldm/serial_flash_sst25pf.h</itemPath>
-      </logicalFolder>
       <logicalFolder name="config" displayName="config" projectFiles="true">
         <logicalFolder name="cec1736_s0_2zw_ev19k07a_freertos"
                        displayName="cec1736_s0_2zw_ev19k07a_freertos"
@@ -237,6 +231,12 @@
           </logicalFolder>
         </logicalFolder>
       </logicalFolder>
+      <logicalFolder name="pldm_app" displayName="pldm_app" projectFiles="true">
+        <itemPath>../src/pldm_app/platform_serial_flash.h</itemPath>
+        <itemPath>../src/pldm_app/pldm_app.h</itemPath>
+        <itemPath>../src/pldm_app/rom_qmspi.h</itemPath>
+        <itemPath>../src/pldm_app/serial_flash_sst25pf.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="smbus" displayName="smbus" projectFiles="true">
         <itemPath>../src/smbus/smb.h</itemPath>
         <itemPath>../src/smbus/smb_base.hpp</itemPath>
@@ -268,11 +268,6 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <logicalFolder name="app_pldm" displayName="app_pldm" projectFiles="true">
-        <itemPath>../src/app_pldm/app_pldm.c</itemPath>
-        <itemPath>../src/app_pldm/platform_serial_flash.c</itemPath>
-        <itemPath>../src/app_pldm/serial_flash_sst25pf040c.c</itemPath>
-      </logicalFolder>
       <logicalFolder name="config" displayName="config" projectFiles="true">
         <logicalFolder name="cec1736_s0_2zw_ev19k07a_freertos"
                        displayName="cec1736_s0_2zw_ev19k07a_freertos"
@@ -383,6 +378,11 @@
           <itemPath>../src/hal/interrupt/interrupt_api.c</itemPath>
         </logicalFolder>
       </logicalFolder>
+      <logicalFolder name="pldm_app" displayName="pldm_app" projectFiles="true">
+        <itemPath>../src/pldm_app/platform_serial_flash.c</itemPath>
+        <itemPath>../src/pldm_app/pldm_app.c</itemPath>
+        <itemPath>../src/pldm_app/serial_flash_sst25pf040c.c</itemPath>
+      </logicalFolder>
       <logicalFolder name="smbus" displayName="smbus" projectFiles="true">
         <itemPath>../src/smbus/smbus_wrapper.c</itemPath>
         <itemPath>../src/smbus/smb_buffers.c</itemPath>
@@ -418,7 +418,7 @@
         <targetDevice>CEC1736_S0_2ZW</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>ICD4Tool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>4.21</languageToolchainVersion>
         <platform>3</platform>

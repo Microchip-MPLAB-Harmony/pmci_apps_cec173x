@@ -79,7 +79,7 @@ void __attribute__((optimize("-O1"),section(".text.Dummy_Handler"),long_call, no
 }
 
 /* MISRAC 2012 deviation block start */
-/* MISRA C-2012 Rule 8.6 deviated 73 times.  Deviation record ID -  H3_MISRAC_2012_R_8_6_DR_1 */
+/* MISRA C-2012 Rule 8.6 deviated 74 times.  Deviation record ID -  H3_MISRAC_2012_R_8_6_DR_1 */
 /* Device vectors list dummy definition*/
 extern void vPortSVCHandler            ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void xPortPendSVHandler         ( void ) __attribute__((weak, alias("Dummy_Handler")));
@@ -88,6 +88,7 @@ extern void GIRQ09_Handler             ( void ) __attribute__((weak, alias("Dumm
 extern void GIRQ10_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void GIRQ11_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void GIRQ12_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
+extern void GIRQ14_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void GIRQ15_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void GIRQ16_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void GIRQ17_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
@@ -166,20 +167,6 @@ static void GIRQ13_Handler( void )
     I2CSMB2_GRP_InterruptHandler();
     I2CSMB3_GRP_InterruptHandler();
     I2CSMB4_GRP_InterruptHandler();
-}
-
-static void GIRQ14_Handler( void )
-{
-    DMA_CH00_GRP_InterruptHandler();
-    DMA_CH01_GRP_InterruptHandler();
-    DMA_CH02_GRP_InterruptHandler();
-    DMA_CH03_GRP_InterruptHandler();
-    DMA_CH04_GRP_InterruptHandler();
-    DMA_CH05_GRP_InterruptHandler();
-    DMA_CH06_GRP_InterruptHandler();
-    DMA_CH07_GRP_InterruptHandler();
-    DMA_CH08_GRP_InterruptHandler();
-    DMA_CH09_GRP_InterruptHandler();
 }
 
 

@@ -197,7 +197,7 @@ uint8_t platform_serial_flash_check_done_status(uint32_t *qmspi_status)
     do 
     {
         done_status = api_qmspi_is_done_status(qmspi_status, spi_port_sel);
-        timer_delay_ms(1);
+        timer_delay_us(20);
         count--;
         
     }while ((!done_status) && (count > 0));

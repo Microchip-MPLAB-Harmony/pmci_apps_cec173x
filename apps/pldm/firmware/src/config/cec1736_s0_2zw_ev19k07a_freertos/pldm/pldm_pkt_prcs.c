@@ -18,25 +18,6 @@
 * OF THESE TERMS.
 *****************************************************************************/
 
-/** @file pldm_pkt_prcs.c
- * MEC1324 Peripheral common header file
- */
-/** @defgroup MEC1324 Peripherals
- */
-
-/*******************************************************************************
- *  MCHP version control information (Perforce):
- *
- *  FILE:     $ $
- *  REVISION: $Revision: #58 $
- *  DATETIME: $DateTime: 2023/02/27 05:44:49 $
- *  AUTHOR:   $Author: i67071 $
- *
- *  Revision history (latest first):
- *      # 1: Initial revision for the PLDM porting
- ***********************************************************************************
-*/
-
 #include <stdlib.h>
 #include "pldm.h"
 #include "pldm_common.h"
@@ -52,8 +33,8 @@ PLDM_BSS1_ATTR MCTP_PKT_BUF pldm_buf_tx[1];
 PLDM_BSS2_ATTR uint8_t pldm_request_firmware_update;
 PLDM_BSS2_ATTR MCTP_PKT_BUF *mctp_buf_tx1 = MCTP_NULL;
 PLDM_BSS2_ATTR uint32_t offset;
-PLDM_BSS2_ATTR uint32_t length;
-PLDM_BSS1_ATTR uint8_t get_mctp_pldm[PLDM_MAX_PAYLOAD_BUFF_SIZE]__attribute__((aligned(8)));
+PLDM_BSS2_ATTR uint32_t len;
+PLDM_BSS2_ATTR uint8_t get_mctp_pkt[PLDM_MAX_PAYLOAD_BUFF_SIZE]__attribute__((aligned(8)));
 PLDM_BSS1_ATTR uint32_t pldm_packet_size;
 PLDM_BSS2_ATTR bool received_1024b_for_flash_write;
 PLDM_BSS1_ATTR uint32_t offset_for_flash;
@@ -66,7 +47,6 @@ PLDM_BSS2_ATTR REQUEST_PASS_COMPONENT_TABLE request_pass_component_table;
 PLDM_BSS0_ATTR uint8_t buffer[1024];
 PLDM_BSS1_ATTR uint8_t pldm_pkt_seq_mctp;
 PLDM_BSS1_ATTR bool pldm_first_pkt;
-
 PLDM_BSS1_ATTR uint16_t total_length;
 PLDM_BSS1_ATTR uint16_t offset_for_data;
 
@@ -86,8 +66,6 @@ PLDM_BSS1_ATTR REQUEST_UPDATE_COMPONENT_RESPONSE req_update_comp_resp_data;
 PLDM_BSS2_ATTR GET_FIRMWARE_PARAMETERS_RES_FIELDS get_firmware_parameters_res;
 
 extern void timer_delay_ms(uint32_t num_ms);
-
-PLDM_BSS1_ATTR uint8_t curr_ec_id;
 PLDM_BSS2_ATTR bool host_functionality_reduced;
 
 PLDM_BSS1_ATTR uint32_t remaining_data_size_for_transfer;
@@ -133,15 +111,14 @@ void pldm_pkt_handle_query_device_identifiers(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CO
     pldm_buf_tx->pkt.data[PLDM_HEADER_COMMAND_CODE_POS] = PLDM_QUERY_DEVICE_IDENTIFIERS_REQ;
 
     QUERY_DEVICE_IDENTIFIERS_REQ_MESSAGE_RES_FIELDS device_desp_resp;
-
     device_desp_resp.completion_code = PLDM_SUCCESS;
 
     {
-        device_desp_resp.device_identifiers_length = sb_apcfg_pldm_device_identifier_length();
+        device_desp_resp.device_identifiers_length = pldm_apcfg_device_identifier_length();
 
-        device_desp_resp.descriptor_count = sb_apcfg_pldm_descriptor_count();
+        device_desp_resp.descriptor_count = pldm_apcfg_descriptor_count();
 
-        sb_apcfg_pldm_descriptor(descriptors);
+        pldm_apcfg_descriptor(descriptors);
 
         memcpy(device_desp_resp.descriptor, descriptors, device_desp_resp.device_identifiers_length);
         uint64_t local = (uint64_t)((device_desp_resp.device_identifiers_length + 6u )& UINT64_MAX);
@@ -176,8 +153,8 @@ void pldm_pkt_handle_get_firmware_parameters(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CON
     uint16_t cap;
 
     get_firmware_parameters_res.completion_code = PLDM_SUCCESS;
-    if (sb_apcfg_pldm_override_cap_upgrade()) {
-        cap = sb_apcfg_pldm_capabilities_upgrade();
+    if (pldm_apcfg_override_cap_upgrade()) {
+        cap = pldm_apcfg_capabilities_upgrade();
         get_firmware_parameters_res.capabilities_during_update = cap;
         if (get_firmware_parameters_res.capabilities_during_update & PLDM_COMP_UPDATE_FAILURE_RECOVERY_CAP) {
             failure_recovery_cap = false;
@@ -234,7 +211,8 @@ void pldm_pkt_handle_request_update(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CONTEXT *pld
     MCTP_PKT_BUF *pldm_msg_rx_buf = NULL;
     pldm_msg_rx_buf = (MCTP_PKT_BUF *) &mctp_pktbuf[MCTP_BUF4];
 
-    memcpy(&request_update, &(get_mctp_pldm[0]), PLDM_REQUEST_UPDATE_DATA_LEN);
+    memcpy(&request_update, &(get_mctp_pkt[0]), PLDM_REQUEST_UPDATE_DATA_LEN);
+
     if (request_update.max_transfer_size < ONE_KB)
     {
         size_supported_by_UA = request_update.max_transfer_size;
@@ -292,9 +270,8 @@ void pldm_pkt_handle_pass_component_table(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CONTEX
     MCTP_PKT_BUF *pldm_msg_rx_buf = NULL;
     pldm_msg_rx_buf = (MCTP_PKT_BUF *) &mctp_pktbuf[MCTP_BUF4];
 
-    memcpy(&request_pass_component_table, &(get_mctp_pldm[0]), sizeof(REQUEST_PASS_COMPONENT_TABLE));
+    memcpy(&request_pass_component_table, &(get_mctp_pkt[0]), sizeof(REQUEST_PASS_COMPONENT_TABLE));
     
-
     pldm_buf_tx->pkt.data[PLDM_HEADER_VERSION_PLDM_TYPE_POS] = PLDM_HDR_VERSION_PLDM_FW_UPDATE_TYPE;
     pldm_buf_tx->pkt.data[PLDM_HEADER_COMMAND_CODE_POS] = PLDM_PASS_COMPONENT_TABLE_REQ;
 
@@ -370,8 +347,8 @@ void pldm_pkt_handle_update_component(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CONTEXT *p
     MCTP_PKT_BUF *pldm_msg_rx_buf = NULL;
     pldm_msg_rx_buf = (MCTP_PKT_BUF *) &mctp_pktbuf[MCTP_BUF4];
     uint8_t image_id, ap, comp, ht_num, ht_id;
-    memcpy(&request_update_component, &(get_mctp_pldm[0]), PLDM_UPDATE_COMP_REQUEST_SIZE);
     
+    memcpy(&request_update_component, &(get_mctp_pkt[0]), PLDM_UPDATE_COMP_REQUEST_SIZE);
 
     pldm_buf_tx->pkt.data[PLDM_HEADER_VERSION_PLDM_TYPE_POS] = PLDM_HDR_VERSION_PLDM_FW_UPDATE_TYPE;
     pldm_buf_tx->pkt.data[PLDM_HEADER_COMMAND_CODE_POS] = PLDM_UPDATE_COMPONENT_REQ;
@@ -490,18 +467,18 @@ void pldm_pkt_create_request_firmware_data(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CONTE
     {
         if (remaining_data_size_for_transfer < size_supported_by_UA)
         {
-            length = remaining_data_size_for_transfer;
+            len = remaining_data_size_for_transfer;
         }
         else
         {
-            length = size_supported_by_UA;
+            len = size_supported_by_UA;
         }
     }
 
-    req_firmware_data.length = length;
+    req_firmware_data.length = len;
     if (!retry_request_firmware_data)
     {
-        remaining_data_size_for_transfer = remaining_data_size_for_transfer - length;
+        remaining_data_size_for_transfer = remaining_data_size_for_transfer - len;
     }
 
     if (retry_request_firmware_data)
@@ -545,13 +522,13 @@ void pldm_pkt_process_request_firmware_update_response(void)
     {
         if (received_1024b_for_flash_write == true)
         {
-            fn_ret= pldm_write_firmware_data(request_update_component.comp_identifier, &get_mctp_pldm[0], offset_for_flash);
+            fn_ret =  pldm_write_firmware_data(request_update_component.comp_identifier, &get_mctp_pkt[0], offset_for_flash);
             if(fn_ret)
             {
                 return;
             }
 
-            memset(get_mctp_pldm, 0, size_supported_by_UA);
+            memset(get_mctp_pkt, 0, size_supported_by_UA);
             received_1024b_for_flash_write = false;
             offset_for_flash = offset_for_flash + size_supported_by_UA;
             number_of_1024b_requests = number_of_1024b_requests + 1;
@@ -565,7 +542,8 @@ void pldm_pkt_process_request_firmware_update_response(void)
         offset_for_flash = 0;
         number_of_1024b_requests = 0;
         offset = 0;
-        length = 0;
+        len = 0;
+        pldm_reset_firmware_update_flags();
         // PLDM:req fw data resp completion code not success
     }
     return;
@@ -717,8 +695,7 @@ void pldm_pkt_handle_activate_firmware(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CONTEXT *
     MCTP_PKT_BUF *pldm_msg_rx_buf = NULL;
     pldm_msg_rx_buf = (MCTP_PKT_BUF *) &mctp_pktbuf[MCTP_BUF4];
 
-    memcpy(&request_activate_firmware, &get_mctp_pldm[0], PLDM_REQUEST_ACTIVATE_FIRMWARE_LEN);
-
+    memcpy(&request_activate_firmware, &get_mctp_pkt[0], PLDM_REQUEST_ACTIVATE_FIRMWARE_LEN);
 
     pldm_buf_tx->pkt.data[PLDM_HEADER_VERSION_PLDM_TYPE_POS] = PLDM_HDR_VERSION_PLDM_FW_UPDATE_TYPE;
     pldm_buf_tx->pkt.data[PLDM_HEADER_COMMAND_CODE_POS] = PLDM_ACTIVATE_FIRMWARE_REQ;
@@ -805,7 +782,7 @@ void pldm_pkt_create_response_cancel_update_component(MCTP_PKT_BUF *pldm_buf_tx,
     offset_for_flash = 0;
     number_of_1024b_requests = 0;
     offset = 0;
-    length = 0;
+    len = 0;
     if (PLDMResp_timer_started)
     {
         pldm_response_timeout_stop();
@@ -856,7 +833,7 @@ void pldm_pkt_create_response_cancel_update(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CONT
     offset_for_flash = 0;
     number_of_1024b_requests = 0;
     offset = 0;
-    length = 0;
+    len = 0;
     if (PLDMResp_timer_started)
     {
         pldm_response_timeout_stop();
@@ -939,6 +916,8 @@ void pldm_pkt_handle_apply_complete_response(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CON
     REQUEST_APPLY_COMPLETE_RESPONSE apply_complete_response;
 
     apply_complete_response.completion_code = pldm_msg_rx_buf->pkt.data[PLDM_HEADER_DATA_POS_FOR_RESP];
+    pldmContext->pldm_tx_state = PLDM_TX_IDLE;
+    pldm_msg_rx_buf->buf_full = MCTP_EMPTY;
 }
 
 /******************************************************************************/
@@ -983,7 +962,7 @@ void pldm_handle_get_id(MCTP_PKT_BUF *pldm_buf, PLDM_CONTEXT *pldmContext)
     uint8_t comp_code = 0;
     uint8_t tid;
 
-    tid = sb_apcfg_pldm_tid();
+    tid = pldm_apcfg_tid();
 
     pldmContext->pldm_current_response_cmd = PLDM_GET_ID_REQ;
     encode_get_tid_resp(instance_id, comp_code, tid, pldm_buf);
@@ -1449,7 +1428,7 @@ void pldm_pkt_populate_mctp_packet_for_resp(MCTP_PKT_BUF *pldm_buf_tx, MCTP_PKT_
     /* destination eid */
     mctp_buf->pkt.field.hdr.dst_eid   = pldmContext->pldm_host_eid;
     /* source eid = eid of self/EC */
-    mctp_buf->pkt.field.hdr.src_eid = curr_ec_id;
+    mctp_buf->pkt.field.hdr.src_eid = pldmContext->pldm_ec_eid;
     /* message tag */
     /* for req/response packet */
     if (req_bit)
@@ -1553,7 +1532,7 @@ void pldm_pkt_tx_packet(void)
                 offset_for_flash = 0;
                 number_of_1024b_requests = 0;
                 offset = 0;
-                length = 0;
+                len = 0;
                 pldm_pkt_create_transfer_complete_req(pldm_buf_tx, pldmContext);
                 return;
             }
@@ -1647,7 +1626,7 @@ void pldm_pkt_rcv_packet()
                     offset_data_pos = PLDM_HEADER_DATA_POS_FOR_RESP;
                 }
 
-                if(is_sub_safe(pldm_msg_rx_buf->pkt.data[MCTP_BYTE_CNT_OFFSET], byte_cnt_for_one_pkt))
+                if(is_sub_safe(pldm_msg_rx_buf->pkt.data[MCTP_BYTE_CNT_OFFSET], byte_cnt_for_one_pkt) == 0)
                 {
                     ;//Handle error
                 }
@@ -1705,8 +1684,7 @@ void pldm_pkt_rcv_packet()
                     pldmContext->pldm_tx_state = PLDM_TX_IDLE;
                     pldmContext->pldm_current_request_length = 0;
                     memset(pldm_buf_tx, 0, MCTP_PKT_BUF_DATALEN);
-                    memset(get_mctp_pldm, 0, PLDM_MAX_PAYLOAD_BUFF_SIZE);
-
+                    memset(get_mctp_pkt, 0, PLDM_MAX_PAYLOAD_BUFF_SIZE);
                 }
             }
         }
@@ -1723,6 +1701,10 @@ void pldm_pkt_rcv_packet()
         {
             // PLDM:Vld msg rcvd
         }
+    }
+    else
+    {
+        pldm_msg_rx_buf->buf_full = MCTP_EMPTY;
     }
 
     pldm_msg_rx_buf->pkt.data[PLDM_HEADER_COMMAND_CODE_POS] = 0;
@@ -1748,8 +1730,7 @@ uint8_t pldm_pkt_fill_buffer(MCTP_PKT_BUF *pldm_msg_rx_buf, PLDM_CONTEXT *pldmCo
     //buffer the pldm payload to 1K input buffer from mctp input buffer
     for(i = 0; i < len; i++)
     {
-        get_mctp_pldm[pkt_cnt + i] = pldm_msg_rx_buf->pkt.data[offset + i]; //Take only the pldm msg payload
-
+        get_mctp_pkt[pkt_cnt + i] = pldm_msg_rx_buf->pkt.data[offset + i]; //Take only the pldm msg payload
     }
 
     if(pldmContext->pldm_tx_state == PLDM_PACKETIZING)
@@ -1844,8 +1825,7 @@ void PLDMResp_timer_callback(TimerHandle_t pxTimer)
         return;
     }
     pkt_cnt = 0;
-    memset(get_mctp_pldm, 0, PLDM_MAX_PAYLOAD_BUFF_SIZE);
-    
+    memset(get_mctp_pkt, 0, PLDM_MAX_PAYLOAD_BUFF_SIZE);
     if (PLDMResp_timer_started)
     {
         pldm_response_timeout_stop();
@@ -1898,16 +1878,17 @@ void pldm_init_flags()
     pldmContext->pldm_state_info = PLDM_IDLE;
     pldmContext->pldm_previous_state = PLDM_IDLE_STATE;
     pldmContext->pldm_current_state = PLDM_IDLE_STATE;
-    pldmContext->pldm_status_reason_code = INITIALIZATION_OF_FD;    
+    pldmContext->pldm_status_reason_code = INITIALIZATION_OF_FD;  
+    pldmContext->current_pkt_sequence = 0;  
 }
 
 /******************************************************************************/
-/** sb_apcfg_pldm_device_identifier_length();
+/** pldm_apcfg_device_identifier_length();
 * Returns device descriptor length
 * @param None
 * @return length of device descriptor
 *******************************************************************************/
-uint32_t sb_apcfg_pldm_device_identifier_length(void)
+uint32_t pldm_apcfg_device_identifier_length(void)
 {
     uint32_t length = 0;
 
@@ -1917,12 +1898,12 @@ uint32_t sb_apcfg_pldm_device_identifier_length(void)
 }
 
 /******************************************************************************/
-/** sb_apcfg_pldm_descriptor_count();
+/** pldm_apcfg_descriptor_count();
 * Returns device descriptor count
 * @param None
 * @return count no of device descriptor available
 *******************************************************************************/
-uint8_t sb_apcfg_pldm_descriptor_count(void)
+uint8_t pldm_apcfg_descriptor_count(void)
 {
     uint8_t count = 0;
 
@@ -1939,12 +1920,12 @@ uint8_t sb_apcfg_pldm_descriptor_count(void)
 }
 
 /******************************************************************************/
-/** sb_apcfg_pldm_descriptor();
+/** pldm_apcfg_descriptor();
 * Returns device descriptor
 * @param descriptor array
 * @return None
 *******************************************************************************/
-void sb_apcfg_pldm_descriptor(uint8_t *descriptor)
+void pldm_apcfg_descriptor(uint8_t *descriptor)
 {
     uint32_t length = 0;
 
@@ -1955,12 +1936,12 @@ void sb_apcfg_pldm_descriptor(uint8_t *descriptor)
 }
 
 /******************************************************************************/
-/** sb_apcfg_pldm_override_cap_upgrade();
+/** pldm_apcfg_override_cap_upgrade();
 * Returns flag of pldm override capabilities during upgrade
 * @param None
 * @return true = override, false = no override
 *******************************************************************************/
-bool sb_apcfg_pldm_override_cap_upgrade(void)
+bool pldm_apcfg_override_cap_upgrade(void)
 {
     bool override = false;
 
@@ -1970,12 +1951,12 @@ bool sb_apcfg_pldm_override_cap_upgrade(void)
 }
 
 /******************************************************************************/
-/** sb_apcfg_pldm_capabilities_upgrade();
+/** pldm_apcfg_capabilities_upgrade();
 * Returns pldm capabilities during upgrade
 * @param None
 * @return cap capapbilites configured
 *******************************************************************************/
-uint16_t sb_apcfg_pldm_capabilities_upgrade(void)
+uint16_t pldm_apcfg_capabilities_upgrade(void)
 {
     uint16_t cap = 0;
 
@@ -1985,12 +1966,12 @@ uint16_t sb_apcfg_pldm_capabilities_upgrade(void)
 }
 
 /******************************************************************************/
-/** sb_apcfg_pldm_override_comp_classification();
+/** pldm_apcfg_override_comp_classification();
 * Returns flag of pldm override component classification
 * @param None
 * @return true = override, false = no override
 *******************************************************************************/
-bool sb_apcfg_pldm_override_comp_classification(void)
+bool pldm_apcfg_override_comp_classification(void)
 {
     bool override = false;
 
@@ -2000,12 +1981,12 @@ bool sb_apcfg_pldm_override_comp_classification(void)
 }
 
 /******************************************************************************/
-/** pldm_pkt_init_config_params();
+/** pldm_pkt_get_config_from_apcfg();
 * Initialize the PLDM config params
-* @param None
+* @param pldmContext
 * @return None
 *******************************************************************************/
-void pldm_pkt_init_config_params()
+void pldm_pkt_get_config_from_apcfg(PLDM_CONTEXT *pldmContext)
 {  
     void *desc;
     pldm_ap_cfg.PLDM_override_device_descriptors = PLDM_DEVICE_DESCRIPTOR_OVERRIDE;
@@ -2166,15 +2147,17 @@ void pldm_pkt_init_config_params()
     pldm_ap_cfg.cap_during_update = PLDM_UPGRADE_CAPABLITIES;
     pldm_ap_cfg.comp_classification = PLDM_COMP_CLASSIFICATION;
     pldm_ap_cfg.tid = PLDM_DEVICE_TID;
+    /* Move to idle state and wait for response */
+    pldmContext->pldm_state_info = PLDM_IDLE;
 }
 
 /******************************************************************************/
-/** sb_apcfg_pldm_tid();
+/** pldm_apcfg_tid();
 * Returns pldm terminal id
 * @param None
 * @return tid
 *******************************************************************************/
-uint8_t sb_apcfg_pldm_tid(void)
+uint8_t pldm_apcfg_tid(void)
 {
     uint8_t tid = 0;
 
@@ -2184,12 +2167,12 @@ uint8_t sb_apcfg_pldm_tid(void)
 }
 
 /******************************************************************************/
-/** sb_apcfg_pldm_component_classification();
+/** pldm_apcfg_component_classification();
 * Returns pldm component classification
 * @param None
 * @return comp_classification
 *******************************************************************************/
-uint16_t sb_apcfg_pldm_component_classification(void)
+uint16_t pldm_apcfg_component_classification(void)
 {
     uint16_t comp_classification = 0;
 

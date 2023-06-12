@@ -70,16 +70,6 @@ void I2CSMB1_GRP_InterruptHandler (void);
 void I2CSMB2_GRP_InterruptHandler (void);
 void I2CSMB3_GRP_InterruptHandler (void);
 void I2CSMB4_GRP_InterruptHandler (void);
-void DMA_CH00_GRP_InterruptHandler (void);
-void DMA_CH01_GRP_InterruptHandler (void);
-void DMA_CH02_GRP_InterruptHandler (void);
-void DMA_CH03_GRP_InterruptHandler (void);
-void DMA_CH04_GRP_InterruptHandler (void);
-void DMA_CH05_GRP_InterruptHandler (void);
-void DMA_CH06_GRP_InterruptHandler (void);
-void DMA_CH07_GRP_InterruptHandler (void);
-void DMA_CH08_GRP_InterruptHandler (void);
-void DMA_CH09_GRP_InterruptHandler (void);
 
 
 

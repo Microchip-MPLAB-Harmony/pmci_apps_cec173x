@@ -339,6 +339,19 @@ typedef int (*bk_ecdsa_sign_td)(
 *******************************************************************************/
 SHA_RET_CODE do_sha(uint8_t hash_algo, uint8_t *input_buf, uint32_t input_len, uint8_t *output);
 
+/******************************************************************************/
+/** sb_validate_hash();
+* Compare Input buffer with compare buffer of provided length
+* @param input_buf - pointer to input buffer
+* @param input_len - length of input buffer
+* @param compare_buf - pointer to hash buffer to compared with
+* @return 0 on success; 1 on failure
+*******************************************************************************/
+uint8_t sb_validate_hash(  uint8_t *input_buf, uint32_t length, uint8_t *compare_buf );
+
+bool staged_image_auth();
+
+bool active_image_auth();
 #endif /* _APP_SMB_DRV_H */
 
 /*******************************************************************************

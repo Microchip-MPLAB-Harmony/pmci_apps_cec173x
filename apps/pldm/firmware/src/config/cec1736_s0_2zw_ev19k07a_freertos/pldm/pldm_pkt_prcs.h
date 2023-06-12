@@ -18,25 +18,6 @@
 * OF THESE TERMS.
 *****************************************************************************/
 
-/** @file pldm_pkt_prcs.h
- *  MEC1324 Peripheral common header file
- */
-/** @defgroup MEC1324 Peripherals
- */
-
-/*******************************************************************************
- *  MCHP version control information (Perforce):
- *
- *  FILE:     $ $
- *  REVISION: $Revision: #19 $
- *  DATETIME: $DateTime: 2023/02/02 13:26:58 $
- *  AUTHOR:   $Author: i53517 $
- *
- *  Revision history (latest first):
- *      # 1: Initial revision for the MCTP porting
- ***********************************************************************************
-*/
-
 #ifndef PLDM_PKT_PRCS_H
 #define PLDM_PKT_PRCS_H
 
@@ -209,8 +190,6 @@ enum PLDM_STATES
 #define PLDM_REQUEST_ACTIVATE_FIRMWARE_LEN sizeof(REQUEST_ACTIVATE_FIRMWARE)
 
 #define PLDM_EOM 0x40
-
-
 
 // Byte match int spi update masking
 #define BYTE_MATCH_INT_SPI_IMGID_MSK 0x000F
@@ -624,14 +603,6 @@ uint8_t pldm_pkt_fill_buffer(MCTP_PKT_BUF *pldm_msg_rx_buf, PLDM_CONTEXT *pldmCo
 void PLDMResp_timer_callback(TimerHandle_t pxTimer);
 
 /******************************************************************************/
-/** pldm_get_staged_address_for_crisis_recovery();
-* PLDMResp timer callback
-* @param TimerHandle_t pxTimer
-* @return None
-*******************************************************************************/
-void pldm_get_staged_address_for_crisis_recovery();
-
-/******************************************************************************/
 /** is_comp_iden_supported();
 * check if comp identifier in pass component and update component messages are
 * supported
@@ -649,75 +620,92 @@ bool is_comp_iden_supported(uint16_t comp_iden);
 void pldm_init_flags();
 
 /******************************************************************************/
-/** pldm_pkt_init_config_params();
-* Initialize the PLDM config params
-* @param None
-* @return None
-*******************************************************************************/
-void pldm_pkt_init_config_params();
-
-/******************************************************************************/
-/** sb_apcfg_pldm_device_identifier_length();
+/** pldm_apcfg_device_identifier_length();
 * Returns device descriptor length
 * @param None
 * @return length of device descriptor
 *******************************************************************************/
-uint32_t sb_apcfg_pldm_device_identifier_length(void);
+uint32_t pldm_apcfg_device_identifier_length(void);
 
 /******************************************************************************/
-/** sb_apcfg_pldm_descriptor_count();
+/** pldm_apcfg_descriptor_count();
 * Returns device descriptor count
 * @param None
 * @return count no of device descriptor available
 *******************************************************************************/
-uint8_t sb_apcfg_pldm_descriptor_count(void);
+uint8_t pldm_apcfg_descriptor_count(void);
 
 /******************************************************************************/
-/** sb_apcfg_pldm_descriptor();
+/** pldm_apcfg_descriptor();
 * Returns device descriptor
 * @param descriptor array
 * @return None
 *******************************************************************************/
-void sb_apcfg_pldm_descriptor(uint8_t *descriptor);
+void pldm_apcfg_descriptor(uint8_t *descriptor);
 
 /******************************************************************************/
-/** sb_apcfg_pldm_override_cap_upgrade();
+/** pldm_apcfg_override_cap_upgrade();
 * Returns flag of pldm override capabilities during upgrade
 * @param None
 * @return true = override, false = no override
 *******************************************************************************/
-bool sb_apcfg_pldm_override_cap_upgrade(void);
+bool pldm_apcfg_override_cap_upgrade(void);
 
 /******************************************************************************/
-/** sb_apcfg_pldm_capabilities_upgrade();
+/** pldm_apcfg_capabilities_upgrade();
 * Returns pldm capabilities during upgrade
 * @param None
 * @return cap capapbilites configured
 *******************************************************************************/
-uint16_t sb_apcfg_pldm_capabilities_upgrade(void);
+uint16_t pldm_apcfg_capabilities_upgrade(void);
 
 /******************************************************************************/
-/** sb_apcfg_pldm_override_comp_classification();
+/** pldm_apcfg_override_comp_classification();
 * Returns flag of pldm override component classification
 * @param None
 * @return true = override, false = no override
 *******************************************************************************/
-bool sb_apcfg_pldm_override_comp_classification(void);
+bool pldm_apcfg_override_comp_classification(void);
 
 /******************************************************************************/
-/** sb_apcfg_pldm_tid();
+/** pldm_apcfg_tid();
 * Returns pldm terminal id
 * @param None
 * @return tid
 *******************************************************************************/
-uint8_t sb_apcfg_pldm_tid(void);
+uint8_t pldm_apcfg_tid(void);
 
 /******************************************************************************/
-/** sb_apcfg_pldm_component_classification();
+/** pldm_apcfg_component_classification();
 * Returns pldm component classification
 * @param None
 * @return comp_classification
 *******************************************************************************/
-uint16_t sb_apcfg_pldm_component_classification(void);
+uint16_t pldm_apcfg_component_classification(void);
+
+/******************************************************************************/
+/** pldm_pkt_get_config_from_apcfg
+* This function is used for getting AP_CFG during initialization for PLDM
+* @param pldmContext
+* @return void
+*******************************************************************************/
+void pldm_pkt_get_config_from_apcfg(PLDM_CONTEXT *pldmContext);
+
+/******************************************************************************/
+/** pldm_initiate_verify_req_to_update_agent
+* This function is for sending verify complete to UA
+* @param verify_state verify success or failure
+* @return void
+*******************************************************************************/
+void pldm_initiate_verify_req_to_update_agent(uint8_t verify_state);
+
+/******************************************************************************/
+/** pldm_initiate_apply_req_to_update_agent
+* This function is for sending apply complete to UA
+* @param apply_state apply success or failure
+* @return void
+*******************************************************************************/
+void pldm_initiate_apply_req_to_update_agent(uint8_t apply_state);
+
 
 #endif

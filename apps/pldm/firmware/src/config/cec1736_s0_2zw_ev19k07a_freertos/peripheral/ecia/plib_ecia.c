@@ -43,12 +43,11 @@
 
 void ECIA_Initialize(void)
 {
-    ECIA_REGS->ECIA_EN_SET13 = 0x1f;
-    ECIA_REGS->ECIA_EN_SET14 = 0x3fe;
+    ECIA_REGS->ECIA_EN_SET13 = 0x12;
+    ECIA_REGS->ECIA_EN_SET14 = 0x20c;
 
     ECIA_REGS->ECIA_BLK_EN_SET = 0x6000;
 }
-
 void ECIA_GIRQBlockEnable(ECIA_GIRQ_BLOCK_NUM block)
 {
     ECIA_REGS->ECIA_BLK_EN_SET = (1UL << (uint32_t)block);

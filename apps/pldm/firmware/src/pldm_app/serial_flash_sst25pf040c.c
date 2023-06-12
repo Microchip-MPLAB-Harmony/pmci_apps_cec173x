@@ -339,7 +339,7 @@ uint8_t sst25pf_sector_erase_sequence(uint32_t erase_address, uint32_t *qmspi_st
         }        
                     
         /* Wait for Erase to complete */
-        timer_delay_ms(SECTOR_ERASE_TYP_TIME_MS);
+      //  timer_delay_ms(SECTOR_ERASE_TYP_TIME_MS);
         
         /* Check busy bit by polling */
         ret_val = sst25pf_check_busy(&busy_status, 
@@ -556,7 +556,7 @@ uint8_t sst25pf_program(uint32_t spi_addr, uint32_t mem_addr, uint32_t data_len,
             
             
             /* Wait for Page Program to complete */
-            timer_delay_ms(PAGE_PROGRAM_TYP_TIME_MS);
+           // timer_delay_ms(PAGE_PROGRAM_TYP_TIME_MS);
             
             /* Check busy bit by polling */
             ret_val = sst25pf_check_busy(&busy_status, 

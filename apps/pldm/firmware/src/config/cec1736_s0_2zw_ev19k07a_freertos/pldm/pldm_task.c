@@ -17,6 +17,7 @@
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE
  * OF THESE TERMS.
  *****************************************************************************/
+
 #include "definitions.h"
 #include "pldm_task.h"
 #include "pldm_pkt_prcs.h"
@@ -230,7 +231,7 @@ void pldm_response_timeout_stop(void)
 void pldm_init_task(PLDM_CONTEXT *pldmContext)
 {
     pldm_init_flags();
-    pldm_pkt_init_config_params();
+    pldm_pkt_get_config_from_apcfg(pldmContext);
 }
 
 void SET_PLDM_RESP_EVENT_FLAG(void)

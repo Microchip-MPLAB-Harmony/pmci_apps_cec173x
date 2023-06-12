@@ -33,13 +33,13 @@ TERMS.
 
 #define PAGE_PROGRAM_MAX_TIME_MS    5           // Maximum time for page program
 #define PAGE_PROGRAM_TYP_TIME_MS    4           // Typ? time for page program
-#define PAGE_PROGRAM_CHECK_BUSY_TIME_MS   4     // Polling time for checking busy status
+#define PAGE_PROGRAM_CHECK_BUSY_TIME_MS   5     // Polling time for checking busy status
 #define PAGE_PROGRAM_CHECK_BUSY_POLL_MS   1     // Interval between subsequent read status, during polling
 
 #define SECTOR_ERASE_MAX_TIME_MS    150          // Maximum time for sector erase
 #define SECTOR_ERASE_TYP_TIME_MS    40           // Typ? time for sector erase
-#define SECTOR_ERASE_CHECK_BUSY_TIME_MS   120    // Polling time for checking busy status after waiting Typ time
-#define SECTOR_ERASE_CHECK_BUSY_POLL_MS   10     // Interval between subsequent read status, during polling
+#define SECTOR_ERASE_CHECK_BUSY_TIME_MS   220    // Polling time for checking busy status after waiting Typ time
+#define SECTOR_ERASE_CHECK_BUSY_POLL_MS   1     // Interval between subsequent read status, during polling
 
 #define BLOCK_ERASE_MAX_TIME_MS    250          // Maximum time for block erase
 #define BLOCK_ERASE_TYP_TIME_MS    80           // Typ? time for block erase

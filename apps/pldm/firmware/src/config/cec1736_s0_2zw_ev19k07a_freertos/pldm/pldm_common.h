@@ -21,11 +21,6 @@
 #ifndef PLDM_COMMON_H
 #define PLDM_COMMON_H
 
-// #include "FreeRTOS.h"
-// #include "task.h"
-// #include "event_groups.h"
-// #include "../mctp/mctp_base.h"
-// #include "../mctp/mctp.h"
 #include <stdint.h>
 #include <stddef.h>
 #include "definitions.h"
