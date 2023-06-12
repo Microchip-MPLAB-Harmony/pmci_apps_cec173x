@@ -2,7 +2,7 @@
 
 # PLDM (Platform Level Data Model) message exchange
 
-This example application demonstrates PLDM message exchange between CEC173x running as an PLDM device and an PLDM capable host (an attester).
+This example application demonstrates PLDM message exchange between CEC173x running as an PLDM device.
 
 ## Description
 
@@ -34,8 +34,8 @@ The following table shows the target hardware for the application projects.
 ### Setting up [CEC 1736 Development Board](https://www.microchip.com/en-us/development-tool/EV19K07A)
 
 - Interface the [Aardvark I2C/SPI Host adapter](https://www.totalphase.com/catalog/product/view/id/2/s/aardvark-i2cspi/?GA_network=g&GA_device=c&GA_campaign=9527865813&GA_adgroup=123178533820&GA_target=&GA_placement=&GA_creative=522202133248&GA_extension=&GA_keyword=aardvark%20usb&GA_loc_physical_ms=9061891&GA_landingpage=https://www.totalphase.com/catalog/product/view/id/2/s/aardvark-i2cspi/&ga_keyword_match=e&ga_ad_position=&gclid=Cj0KCQiAqOucBhDrARIsAPCQL1ZEkMYUWtPbkQwv6DorBIbkHLq7YfA3ZDtB47hNQ49LSObCFBtchIUaAmj0EALw_wcB) by making the following connections:
-    - Connect a wire from GPIO140 (I2C06_SCL) available on Pin 28 of P4 header to the SCL pin of the I2C capable device
-    - Connect a wire from GPIO132 (I2C06_SDA) available on Pin 26 of P4 header to the SDA pin of the I2C capable device
+    - Connect a wire from GPIO004 (I2C00_SCL) available on Pin 5 of J6 header to the SCL pin of the I2C capable device
+    - Connect a wire from GPIO003 (I2C00_SDA) available on Pin 12 of P4 header to the SDA pin of the I2C capable device
     - Connect GND and VCC between the [Aardvark I2C/SPI Host adapter](https://www.totalphase.com/catalog/product/view/id/2/s/aardvark-i2cspi/?GA_network=g&GA_device=c&GA_campaign=9527865813&GA_adgroup=123178533820&GA_target=&GA_placement=&GA_creative=522202133248&GA_extension=&GA_keyword=aardvark%20usb&GA_loc_physical_ms=9061891&GA_landingpage=https://www.totalphase.com/catalog/product/view/id/2/s/aardvark-i2cspi/&ga_keyword_match=e&ga_ad_position=&gclid=Cj0KCQiAqOucBhDrARIsAPCQL1ZEkMYUWtPbkQwv6DorBIbkHLq7YfA3ZDtB47hNQ49LSObCFBtchIUaAmj0EALw_wcB) and the [CEC 1736 Development Board](https://www.microchip.com/en-us/development-tool/EV19K07A) 
     - Open the [Control Center Serial Software](https://www.totalphase.com/products/control-center-serial/)
     - Enter the slave address as 0x64 under the master tab
@@ -48,3 +48,4 @@ The following table shows the target hardware for the application projects.
 2. Send PLDM request messages using the [Control Center Serial Software](https://www.totalphase.com/products/control-center-serial/)
 3. Skip the "Destination Slave Address" field (first byte) while entering the control message in the message tab of the [Control Center Serial Software](https://www.totalphase.com/products/control-center-serial/)
 4. For every PLDM request message a response message can be seen under the transaction log window of the [Control Center Serial Software](https://www.totalphase.com/products/control-center-serial/)
+5. The component identifier supported in this application is 0x1020.
