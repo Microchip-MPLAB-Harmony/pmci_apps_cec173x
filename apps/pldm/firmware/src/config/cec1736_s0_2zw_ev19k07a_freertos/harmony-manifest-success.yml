@@ -16,6 +16,6 @@ modules:
     - {name: "csp", version: "v3.16.0"}
     - {name: "core", version: "v3.12.0"}
     - {name: "dev_packs", version: "v3.16.0"}
-    - {name: "pmci", version: "v3.0.1"}
+    - {name: "pmci", version: "v3.1.0"}
     - {name: "CMSIS-FreeRTOS", version: "v10.4.6"}
 

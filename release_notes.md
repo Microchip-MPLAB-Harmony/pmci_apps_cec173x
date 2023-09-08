@@ -3,7 +3,7 @@
 
 # Microchip MPLAB® Harmony 3 Release Notes
 
-## Harmony 3 PMCI library (MCTP and SPDM) application examples for CEC173x family  v3.0.1
+## Harmony 3 PMCI library (MCTP and SPDM) application examples for CEC173x family  v3.1.0
 
 ### Development kit and demo application support
 
