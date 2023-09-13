@@ -87,6 +87,7 @@ typedef struct I2C_MAPP_CBK_NEW_TX
     uint8_t pecEnable;        /**< PEC Enable/Disable Flag */
 } I2C_MAPP_CBK_NEW_TX;
 
+
 /******************************************************************************/
 /** enum i2c_master_busy_status 
  * Enumeration to denote whether master is busy or ready to send the next packet
@@ -134,6 +135,7 @@ enum i2c_slave_app_reg_status
     , I2C_SLAVE_APP_STATUS_OK                     /**< Success status */
 };
 
+
 /******************************************************************************/
 /** Status codes for master transaction. The error codes are for Bus Error,
  * MNAKX and PEC Error. The success codes are for successful tx and successful
@@ -142,14 +144,14 @@ enum i2c_slave_app_reg_status
  * -----------------------
  * Usage notes:
  * -----------------------
- * The I2C driver is expected to use the values in this enumeration to communicate 
+ * The  driver is expected to use the values in this enumeration to communicate 
  * to the MCTP module about the packet transmission status 
  * -----------------------
  * Example:
  * -----------------------
- * Refer mctp_i2c_tx interface function
+ * Refer mctp_i2c_tx / mctp_spt_tx interface function
  *******************************************************************************/
-enum i2c_master_status
+enum mctp_tx_status
 {
     I2C_ERROR_BER_TIMEOUT =0        /**< Bus Error due to Timeout */
     , I2C_ERROR_BER_NON_TIMEOUT     /**< Bus Error due to Non Timeout */
@@ -163,7 +165,9 @@ enum i2c_master_status
     , I2C_SUCCESS_RX                /**< Successful Master Rx */
     , I2C_SUCCESS_TX_CHAINED        /**< Successful Master Tx for chained transfer - intermediate status*/
     , I2C_SUCCESS_RX_CHAINED        /**< Successful Master Rx for chained transfer - intermediate status*/
+
 };
+
 
 /******************************************************************************/
 /** Application return values
@@ -189,6 +193,7 @@ enum i2c_application_return_values
     , I2C_APP_RETVAL_CHAINED_TX         /**< Application is continuing a chained TX transaction */
     , I2C_APP_RETVAL_CHAINED_TX_LAST    /**< Last request for a chained TX transaction */
 };
+
 
 /******************************************************************************/
 /** i2c_bus_speed 
@@ -224,6 +229,7 @@ enum i2c_slave_packet_status
     ,I2C_STATUS_BUFFER_ERROR        /**< Packet not meant for this application */
 };
 
+
 /******************************************************************************/
 /** i2c_slave_transmit_status 
  * Values used by MCTP module to check for i2c slave transmit protocol
@@ -242,7 +248,7 @@ enum i2c_slave_transmit_status
 };
 
 /******************************************************************************/
-/** struct I2C_BUFFER_INFO
+/** struct MCTP_BUFFER_INFO
  * This structure is used to store information of a slave receive buffer XmitCount
  * is used along with slaveXmitDoneFlag for chaining slave transmit data
  * @note
@@ -250,14 +256,15 @@ enum i2c_slave_transmit_status
  * -----------------------
  * Usage notes:
  * -----------------------
- * The I2C driver is expected allocate a structure of this type and use it
+ * The Physical layer driver is expected allocate a structure of
+ * this type and use it
  * to pass information to MCTP module about the received packet
  * -----------------------
  * Example:
  * -----------------------
- * Refer I2C_SLAVE_FUNC_PTR
+ * Refer MCTP_SLAVE_FUNC_PTR
 *******************************************************************************/
-typedef struct I2C_BUFFER_INFO
+typedef struct MCTP_BUFFER_INFO
 {
     uint8_t *   buffer_ptr;          /**< Pointer to buffer memory */
     uint16_t    TimeStamp;           /**< Packet received timestamp */
@@ -265,14 +272,15 @@ typedef struct I2C_BUFFER_INFO
     uint8_t     XmitCount;           /**< Number of times slave has transmitted using this buffer for this transaction */
     uint8_t     RxCount;             /**< Number of times slave has received using this buffer for this transaction */
     uint8_t     pecFlag;             /**< PEC valid/invalid flag */
-    uint8_t     slaveXmitDoneFlag;   /**< Flag indicating if xmit is completed by slave application */
     uint8_t     channel;             /**< Channel on which this packet is received */
+    uint8_t     slaveXmitDoneFlag;   /**< Flag indicating if xmit is completed by slave application */
     bool        sdoneFlag;           /**< Flag to indicate if SDONE occured for this buffer */
-} I2C_BUFFER_INFO;
+} MCTP_BUFFER_INFO;
+
 
 /******************************************************************************/
-/** I2C_SLAVE_FUNC_PTR - Slave application function pointer
- * The first argument is pointer to I2C_BUFFER_INFO structure which will contain
+/** MCTP_SLAVE_FUNC_PTR - Slave application function pointer
+ * The first argument is pointer to MCTP_BUFFER_INFO structure which will contain
  * details of the packet received. The second parameter is flag to indicate
  * slave transmit phase. In case of slave transmit phase, the application
  * should provide the data to be transmitted in the same buffer and indicate
@@ -282,7 +290,8 @@ typedef struct I2C_BUFFER_INFO
  * -----------------------
  * Usage notes:
  * -----------------------
- * The I2C driver is expected allocate a structure of this type and use it
+ * The Physical layer driver is expected allocate a structure
+ * of this type and use it
  * to pass information to MCTP module about the received packet
  * -----------------------
  * Example:
@@ -293,7 +302,7 @@ typedef struct I2C_BUFFER_INFO
  *     uint8_t len;
  * };
  * struct i2c_packet i2c_pkt[MAX_I2C_CHANNELS];
- * I2C_BUFFER_INFO i2c_rx_packet;
+ * MCTP_BUFFER_INFO i2c_rx_packet;
  * 
  * uint8_t i2c_store_rxd_pkt(channel, uint8_t *data, uint8_t len)
  * {
@@ -322,12 +331,13 @@ typedef struct I2C_BUFFER_INFO
  * ############################################################################
  * ############################################################################
 *******************************************************************************/
-typedef uint8_t (*I2C_SLAVE_FUNC_PTR)(I2C_BUFFER_INFO *buffer_info, 
+typedef uint8_t (*MCTP_SLAVE_FUNC_PTR)(MCTP_BUFFER_INFO *buffer_info, 
                                       uint8_t slaveTransmitFlag);
 
 /******************************************************************************/
+
 /** I2C_MASTER_FUNC_PTR - Master transmit status function pointer
- * This function pointer should be saved by the I2C driver and called later
+ * This function pointer should be saved by the driver and called later
  * to inform the MCTP module about the status of the packet transmission.
  * The first parameters should contain the channel information
  * The second parameter should contian the packet transmission status,
@@ -518,7 +528,8 @@ extern uint8_t mctp_i2c_tx(const uint8_t channel,
  * ############################################################################
 *******************************************************************************/
 extern uint8_t mctp_i2c_rx_register(const uint8_t channel, 
-                            I2C_SLAVE_FUNC_PTR slaveFuncPtr);
+                            MCTP_SLAVE_FUNC_PTR slaveFuncPtr);
+
 
 /******************************************************************************/
 /** mctp_i2c_configure_and_enable
@@ -627,6 +638,7 @@ extern uint8_t mctp_i2c_get_chan_busy_status(uint8_t channel);
  * ############################################################################
  ******************************************************************************/
 extern uint16_t mctp_i2c_get_current_timestamp(void);
+
 
 /******************************************************************************/
 /** mctp_app_task_create(void)

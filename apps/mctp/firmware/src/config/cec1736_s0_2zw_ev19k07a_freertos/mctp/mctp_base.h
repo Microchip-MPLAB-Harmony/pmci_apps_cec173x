@@ -46,6 +46,7 @@ extern "C" {
 #define MCTP_PACKET_MAX            73U
 
 #define MCTP_BYTECNT_OFFSET         3U
+#define MCTP_BYTE_CNT_OFFSET        2u
 #define MCTP_PEC_BYTE               1U
 #define PAYLOAD                     8U
 #define MCTP_BYTECNT_MIN            5U
@@ -146,6 +147,8 @@ extern "C" {
 
 #define PLDM_SEND_VERIFY_COMPLETE_CMD       23U
 #define PLDM_TYPE5_AND_HEADER_VERSION       0x05U
+
+#define MCTP_MSG_CONTEXT 2 //currently supporting SPDM and PLDM application
 
 /* Status codes for application callback from MCTP */
 enum STATUS_TO_APP
@@ -333,7 +336,7 @@ typedef struct MCTP_PKT_BUF
 
     /* Holds rx packet timestamp; i.e. time when packet was received
      * by smbus layer */
-    uint16_t rx_smbus_timestamp;
+    uint16_t rx_timestamp;
 
 } MCTP_PKT_BUF;
 
@@ -376,11 +379,24 @@ typedef struct MCTP_CFG_PARA
 
 } MCTP_CFG_PARA;
 
+typedef struct MCTP_TX_CXT
+{
+    uint8_t in_active_state;
+    uint8_t message_type;
+    /* To hold the message tag value for the incomign start of Packet for Application*/
+    uint8_t message_tag;
+    /* Holds source endpoint */
+    uint8_t source_endpt;
+    /* Holds destination endpoint */
+    uint8_t destination_endpt;
+} MCTP_TX_CXT;
+
 /******************************************************************************/
 /** MCTP self idnetification flags for internal processing
 *******************************************************************************/
 typedef struct MCTP_IDENTITY
 {
+    uint8_t in_active_state;
     /*Holds the current packet Sequence number SMBus*/
     uint8_t packet_seq;
     /*Holds the current message type received Via SMBus*/
@@ -395,6 +411,14 @@ typedef struct MCTP_IDENTITY
     uint8_t app_register;
     /* To hold the error if any from SMBus transfer*/
     uint8_t smbus_error;
+    /* Holds the tag owner bit value*/
+    uint8_t tag_owner;
+    /* Holds source endpoint */
+    uint8_t source_endpt;
+    /* Holds destination endpoint */
+    uint8_t destination_endpt;
+    /* if packetizing is in progress */
+    uint8_t packetizing;
 } MCTP_IDENTITY;
 
 /******************************************************************************/
@@ -402,14 +426,16 @@ typedef struct MCTP_IDENTITY
 *******************************************************************************/
 typedef struct MCTP_CONTEXT
 {
+   
     uint8_t i2c_bus_freq;
 
-    uint8_t i2c_slave_addr;
+    uint16_t i2c_slave_addr;
 
     uint8_t eid;
 
     uint8_t check_spdm_cmd;
 
+    
     /* Event group handle */
     EventGroupHandle_t xmctp_EventGroupHandle;
 
@@ -444,7 +470,7 @@ void mctp_event_task(void);
 * @param NULL
 * @return true/false
 *******************************************************************************/
-extern bool mctp_base_packetizing_val_get(void);
+extern bool mctp_base_packetizing_val_get(uint8_t msg_type);
 
 /******************************************************************************/
 /** UPDATES packetizing variable to check if input data spans more than one
@@ -452,7 +478,7 @@ extern bool mctp_base_packetizing_val_get(void);
 * @param val = true/false
 * @return None
 *******************************************************************************/
-extern void mctp_base_packetizing_val_set(bool val);
+extern void mctp_base_packetizing_val_set(uint8_t msg_type, bool value);
 
 /******************************************************************************/
 /** Validates packet received over smbus.
@@ -476,7 +502,7 @@ uint8_t mctp_get_packet_type(uint8_t *buffer_ptr);
 uint32_t mctp_timer_difference(uint32_t start_time_val);
 
 /******************************************************************************/
-/** Store I2C parameters into MCTP context structure
+/** Store I2C Physical layer parameters into MCTP context structure
 * @param void
 * @return void
 *******************************************************************************/
@@ -488,15 +514,17 @@ void mctp_update_i2c_params(MCTP_CONTEXT* ret_mctp_ctxt);
 * @param void
 * @return void
 *****************************************************************/
-void mctp_i2c_update(uint8_t slv_addr, uint8_t freq);
+void mctp_i2c_update(uint16_t slv_addr, uint8_t freq, uint8_t eid);
 
 /****************************************************************/
-/** sb_mctp_enable
-* Enable MCTP module
+/** sb_mctp_i2c_enable
+* Enable MCTP module via I2C driver
 * @param void
 * @return void
 *****************************************************************/
-void sb_mctp_enable(void);
+void sb_mctp_i2c_enable(void);
+
+
 
 /******************************************************************************/
 /** UPDATES CURRENT_EID FIELD OF RESPECTIVE ENDPOINT OF MCTP BRIDGE ROUTING TABLE
@@ -520,16 +548,64 @@ extern void mctp_rtupdate_eid_type(uint8_t i);
 extern void mctp_rtupdate_eid_state(uint8_t i);
 
 extern MCTP_BSS_ATTR struct MCTP_CFG_PARA mctp_cfg;
-
-extern MCTP_BSS_ATTR struct MCTP_IDENTITY mctp_self;
-
+extern MCTP_BSS_ATTR struct MCTP_IDENTITY mctp_rx[MCTP_MSG_CONTEXT];
 extern MCTP_BSS_ATTR uint8_t mctp_tx_state;
-
 extern MCTP_BSS_ATTR uint8_t mctp_wait_smbus_callback;
+extern MCTP_BSS_ATTR uint8_t mctp_wait_spt_callback;
 
-extern MCTP_BSS_ATTR uint8_t store_msg_type_tx; // pldm or spdm or mctp - when transmitting multiple/single pkt through smbus
+extern MCTP_BSS_ATTR uint8_t msg_type_tx; // pldm or spdm or mctp - when transmitting multiple/single pkt through smbus
 
 MCTP_CONTEXT* mctp_ctxt_get(void);
+
+uint16_t tx_time_get();
+
+/******************************************************************************/
+/** MCTP message context create
+* @param *pktbuf Pointer to smbus layer packet buffer
+* @return pointer to created mctp msg context
+*******************************************************************************/
+MCTP_IDENTITY * mctp_msg_ctxt_create(uint8_t *pkt_buf);
+
+/******************************************************************************/
+/** MCTP message lookup for message reassembly
+* @param *pktbuf Pointer to smbus layer packet buffer
+* @return pointer to mctp contest if lookup is success, else NULL pointer
+*******************************************************************************/
+MCTP_IDENTITY * mctp_msg_ctxt_lookup(uint8_t *pkt_buf);
+
+/******************************************************************************/
+/** MCTP message context create
+* @param msg_type
+* @param src_eid
+* @param dst_eid
+* @param msg_tag
+* @return pointer to created context
+*******************************************************************************/
+MCTP_TX_CXT * mctp_msg_tx_ctxt_create (uint8_t msg_type, uint8_t src_eid, uint8_t dst_eid, uint8_t msg_tag);
+
+/******************************************************************************/
+/** mctp_msg_tx_ctxt_lookup
+* @param src_eid
+* @param dst_eid
+* @param msg_tag
+* @return pointer to mctp contest if lookup is success, else NULL pointer
+*******************************************************************************/
+MCTP_TX_CXT * mctp_msg_tx_ctxt_lookup (uint8_t src_eid, uint8_t dst_eid, uint8_t msg_tag);
+
+/******************************************************************************/
+/** mctp_msg_ctxt_drop
+* @param *mctp_ctxt Pointer to mtp ctxt to be dropped
+* @return none
+*******************************************************************************/
+void mctp_msg_ctxt_drop(MCTP_IDENTITY *mctp_ctxt);
+
+/******************************************************************************/
+/** mctp_msg_ctxt_reset
+* @param *mctp_ctxt Context for which buffer parameters needs to be reset
+* @return none
+*******************************************************************************/
+void mctp_msg_ctxt_reset(MCTP_IDENTITY *mctp_ctxt);
+
 #ifdef __cplusplus
 }
 #endif

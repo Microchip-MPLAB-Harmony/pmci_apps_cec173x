@@ -114,25 +114,22 @@ static void mctp_main(void* pvParameters)
     }
 
     mctp_init_task();
-    mctp_update_eid(MCTP_EC_EID);
-    mctp_i2c_update(HOST_SLAVE_ADDR, (uint8_t)MCTP_I2C_CLK_FREQ);
+    mctp_i2c_update(HOST_SLAVE_ADDR, (uint8_t)MCTP_I2C_CLK_FREQ, MCTP_EC_EID);
     mctp_smbaddress_update(mctpContext->i2c_slave_addr, MCTP_I2C_PORT);
     mctp_update_i2c_params(mctpContext);
-    sb_mctp_enable();
+    sb_mctp_i2c_enable();
 
     while(true)
     {
         uxBits = xEventGroupWaitBits((mctpContext->xmctp_EventGroupHandle),
-                                     (MCTP_EVENT_BIT | MCTP_I2C_ENABLE_BIT | MCTP_EVENT_BIT),
+                                     (MCTP_EVENT_BIT | MCTP_I2C_ENABLE_BIT),
                                      pdTRUE,
                                      pdFALSE,
                                      portMAX_DELAY);
-
         if(MCTP_I2C_ENABLE_BIT == (uxBits & MCTP_I2C_ENABLE_BIT))
         {
             (void)mctp_smbus_init();
         }
-
         if(MCTP_EVENT_BIT == (uxBits & MCTP_EVENT_BIT))
         {
             mctp_event_task();
@@ -162,16 +159,18 @@ void SET_MCTP_EVENT_FLAG(void)
 * @param void
 * @return void
 *****************************************************************/
-void mctp_i2c_update(uint8_t slv_addr, uint8_t freq)
+void mctp_i2c_update(uint16_t slv_addr, uint8_t freq, uint8_t eid)
 {
     mctpContext = mctp_ctxt_get();
     if(NULL == mctpContext)
     {
         return;
     }
+    mctpContext->eid = eid;
     mctpContext->i2c_bus_freq = freq;
     mctpContext->i2c_slave_addr = slv_addr;
 }
+
 
 /****************************************************************/
 /** mctp_update_eid
@@ -190,17 +189,18 @@ void mctp_update_eid(uint8_t eid)
 }
 
 /****************************************************************/
-/** sb_mctp_enable
-* Enable MCTP module
+/** sb_mctp_i2c_enable
+* Enable I2C MCTP module
 * @param void
 * @return void
 *****************************************************************/
-void sb_mctp_enable(void)
+void sb_mctp_i2c_enable()
 {
     mctpContext = mctp_ctxt_get();
     if(NULL == mctpContext)
     {
         return;
     }
-    (void)xEventGroupSetBits( mctpContext->xmctp_EventGroupHandle, MCTP_I2C_ENABLE_BIT );
+    xEventGroupSetBits( mctpContext->xmctp_EventGroupHandle, MCTP_I2C_ENABLE_BIT );
 }
+
