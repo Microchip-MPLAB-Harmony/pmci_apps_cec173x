@@ -32,24 +32,23 @@
 extern "C" {
 #endif
 
-#define SPDM_BSS0_ATTR    __attribute__((section("spdm_bss0")))
-#define SPDM_BSS1_ATTR    __attribute__((section("spdm_bss1")))
-#define SPDM_BSS2_ATTR    __attribute__((section("spdm_bss2")))
+#define SPDM_BSS0_ATTR                                     __attribute__((section("spdm_bss0")))
+#define SPDM_BSS1_ATTR                                     __attribute__((section("spdm_bss1")))
+#define SPDM_BSS2_ATTR                                     __attribute__((section("spdm_bss2")))
+#define SPDM_STACK_ATTR                                    __attribute__((section("spdm_task_stack")))
 
-#define PVT_KEY_CODE_LENGTH    (96U)
-#define SPDM_SHA384_LEN        (48U)
-#define CURVE_384_SZ           (48U)
+#define PVT_KEY_CODE_LENGTH               (96U)
+#define SPDM_SHA384_LEN                   (48U)
+#define CURVE_384_SZ                      (48U)
 
 /* Attestation - Hasd Pointer for Chain */
-#define MAXIMUM_HEAD_PTR_CHAIN   8U
+#define MAXIMUM_HEAD_PTR_CHAIN             8U
 
 /* Attestation certificate Maximum*/
-#define MAXIMUM_CERTIFICATE   64U
+#define MAXIMUM_CERTIFICATE                64U
 
-#define STATUS_OK    0U
+#define STATUS_OK 0U
 
-#define is_add_safe(sum, aug_or_add) ((sum) < (aug_or_add) ? 0 : 1) // Coverity INT30-C Postcondition Test
-#define is_sub_safe(ui_a, ui_b) ((ui_a) < (ui_b) ? 0 : 1) // Coverity INT30-C Precondition Test
 
 typedef union
 {

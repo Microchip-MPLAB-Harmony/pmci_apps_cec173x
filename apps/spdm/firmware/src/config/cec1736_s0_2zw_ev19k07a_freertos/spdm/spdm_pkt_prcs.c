@@ -32,16 +32,12 @@
 
 #define SPI_DATA_MAX_BUFF 4096U
 
-// extern SPDM_BSS1_ATTR DI_CONTEXT_SPDM *spdm_di_context;
-SPDM_BSS1_ATTR uint8_t curr_ec_id;
-
 SPDM_BSS1_ATTR uint8_t get_mctp_pld[MAX_SIZE_CERTIFICATE] __attribute__((aligned(8)));
 SPDM_BSS1_ATTR MCTP_PKT_BUF mctp_pktbuf_tx;
 SPDM_BSS1_ATTR MCTP_PKT_BUF spdm_pktbuf_rx;
 
 SPDM_BSS1_ATTR MCTP_PKT_BUF spdm_pktbuf[1] __attribute__((aligned(8)));
 SPDM_BSS1_ATTR uint8_t spdm_tx_state;
-SPDM_BSS1_ATTR bool pldm_first_pkt;
 
 SPDM_BSS0_ATTR uint8_t spi_data[SPI_DATA_MAX_BUFF] __attribute__((aligned(8))); // This buffer is externed and used to read/Write certificate
 SPDM_BSS1_ATTR VERSION_NUM_ENTRY_TABLE version_tbl_buf[2 * SPDM_VER_NUM_ENTRY_COUNT];
@@ -146,7 +142,7 @@ SPDM_BSS1_ATTR uint16_t read_bytes_from_chain;
 SPDM_BSS1_ATTR uint16_t START_OFFSET_IN_BUFFER;
 SPDM_BSS1_ATTR uint16_t BUFFER_END_OFFSET;
 SPDM_BSS1_ATTR uint16_t length;
-
+SPDM_BSS1_ATTR uint8_t spdm_flash_busy;
 
 /******************************************************************************/
 /** get certificate length and update total length of chain into cert_len variable
@@ -230,7 +226,7 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                 current_cert_ptr = slot_buf[slot].chain.head_ptr_val; // get head pointer - root cert
 
                 uint8_t counter = 0; /* Max 8 certificates in a chain are supported */
-
+                
                 // Get number of certificates in the chain 
                 while (current_cert_ptr != END_OF_CHAIN)
                 {
@@ -253,13 +249,13 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                     {
                         get_mem = cert_buf[current_cert_ptr].mem_addr;
                         if (root_cert)
-                        {         
+                        {
                             
                             
                             if (spdm_read_certificate(get_mem, &spi_data[offset], 1024, current_cert_ptr))
                             {
-                                    cert_chain_valid_status = CERT_CHAIN_INVALID;
-                                    break;
+                                cert_chain_valid_status = CERT_CHAIN_INVALID;
+                                break;
                             }
                             cert_chain_valid_status |= spdm_pkt_update_cert_data_len(offset, &cert_buf[current_cert_ptr].cert_size);
 
@@ -274,7 +270,7 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                             {
                                 /* Set roothash to 0U since root cert is invalid
                                 However, since variable is global, which is initialized to 0U by default, memset to 0U is not needed */
-                                    break;
+                                break;
                             }
                             root_cert = false;
                             offset += cert_buf[current_cert_ptr].cert_size;
@@ -283,8 +279,8 @@ void spdm_pkt_store_hash_of_chain(SPDM_CONTEXT *spdmContext)
                         {
                             if (spdm_read_certificate(get_mem, &spi_data[offset], 4, current_cert_ptr))
                             {
-                                    cert_chain_valid_status = CERT_CHAIN_INVALID;
-                                    break;
+                                cert_chain_valid_status = CERT_CHAIN_INVALID;
+                                break;
                             }
                             cert_chain_valid_status |= spdm_pkt_update_cert_data_len(offset, &cert_buf[current_cert_ptr].cert_size);
                         }
@@ -702,7 +698,7 @@ void spdm_init_task(SPDM_CONTEXT *spdmContext)
     spdm_pktbuf[0].smbus_lab_retry_count = 0;
     spdm_pktbuf[0].request_tx_retry_count = 0;
     spdm_pktbuf[0].request_per_tx_timeout_count = 0;
-    spdm_pktbuf[0].rx_smbus_timestamp = 0;
+    spdm_pktbuf[0].rx_timestamp = 0;
     spdm_tx_state = SPDM_TX_IDLE;
     // initialize table entry buffers
     for (iter = 0; iter < SPDM_VER_NUM_ENTRY_COUNT; iter++)
@@ -715,7 +711,6 @@ void spdm_init_task(SPDM_CONTEXT *spdmContext)
     packet_sz = 0x00;
     pkt_seq_mctp = 0x00;
     first_pkt = true;
-    pldm_first_pkt = true;
     tbl_entry = 0x00;
     bytes_sent_over_mctp_for_cert = 0x00;
     struct_algo.AlgType = ALG_TYPE;
@@ -738,8 +733,6 @@ void spdm_init_task(SPDM_CONTEXT *spdmContext)
     memset(ecdsa_signature.signature_r_term, 0, CURVE_384_SZ);
     memset(ecdsa_signature.signature_s_term, 0, CURVE_384_SZ);
     spdmContext->spdm_state_info = SPDM_INIT_CERT_PARAMS;
-    spdmContext->pldm_state_info = PLDM_IDLE;
-    spdmContext->current_pkt_sequence = 0;
 
     spdmContext->get_requests_state = HASH_INIT_MODE;
 
@@ -1002,6 +995,7 @@ void spdm_pkt_fill_spdm_buf_certificate(MCTP_PKT_BUF *spdm_buf_tx, SPDM_CONTEXT 
     {
         return;
     }
+    spdm_flash_busy = true;
 
     uint16_t read_frm_offset = spdmContext->cert_offset_to_read[requested_slot];
 
@@ -1138,6 +1132,7 @@ void spdm_pkt_fill_spdm_buf_certificate(MCTP_PKT_BUF *spdm_buf_tx, SPDM_CONTEXT 
             remaining_bytes_to_sent = (uint16_t)((remaining_bytes_to_sent + MAX_NUM_BYTES_PLD) & UINT16_MAX);
         }
     }
+    spdm_flash_busy = false;
 }
 
 /******************************************************************************/
@@ -1833,14 +1828,14 @@ void spdm_pkt_fill_spdm_buf_measurements_resp(MCTP_PKT_BUF *spdm_buf_tx, SPDM_CO
                             if (SPDM_MSG_TYPE_POS + measurement_var.msr_bytes_copied < MAX_PKT_SIZE)
                             {
                                 measurement_var.opq_offset = 0;
-                                    memcpy(&spdm_buf_tx->pkt.data[SPDM_MSG_TYPE_POS + measurement_var.msr_bytes_copied],
-                                           &msr_opaque_buf[measurement_var.opq_offset], remaining_bytes_to_sent);
-                                    measurement_var.opq_offset = remaining_bytes_to_sent;
-                                    measurement_var.msr_bytes_copied = measurement_var.msr_bytes_copied + remaining_bytes_to_sent;
-                                    remaining_bytes_to_sent = 0;
-                                    measurement_var.msr_response_byte_iter = FILL_MSR_OPQ_PEND;
-                                    break;
-                                }
+                                memcpy(&spdm_buf_tx->pkt.data[SPDM_MSG_TYPE_POS + measurement_var.msr_bytes_copied],
+                                        &msr_opaque_buf[measurement_var.opq_offset], remaining_bytes_to_sent);
+                                measurement_var.opq_offset = remaining_bytes_to_sent;
+                                measurement_var.msr_bytes_copied = measurement_var.msr_bytes_copied + remaining_bytes_to_sent;
+                                remaining_bytes_to_sent = 0;
+                                measurement_var.msr_response_byte_iter = FILL_MSR_OPQ_PEND;
+                                break;
+                            }
                             else
                             {
                                 measurement_var.msr_response_byte_iter = END_OF_TRANSACTION;
@@ -2136,7 +2131,7 @@ void spdm_pkt_populate_mctp_packet_for_resp(MCTP_PKT_BUF *spdm_buf_tx, MCTP_PKT_
     mctp_buf->pkt.field.hdr.dst_addr = spdmContext->host_slv_addr;
     mctp_buf->pkt.field.hdr.rw_dst = 0;
     /*  Command Code */
-    mctp_buf->pkt.field.hdr.cmd_code = MCTP_SMBUS_HDR_CMD_CODE;
+    mctp_buf->pkt.field.hdr.cmd_code = spdmContext->spdm_cmd_code;
     /* Source Slave address*/
     mctp_buf->pkt.field.hdr.src_addr = spdmContext->ec_slv_addr;
     mctp_buf->pkt.field.hdr.ipmi_src = 1;
@@ -2150,6 +2145,7 @@ void spdm_pkt_populate_mctp_packet_for_resp(MCTP_PKT_BUF *spdm_buf_tx, MCTP_PKT_
     //        mctp_buf->pkt.field.hdr.src_eid   = mctp_rt.ep.ec.field.current_eid;
     mctp_buf->pkt.field.hdr.src_eid = spdmContext->ec_eid;
     /* message tag */
+    mctp_buf->pkt.field.hdr.msg_tag = spdmContext->message_tag;
     /* for response packet */
     mctp_buf->pkt.field.hdr.tag_owner = 0;
     /* Packet sequence number */
@@ -2159,7 +2155,7 @@ void spdm_pkt_populate_mctp_packet_for_resp(MCTP_PKT_BUF *spdm_buf_tx, MCTP_PKT_
     /* integrity check */
     mctp_buf->pkt.field.hdr.integrity_check = 0;
 
-    mctp_buf->rx_smbus_timestamp = spdm_buf_tx->rx_smbus_timestamp;
+    mctp_buf->rx_timestamp = spdm_buf_tx->rx_timestamp;
 
     switch (cmd_resp)
     {
@@ -3613,7 +3609,9 @@ void spdm_pkt_rcv_packet()
         spdmContext->ec_eid = spdm_msg_rx_buf->pkt.field.hdr.dst_eid;
         spdmContext->ec_slv_addr = spdm_msg_rx_buf->pkt.field.hdr.dst_addr;
         spdmContext->host_slv_addr = spdm_msg_rx_buf->pkt.field.hdr.src_addr;
-
+        spdmContext->message_tag = spdm_msg_rx_buf->pkt.field.hdr.msg_tag;
+        spdmContext->spdm_cmd_code = spdm_msg_rx_buf->pkt.field.hdr.cmd_code;
+        
         if (spdm_tx_state == SPDM_TX_IDLE || spdm_tx_state == SPDM_PACKETIZING)
         {
             // check if MCTP packet received is single packet request
@@ -3624,7 +3622,7 @@ void spdm_pkt_rcv_packet()
                 ret_sts = spdm_pkt_fill_buffer(spdm_msg_rx_buf, spdmContext);
                 if (!ret_sts)
                 {
-                    time_stamp = spdm_msg_rx_buf->rx_smbus_timestamp;
+                    time_stamp = spdm_msg_rx_buf->rx_timestamp;
                 }
             }
             else
@@ -3643,7 +3641,7 @@ void spdm_pkt_rcv_packet()
                     {
                         spdm_tx_state = SPDM_RX_LAST_PKT;
                         pld_index = 0;
-                        time_stamp = spdm_msg_rx_buf->rx_smbus_timestamp;
+                        time_stamp = spdm_msg_rx_buf->rx_timestamp;
                     }
                     else
                     {
@@ -3668,7 +3666,7 @@ void spdm_pkt_rcv_packet()
             // reached here means spdm request need to be processed for validation
             spdm_buf_tx = (MCTP_PKT_BUF *)&spdm_pktbuf[0];
             memset(spdm_buf_tx, 0, MCTP_PKT_BUF_DATALEN);
-            spdm_buf_tx->rx_smbus_timestamp = time_stamp;
+            spdm_buf_tx->rx_timestamp = time_stamp;
             get_cmd = (get_mctp_pld[1] & 0xff); // get the spdm command
 
             ret_sts = spdm_pkt_validate_and_process_spdm_msg(get_cmd, spdm_buf_tx, spdmContext);
@@ -3689,6 +3687,7 @@ void spdm_pkt_rcv_packet()
         }
 
         // spdm_mctp_done_set();
+         spdm_pktbuf_rx.buf_full = MCTP_EMPTY;
     }
 }
 

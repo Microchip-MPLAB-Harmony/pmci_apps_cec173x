@@ -222,7 +222,7 @@ uint8_t mctp_i2c_tx(const uint8_t channel,
 }
 
 uint8_t mctp_i2c_rx_register(const uint8_t channel, 
-                            I2C_SLAVE_FUNC_PTR slaveFuncPtr)
+                            MCTP_SLAVE_FUNC_PTR slaveFuncPtr)
 {
    return smb_register_slave(channel, 
                              (SLAVE_FUNC_PTR)slaveFuncPtr);

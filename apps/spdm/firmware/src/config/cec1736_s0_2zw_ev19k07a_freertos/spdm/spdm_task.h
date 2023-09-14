@@ -34,7 +34,7 @@ extern "C" {
 #define SPDM_PRIORITY ((tskIDLE_PRIORITY + configSPDM_PRIORITY) % configMAX_PRIORITIES)
 
 /* Stack size must be a power of 2 if the task is restricted */
-#define SPDM_STACK_SIZE 1024U       // 2 * configMINIMAL_STACK_SIZE (120)
+#define SPDM_STACK_SIZE 2048       // 2 * configMINIMAL_STACK_SIZE (120)
 #define SPDM_STACK_WORD_SIZE ((SPDM_STACK_SIZE) / 2U)
 
 #define SPDM_STACK_ALIGN __attribute__ ((aligned(SPDM_STACK_SIZE)))
@@ -71,6 +71,7 @@ enum SPDM_TASK_MODES
     PLDM_CMD_GET_AP_CFG
 };
 
+
 /******************************************************************************/
 /**  SPDM Context Information
 *******************************************************************************/
@@ -89,6 +90,10 @@ typedef struct SPDM_CONTEXT
     uint8_t ec_slv_addr;
 
     uint8_t host_slv_addr;
+
+    uint8_t message_tag;
+
+    uint8_t spdm_cmd_code;
 
     /* Event group handle */
     EventGroupHandle_t xSPDMEventGroupHandle;
@@ -120,47 +125,8 @@ typedef struct SPDM_CONTEXT
 
     uint16_t cert_bytes_pending_to_sent[8];
 
-    uint16_t cert_bytes_requested[8];
-
-    uint8_t pldm_state_info; // added this to track PLDM packets (if tracking with spdm_state_info, if spdm packet comes in between
-    // pldm packets, the current state would go into toss)
-
-    uint8_t pldm_tx_state;
-
-    uint8_t pldm_host_eid;
-
-    uint8_t pldm_ec_eid;
-
-    uint8_t pldm_ec_slv_addr;
-
-    uint8_t pldm_host_slv_addr;
-
-    uint8_t pldm_instance_id;
-
-    uint8_t pldm_current_response_cmd;
-
-    uint8_t pldm_current_state;
-
-    uint8_t pldm_previous_state;  // maintaining this for sending previous state in GetStatus command
-
-    uint8_t pldm_next_state;
-
-    uint8_t pldm_verify_state;
-
-    uint8_t pldm_apply_state;
-
-    uint8_t pldm_status_reason_code;
-
-    uint8_t current_pkt_sequence; // PLDM; used to find for packet loss and retry
-
-    uint8_t expected_pkt_sequence;
-
-    /* PLDM timeout response Timer Handle*/
-    TimerHandle_t xPLDMRespTimer;
-
-    /* PLDM timeout response Timer buffer*/
-    StaticTimer_t PLDMResp_TimerBuffer __attribute__((aligned(8)));
-
+    uint16_t cert_bytes_requested[8]  __attribute__((aligned(8)));
+  
 } __attribute__((packed)) SPDM_CONTEXT;
 
 void spdm_init_task(SPDM_CONTEXT *spdmContext);
@@ -176,6 +142,7 @@ SPDM_CONTEXT* spdm_ctxt_get(void);
 * @return void
 *******************************************************************************/
 void spdm_wait_post_auth_completion(SPDM_CONTEXT *spdmContext);
+
 
 #ifdef __cplusplus
 }
