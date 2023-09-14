@@ -88,6 +88,8 @@ typedef struct PLDM_CONTEXT
 
     uint8_t pldm_host_slv_addr;
 
+    uint8_t pldm_message_tag;
+
     uint8_t pldm_instance_id;
 
     uint8_t pldm_current_response_cmd;
@@ -108,6 +110,8 @@ typedef struct PLDM_CONTEXT
 
     uint8_t expected_pkt_sequence;
 
+    uint8_t pldm_cmd_code;
+    
     /* PLDM timeout response Timer Handle*/
     TimerHandle_t xPLDMRespTimer;
 

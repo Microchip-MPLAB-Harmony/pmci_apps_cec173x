@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include "pldm.h"
+#include <stdio.h>
 #include "pldm_common.h"
 #include "pldm_task.h"
 #include "mctp/mctp_smbus.h"
@@ -87,6 +88,9 @@ PLDM_BSS1_ATTR bool PLDMResp_timer_started;
 // support for update during crisis update
 PLDM_BSS1_ATTR PLDM_AP_CFG pldm_ap_cfg;
 
+PLDM_BSS1_ATTR uint8_t pldm_flash_busy;
+
+
 /******************************************************************************/
 /** function for handling query device identifiers message
 * @param pldm_buf_tx trasmit buffer,
@@ -95,7 +99,7 @@ PLDM_BSS1_ATTR PLDM_AP_CFG pldm_ap_cfg;
 *******************************************************************************/
 void pldm_pkt_handle_query_device_identifiers(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CONTEXT *pldmContext)
 {
-    bool override = 0;
+    bool override = false;
     uint16_t size=0x0u;
 
     uint16_t des_type1 = PLDM_QUERY_DEVICE_DES1_TYPE;
@@ -104,6 +108,10 @@ void pldm_pkt_handle_query_device_identifiers(MCTP_PKT_BUF *pldm_buf_tx, PLDM_CO
 
     uint16_t des_type2 = PLDM_QUERY_DEVICE_DES2_TYPE;
     uint16_t des_length2 = PLDM_QUERY_DEVICE_DES2_LEN;
+    uint8_t des_type2_title_type = ASCII;
+    uint8_t des_type2_title_len = PLDM_QUERY_DEVICE_DES2_TITLE_LEN;
+    uint8_t des_type2_title[9] = "Device ID";
+
     uint64_t dec_value2_serial_number = 0x00; //coverity fix
     uint32_t dec_value2_part_number = 0x00; //coverity fix
 
@@ -1368,7 +1376,7 @@ void pldm_pkt_populate_mctp_packet_for_resp(MCTP_PKT_BUF *pldm_buf_tx, MCTP_PKT_
         mctp_buf->pkt.field.hdr.inst_id = pldmContext->pldm_instance_id & 0x1F;
     }
 
-    mctp_buf->rx_smbus_timestamp  = pldm_buf_tx->rx_smbus_timestamp;
+    mctp_buf->rx_timestamp  = pldm_buf_tx->rx_timestamp;
 
     if (cmd_resp == PLDM_QUERY_DEVICE_IDENTIFIERS_REQ || cmd_resp == PLDM_GET_FIRMWARE_PARAMETERS_REQ)
     {
@@ -1417,7 +1425,7 @@ void pldm_pkt_populate_mctp_packet_for_resp(MCTP_PKT_BUF *pldm_buf_tx, MCTP_PKT_
     mctp_buf->pkt.field.hdr.dst_addr  = pldmContext->pldm_host_slv_addr;
     mctp_buf->pkt.field.hdr.rw_dst    = 0;
     /*  Command Code */
-    mctp_buf->pkt.field.hdr.cmd_code  = MCTP_SMBUS_HDR_CMD_CODE;
+    mctp_buf->pkt.field.hdr.cmd_code  = pldmContext->pldm_cmd_code;
     /* Source Slave address*/
     mctp_buf->pkt.field.hdr.src_addr  = pldmContext->pldm_ec_slv_addr;
     mctp_buf->pkt.field.hdr.ipmi_src  = 1;
@@ -1429,7 +1437,9 @@ void pldm_pkt_populate_mctp_packet_for_resp(MCTP_PKT_BUF *pldm_buf_tx, MCTP_PKT_
     mctp_buf->pkt.field.hdr.dst_eid   = pldmContext->pldm_host_eid;
     /* source eid = eid of self/EC */
     mctp_buf->pkt.field.hdr.src_eid = pldmContext->pldm_ec_eid;
+    mctp_buf->pkt.field.hdr.msg_tag = pldmContext->pldm_message_tag;
     /* message tag */
+    mctp_buf->pkt.field.hdr.msg_tag = pldmContext->pldm_message_tag;
     /* for req/response packet */
     if (req_bit)
     {
@@ -1604,6 +1614,8 @@ void pldm_pkt_rcv_packet()
         pldmContext->pldm_ec_slv_addr = pldm_msg_rx_buf->pkt.field.hdr.dst_addr;
         pldmContext->pldm_host_slv_addr = pldm_msg_rx_buf->pkt.field.hdr.src_addr;
         pldmContext->pldm_instance_id = pldm_msg_rx_buf->pkt.field.hdr.inst_id;
+        pldmContext->pldm_message_tag = pldm_msg_rx_buf->pkt.field.hdr.msg_tag;
+        pldmContext->pldm_cmd_code = pldm_msg_rx_buf->pkt.field.hdr.cmd_code;
 
         if(pldmContext->pldm_tx_state == PLDM_TX_IDLE || pldmContext->pldm_tx_state == PLDM_PACKETIZING)
         {
@@ -1798,6 +1810,9 @@ void pldm_initiate_apply_req_to_update_agent(uint8_t apply_state)
 {
     PLDM_CONTEXT *pldmContext = NULL;
     pldmContext = pldm_ctxt_get();
+
+    pldm_flash_busy = false;
+    
     if(NULL == pldmContext)
     {
         return;
@@ -2179,4 +2194,18 @@ uint16_t pldm_apcfg_component_classification(void)
     comp_classification = pldm_ap_cfg.comp_classification;
 
     return comp_classification;
+}
+
+/******************************************************************************/
+/** convert16BitHexToAscii();
+* convert Hex value of size 2bytes to ASCII of size 4bytes
+* @param uint16_t Hex value to be converted
+* @return uint8_t * pointer to ASCII data
+*******************************************************************************/
+void convert16BitHexToAscii(uint16_t hex_value, uint32_t * ascii_conv)
+{
+    uint8_t i=0;
+    uint8_t string[5];
+    snprintf(string, 5, "%04X", hex_value);
+    memcpy(ascii_conv, string, 4);
 }

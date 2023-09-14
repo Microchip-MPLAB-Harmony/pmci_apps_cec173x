@@ -43,7 +43,7 @@
 
 void ECIA_Initialize(void)
 {
-    ECIA_REGS->ECIA_EN_SET13 = 0x12;
+        ECIA_REGS->ECIA_EN_SET13 = 0x13;
     ECIA_REGS->ECIA_EN_SET14 = 0x20c;
 
     ECIA_REGS->ECIA_BLK_EN_SET = 0x6000;
