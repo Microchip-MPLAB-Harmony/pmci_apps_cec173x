@@ -2,9 +2,9 @@
 <Package name="pmci_apps_cec173x">
     <Dependencies>
         <Dependency name="pmci" version="v3.1.0"/>
-        <Dependency name="csp" version="v3.16.0"/>
-        <Dependency name="dev_packs" version="v3.16.0"/>
-        <Dependency name="core" version="v3.12.0"/>
+        <Dependency name="csp" version="v3.18.0"/>
+        <Dependency name="dev_packs" version="v3.18.0"/>
+        <Dependency name="core" version="v3.13.1"/>
         <Dependency name="CMSIS-FreeRTOS" version="v10.4.6"/>
     </Dependencies>
 </Package>

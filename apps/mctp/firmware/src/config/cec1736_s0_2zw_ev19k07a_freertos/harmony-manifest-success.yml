@@ -13,9 +13,9 @@ plugin_version: NA        # if MPLAB X plugin only
 compiler: xc32
 
 modules:
-    - {name: "csp", version: "v3.16.0"}
-    - {name: "core", version: "v3.12.0"}
-    - {name: "dev_packs", version: "v3.16.0"}
-    - {name: "pmci", version: "v3.0.0"}
+    - {name: "csp", version: "v3.18.0"}
+    - {name: "core", version: "v3.13.1"}
+    - {name: "dev_packs", version: "v3.18.0"}
+    - {name: "pmci", version: "v3.1.0"}
     - {name: "CMSIS-FreeRTOS", version: "v10.4.6"}
 
